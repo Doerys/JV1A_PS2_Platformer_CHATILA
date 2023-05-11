@@ -73,8 +73,8 @@ class TestScene extends Phaser.Scene {
         this.canJump = true;
         this.isJumping = false;
         
-        this.accelerationX = 50;
-        this.frictionGround = 50; 
+        this.accelerationX = 15;
+        this.frictionGround = 15; 
         
         this.canJump = true;
         this.isJumping = false;
@@ -159,29 +159,112 @@ class TestScene extends Phaser.Scene {
             }
         }*/
 
-        this.onGround = this.player.body.blocked.down;
-        this.upOnce = Phaser.Input.Keyboard.JustDown(this.cursors.up);
+        this.onGround = this.player.body.blocked.down; // verifie que le joueur est au sol
+		this.blockedLeft = this.player.body.blocked.left;
+		this.blockedRight = this.player.body.blocked.right;
+
+        this.upOnce = Phaser.Input.Keyboard.JustDown(this.cursors.up); // variable correspondant à une pression instantanée
 
         // handle long jump press
-        if ((this.upOnce) && this.canJump && this.onGround){
-            this.jumpTimer = 1;
-            this.canJump = false;
-            this.isJumping = true;
-            this.player.setVelocityY(-this.speedMoveX);
+        if (this.upOnce && this.canJump && this.onGround){ // si on vient de presser saut + peut sauter true + au sol
+            this.jumpTimer = 1; // création jump timer
+            this.canJump = false; // ne peut plus sauter - FALSE
+            this.isJumping = true; // est en train de sauter - TRUE
+            this.player.setVelocityY(-this.speedMoveX); // On set la vélocité Y à la force de base
 
             setTimeout(() => {
                 this.canJump = true;
-            }, 100);
-        } else if ((this.cursors.up.isDown) && this.jumpTimer != 0){
-            if (this.jumpTimer > 12) {
+            }, 100); // après un certain temps, on repasse la possibilité de sauter à true
+
+        } else if (this.cursors.up.isDown && this.jumpTimer != 0){ // si le curseur haut est pressé et jump timer =/= 0
+            if (this.jumpTimer > 24) { // Si le timer du jump est supérieur à 12, le stoppe.
                 this.jumpTimer = 0;
             } else {
                 // jump higher if holding jump
-                this.jumpTimer++;
+                this.jumpTimer++; // on imcrémente au fur et à mesure
                 this.player.setVelocityY(-this.speedMoveY);
             }
         } else if (this.jumpTimer != 0){
             this.jumpTimer = 0;
         }
+        else if (this.upOnce && !this.onGround){
+        
+        // handle walljumps
+
+        // WALL JUMP GAUCHE
+        if(this.blockedLeft && !this.cursors.down.isDown){
+
+                console.log("check wall grab");
+
+                this.player.setVelocityY(-100);
+                this.player.setVelocityX(2);
+            
+            /*if ((cursors.up.isDown || spaceBar.isDown || controller.up || controller.A) && (wallIce == false)){ // SAUT => on se repousse du mur
+                // commandes bloquées
+                commandesLocked = true;
+
+                player.setAccelerationX(0); // reset l'accélération à 0
+                
+                player.setAccelerationX(4000);
+                player.setMaxVelocity(1000);
+                player.setVelocityY(-speedMoveY);
+                                
+                // commandes débloquées
+                setTimeout(function() {
+                    unlockCommandes();
+                    player.setAccelerationX(0);                
+                }, 2000);
+            }*/
+        }
+
+
+        /*if (this.blockedRight){
+            
+            this.jumpTimer = 1;
+            this.canJump = false;
+            this.isJumping = true;
+
+            this.player.setAccelerationX(- this.accelerationX);
+            this.player.setMaxVelocity(this.speedXMax, this.speedYMax);
+            this.player.setVelocity(-this.speedMoveX, -this.speedMoveY);
+
+            // slow down after wall jumping
+            setTimeout(() => { 
+                this.canJump = true;
+                this.player.setMaxVelocity(this.speedMoveX / 1.2, this.speedMoveY / 1.2);
+            }, 100);
+            setTimeout(() => { 
+                this.player.setMaxVelocity(this.speedMoveX / 1.5, this.speedMoveY);
+            }, 200);
+            setTimeout(() => {
+                this.player.setMaxVelocity(this.speedMoveX, this.speedMoveY);
+            }, 300);
+
+        } else if (this.blockedLeft){
+                            
+            this.jumpTimer = 1;
+            this.canJump = false;
+            this.isJumping = true;
+
+            this.player.setAccelerationX(this.accelerationX);
+            this.player.setMaxVelocity(this.speedXMax, this.speedYMax);
+            this.player.setVelocity(this.speedMoveX, -this.speedMoveY);
+
+            // slow down after wall jumping
+            setTimeout(() => { 
+                this.canJump = true;
+                this.player.setMaxVelocity(this.speedMoveX / 1.2, this.speedMoveY / 1.2);
+            }, 100);
+            setTimeout(() => { 
+                this.player.setMaxVelocity(this.speedMoveX / 1.5, this.speedMoveY);
+            }, 200);
+            setTimeout(() => {
+                this.player.setMaxVelocity(this.speedMoveX, this.speedMoveY);
+            }, 300);
+        }*/
     }
+        
+    }
+    
+
 }
