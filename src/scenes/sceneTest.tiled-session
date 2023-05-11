@@ -1,0 +1,47 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "testScene.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInEditor": 1
+        },
+        "testScene.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 4816,
+                "y": -1256
+            }
+        },
+        "testScene.tmx#placeholder_test": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/y.chatila/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/src/scenes",
+    "last.imagePath": "C:/Users/y.chatila/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/src/scenes",
+    "map.height": 27,
+    "map.lastUsedExportFilter": "Tous les Fichiers (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 48,
+    "openFiles": [
+        "testScene.tmx"
+    ],
+    "project": "sceneTest.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "testScene.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    }
+}

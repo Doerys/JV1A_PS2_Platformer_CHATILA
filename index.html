@@ -34,11 +34,13 @@
             physics: {
             default: 'arcade',
             arcade: {
+                //gravity: { y: 1450 },
+                gravity: { y : 1600 },
                 debug: true,
             }
             },
+            input:{gamepad:true},
             fps: {
-            gravity: { y: 5000 },
             target: 60,
             },
             scene: [TestScene]
