@@ -78,6 +78,7 @@ class TestScene extends Phaser.Scene {
         
         this.canJump = true;
         this.isJumping = false;
+        this.inputsMoveLocked = false;
         
         this.physics.add.collider(this.player, this.layer_platforms);
 
@@ -92,10 +93,10 @@ class TestScene extends Phaser.Scene {
         }
 
         if (this.speedMoveX == 0) { // condition pour idle
-            if (this.facingPlayer == 'right') {
+            if (this.playerFacing == 'right') {
                 this.player.anims.play('player_right', true);
             }
-            if (this.facingPlayer == 'left') {
+            if (this.playerFacing == 'left') {
                 this.player.anims.play('player_left', true);
             }
         }
@@ -103,9 +104,9 @@ class TestScene extends Phaser.Scene {
         // DEPLACEMENT 2 DIRECTIONS
 
         // DEPLACEMENT A GAUCHE
-        if ((this.cursors.left.isDown || this.keyQ.isDown || this.controller.left)) { // si touche vers la gauche pressée
+        if ((this.cursors.left.isDown || this.keyQ.isDown || this.controller.left) && this.inputsMoveLocked == false) { // si touche vers la gauche pressée
             this.player.anims.play('player_left', true);
-            this.facingPlayer = 'left';
+            this.playerFacing = 'left';
 
             if (Math.abs(this.speedMoveX) < this.speedXMax) {
                 this.speedMoveX -= this.accelerationX;
@@ -116,9 +117,9 @@ class TestScene extends Phaser.Scene {
         }
 
         // DEPLACEMENT A DROITE
-        else if ((this.cursors.right.isDown || this.keyD.isDown || this.controller.right)) { // si touche vers la droite pressée
+        else if ((this.cursors.right.isDown || this.keyD.isDown || this.controller.right) && this.inputsMoveLocked == false) { // si touche vers la droite pressée
             this.player.anims.play('player_right', true);
-            this.facingPlayer = 'right';
+            this.playerFacing = 'right';
 
             if (Math.abs(this.speedMoveX) < this.speedXMax) {
                 this.speedMoveX += this.accelerationX;
@@ -187,17 +188,62 @@ class TestScene extends Phaser.Scene {
         } else if (this.jumpTimer != 0){
             this.jumpTimer = 0;
         }
-        else if (this.upOnce && !this.onGround){
         
+        console.log(this.blockedLeft);
+
+
         // handle walljumps
 
         // WALL JUMP GAUCHE
-        if(this.blockedLeft && !this.cursors.down.isDown){
+        if(this.blockedLeft && !this.onGround){
 
-                console.log("check wall grab");
+            if (!this.cursors.up.isDown){
 
-                this.player.setVelocityY(-100);
-                this.player.setVelocityX(2);
+                this.player.body.setAllowGravity(false);
+                this.player.setVelocityY(0);
+                //this.player.setImmovable(true)
+                this.inputsMoveLocked = true;
+                this.grabLeft = true;
+            }
+        }
+
+        else if(this.blockedRight && !this.onGround){
+
+            if (!this.cursors.up.isDown){
+
+                this.player.body.setAllowGravity(false);
+                this.player.setVelocityY(0);
+                //this.player.setImmovable(true)
+                this.inputsMoveLocked = true;
+                this.grabRight = true;
+            }
+        }
+
+        if(this.grabLeft && this.upOnce){
+        
+            this.player.body.setAllowGravity(true);
+            this.inputsMoveLocked = false;
+
+            this.jumpTimer = 1; // création jump timer
+            this.canJump = false; // ne peut plus sauter - FALSE
+            this.isJumping = true; // est en train de sauter - TRUE
+            this.player.setVelocityY(-this.speedMoveX); // On set la vélocité Y à la force de base
+
+            setTimeout(() => {
+                this.canJump = true;
+            }, 100); // après un certain temps, on repasse la possibilité de sauter à true
+    
+        } else if (this.cursors.up.isDown && this.jumpTimer != 0){ // si le curseur haut est pressé et jump timer =/= 0
+            if (this.jumpTimer > 24) { // Si le timer du jump est supérieur à 12, le stoppe.
+                this.jumpTimer = 0;
+            } else {
+                // jump higher if holding jump
+                this.jumpTimer++; // on imcrémente au fur et à mesure
+                this.player.setVelocityY(-this.speedMoveY);
+            }
+        } else if (this.jumpTimer != 0){
+            this.jumpTimer = 0;
+        }
             
             /*if ((cursors.up.isDown || spaceBar.isDown || controller.up || controller.A) && (wallIce == false)){ // SAUT => on se repousse du mur
                 // commandes bloquées
@@ -215,7 +261,7 @@ class TestScene extends Phaser.Scene {
                     player.setAccelerationX(0);                
                 }, 2000);
             }*/
-        }
+        
 
 
         /*if (this.blockedRight){
@@ -262,7 +308,6 @@ class TestScene extends Phaser.Scene {
                 this.player.setMaxVelocity(this.speedMoveX, this.speedMoveY);
             }, 300);
         }*/
-    }
         
     }
     
