@@ -1,0 +1,25 @@
+        this.onGround = this.player.body.blocked.down;
+        this.upOnce = Phaser.Input.Keyboard.JustDown(this.cursors.up);
+
+        // handle long jump press
+        if ((this.upOnce) && this.canJump && this.onGround){
+            this.jumpTimer = 1;
+            this.canJump = false;
+            this.isJumping = true;
+            this.player.setVelocityY(-this.speedMoveX);
+
+            setTimeout(() => {
+                this.canJump = true;
+            }, 100);
+        } else if ((this.cursors.up.isDown) && this.jumpTimer != 0){
+            if (this.jumpTimer > 12) {
+                this.jumpTimer = 0;
+            } else {
+                // jump higher if holding jump
+                this.jumpTimer++;
+                this.player.setVelocityY(-this.speedMoveY);
+            }
+        } else if (this.jumpTimer != 0){
+            this.jumpTimer = 0;
+        }
+    }

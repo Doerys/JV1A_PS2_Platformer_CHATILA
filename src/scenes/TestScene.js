@@ -188,8 +188,21 @@ class TestScene extends Phaser.Scene {
         } else if (this.jumpTimer != 0){
             this.jumpTimer = 0;
         }
-        
-        console.log(this.blockedLeft);
+        else if (upOnce && !this.onGround){
+			// handle walljumps
+			if (this.grabRight){
+				
+
+
+
+
+			} else if (this.grabLeft){
+				
+
+
+                
+			}
+		}
 
 
         // handle walljumps
@@ -219,12 +232,14 @@ class TestScene extends Phaser.Scene {
             }
         }
 
-        if(this.grabLeft && this.upOnce){
+        if(this.grabLeft && (this.upOnce || this.cursors.down.isDown)){
         
             this.player.body.setAllowGravity(true);
             this.inputsMoveLocked = false;
 
-            this.jumpTimer = 1; // création jump timer
+            
+            
+        /*    this.jumpTimer = 1; // création jump timer
             this.canJump = false; // ne peut plus sauter - FALSE
             this.isJumping = true; // est en train de sauter - TRUE
             this.player.setVelocityY(-this.speedMoveX); // On set la vélocité Y à la force de base
@@ -243,7 +258,7 @@ class TestScene extends Phaser.Scene {
             }
         } else if (this.jumpTimer != 0){
             this.jumpTimer = 0;
-        }
+        }*/
             
             /*if ((cursors.up.isDown || spaceBar.isDown || controller.up || controller.A) && (wallIce == false)){ // SAUT => on se repousse du mur
                 // commandes bloquées
@@ -312,4 +327,5 @@ class TestScene extends Phaser.Scene {
     }
     
 
+}
 }
