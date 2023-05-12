@@ -10,7 +10,8 @@ class TestScene extends Phaser.Scene {
         this.load.spritesheet('player', 'src/scenes/player_test.png',
             { frameWidth: 64, frameHeight: 128});
 
-        this.load.image('tiles_test', 'src/scenes/placeholder_test.png'); //Tileset        
+        this.load.image('tiles_test', 'src/scenes/placeholder_test.png'); //Tileset     
+        this.load.image('box', 'src/scenes/caisse.png'); //Tileset     
         
         this.load.tilemapTiledJSON('map_test', 'src/scenes/testScene.json'); //fichier JSON
 
@@ -30,8 +31,14 @@ class TestScene extends Phaser.Scene {
         this.layer_platforms = this.map_Test.createLayer('layer_platforms', this.tileset_Test);
         this.layer_platforms.setCollisionByProperty({ estSolide: true });
 
+        this.box = this.physics.add.sprite(400, 1472, 'box').setImmovable(true);
+
         // load personnage
-        this.player = this.physics.add.sprite(this.spawnX, this.spawnY, 'player');
+        this.player = this.physics.add.sprite(this.spawnX, this.spawnY, 'player').setCollideWorldBounds();
+
+        this.physics.add.collider(this.player, this.layer_platforms);
+        this.physics.add.overlap(this.player, this.box, this.handleBoxCollision(), null, this);
+        this.physics.add.collider(this.box, this.layer_platforms);
 
         // animation joueur
         this.anims.create({
@@ -62,11 +69,9 @@ class TestScene extends Phaser.Scene {
         // résolution de l'écran
         this.physics.world.setBounds(0, 0, 3072, 1728);
         // PLAYER - Collision entre le joueur et les limites du niveau
-        this.player.setCollideWorldBounds(true);
 
         // caméra
-        this.cameras.main.setBounds(0, 0, 3072, 1728);
-        this.cameras.main.setSize(3072, 1728)  ; //format 16/9
+        this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728); //format 16/9 
 
         // constantes
         this.speedMoveX = 0;
@@ -83,9 +88,6 @@ class TestScene extends Phaser.Scene {
         this.frictionGround = 15; 
     
         this.inputsMoveLocked = false;
-        
-        this.physics.add.collider(this.player, this.layer_platforms);
-
     }
 
     update () {
@@ -333,4 +335,43 @@ class TestScene extends Phaser.Scene {
             this.inputsMoveLocked = false;
         }        
     }
+    
+    handleBoxCollision(player, box){
+
+        if(player.body.blocked.right){
+            this.futureX = box.x + (-1) * 64
+        }
+        else if(player.body.blocked.left){
+            this.futureX = box.x + 1 * 64
+        }
+
+        // Vérifie si la position future de la caisse est valide (ne rentre pas en collision avec la plateforme)
+        if (!this.layer_platforms.getTileAtWorldXY(futureX, box.y)) {
+            // Déplace la caisse dans la direction déterminée
+            caisse.x = futureX;
+
+            // Déplace le joueur pour éviter le chevauchement
+            if(player.body.blocked.right){
+                player.x += -1 * 64; // Déplace le joueur de la même distance que la caisse
+            }
+            else if(player.body.blocked.left){
+                player.x += 1 * 64; // Déplace le joueur de la même distance que la caisse
+            }
+        }
+    }
+
+
+    pushBox(player, box){
+        player.body.velocity.x = this.speedXMax - this.speedXMax - .25
+        box.body.velocity.x = player.body.velocity.x
+
+        if(player.body.blocked.right){
+            
+        }
+            
+        player.body.velocity.x = this.speedXMax - this.speedXMax - .25
+        box.body.velocity.x = player.body.velocity.x
+
+    }
 }
+
