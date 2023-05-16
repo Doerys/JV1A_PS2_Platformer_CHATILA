@@ -19,7 +19,6 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        console.log("PRELOAD ATTEINT");
         this.scene.start("TestScene", {
             mapName: "map_test", // nom de la map
             mapTileset: "placeholder_test", // nom du tileset sur TILED

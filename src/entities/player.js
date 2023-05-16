@@ -19,7 +19,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.facing = 'right';
 
         this.canJump = true;
-        
+
+        this.startJumpRunTime = false;
+        this.jumpRuntime = 0;
         this.jumpCounter = 1;
         this.isJumping = false;
         
@@ -65,7 +67,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
 
-    update () {
+    update (time, delta) {
+
         const { // /!\ const = utilisable uniquement à l'intérieur d'un 
 			left: keyLeft,
 			right: keyRight,
@@ -183,9 +186,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         
         // déclencheur du saut
         if (upOnce && this.canJump && this.jumpCounter > 0 && this.onGround){ // si on vient de presser saut + peut sauter true + au sol
+            this.startJumpRunTime = true;
+
+            if(this.startJumpRunTime == true){
+                this.startJumpRunTime = false;
+                this.jumpRunTimer = this.scene.time.addEvent({
+                    delay: 3000,                // ms
+                    loop: false
+                });
+            }
+
             this.jumpTimer = 1; // création jump timer
             this.canJump = false; // ne peut plus sauter - FALSE
-            this.jumpCounter -= 1;
+            this.jumpCounter -= 1; // pour le double jump
             this.isJumping = true; // est en train de sauter - TRUE
             this.setVelocityY(-this.speedMoveY); // On set la vélocité Y à la force de base
 
@@ -209,11 +222,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         
         // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
         else if (keyUp.isDown && this.jumpTimer != 0){ // si le curseur haut est pressé et jump timer =/= 0
-            if (this.jumpTimer > 12 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
+            if (this.jumpRunTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                 this.jumpTimer = 0;
             } else {
                 // jump higher if holding jump
-                this.jumpTimer++; // on imcrémente au fur et à mesure
+
+                console.log(this.jumpRunTimer.getElapsedSeconds());
                 this.setVelocityY(-this.speedMoveY);
             }
 

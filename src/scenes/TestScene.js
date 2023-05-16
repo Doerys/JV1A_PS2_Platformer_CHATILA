@@ -14,6 +14,7 @@ class TestScene extends SceneClass {
       };
 
     create(){
+        
         this.spawnX = 96;
         this.spawnY = 1472;
 
@@ -45,7 +46,6 @@ class TestScene extends SceneClass {
     }
 
     update () {
-
     }
 }
 
