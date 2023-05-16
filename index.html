@@ -1,54 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8" />
     <title>Immortal Glades</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-        }
-    </style>
 </head>
 
-<body style="background-color:#FFFFFF; text-align: center; vertical-align: middle;">
-
-    <script src="src/scenes/TestScene.js"></script>
-
-    <script type="text/javascript">
-
-        const WIDTH = 3072;
-        const HEIGHT = 1728;
-        const ZOOM_FACTOR = 0; 
-
-        const SHARED_CONFIG = {
-        width: WIDTH,
-        height: HEIGHT,
-        zoomFactor: ZOOM_FACTOR,
-        }
-        
-        const config = {
-            type: Phaser.AUTO,
-            ...SHARED_CONFIG,
-            physics: {
-            default: 'arcade',
-            arcade: {
-                //gravity: { y: 1450 },
-                gravity: { y : 1600 },
-                debug: true,
-                tileBias: 64,
-            }
-            },
-            input:{gamepad:true},
-            fps: {
-                target: 60,
-            },
-            scene: [TestScene]
-        }
-        
-        new Phaser.Game(config);
-    </script>
+<body style="background-color:#656781; text-align: center; vertical-align: middle;">
+    <script type="module" src="game.js"></script>    
+    <!-- <script src="src/scenes/TestScene.js"></script> -->
 </body>
 
 </html>
