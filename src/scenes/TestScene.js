@@ -1,4 +1,5 @@
 import SceneClass from "../templates/sceneClass.js";
+import Player from "../entities/player.js";
 
 class TestScene extends SceneClass {
 
@@ -13,7 +14,6 @@ class TestScene extends SceneClass {
       };
 
     create(){
-
         this.spawnX = 96;
         this.spawnY = 1472;
 
@@ -22,14 +22,16 @@ class TestScene extends SceneClass {
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
 
-        // load des layers
-        this.layer_platforms = this.map_Test.createLayer('layer_platforms', this.tileset_Test);
-        this.layer_platforms.setCollisionByProperty({ estSolide: true });
+        // chargement des calques
+        const layers = this.loadMap(levelMap);
 
+        // création du player
+        this.createPlayer(layers.spawnPoint.x,layers.spawnPoint.y,layers);
+
+        // création d'une box
         this.box = this.physics.add.sprite(400, 1472, 'box').setImmovable(true);
 
-        // load personnage
-
+        // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
             controller = pad;
         });

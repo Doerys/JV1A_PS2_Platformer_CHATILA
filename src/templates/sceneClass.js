@@ -1,19 +1,25 @@
-import Player from "src/entities/player.js";
+import Player from "../entities/player.js";
 
 class SceneClass extends Phaser.Scene {
 
-    constructor(name) {
+    constructor(name) { // name = on reprend le nom qu'on trouve dans le constructeur du niveau
         super({
             key: name,
             physics: {
+                default: 'arcade',
                 arcade: {
-                    debug: false,
-                    gravity: { y: 800 }
+                    //gravity: { y: 1450 },
+                    gravity: { y : 1600 },
+                    debug: true,
+                    tileBias: 64,
                 }
             },
-            render: {
-                pipeline: 'Light2D'
-            }
+            
+            input:{gamepad:true},
+            
+            fps: {
+                target: 60,
+            },
         })
     }
 
@@ -30,27 +36,34 @@ class SceneClass extends Phaser.Scene {
 
     update() { }
 
-    loadMap(levelMap, nextLevel) {;
+    loadMap(levelMap) {;
 
+        // on prend le tileset dans le TILED
         const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
 
-        const layer_platformes = levelMap.createLayer("layer_platformes", tileset);
+        // on crée le calque plateformes
+        const layer_platforms = levelMap.createLayer("layer_platforms", tileset);
+        const layer_spawn = levelMap.getObjectLayer("Spawn");
 
-        layer_platformes.setCollisionByProperty({ estSolide : true });
+        // ajout de collision sur plateformes
+        layer_platforms.setCollisionByProperty({ estSolide : true });
 
-        this.physics.add.collider(this.player, this.layer_platforms);
-        this.physics.add.collider(this.player, this.box, this.handleBoxCollision(), null, this);
-        this.physics.add.collider(this.box, this.layer_platforms);
+        // On enregistre le spawn dans une variable
+        const spawnPoint = layer_spawn.objects[0];
+        this.spawn = layer_spawn.objects[0];
 
-        return {layer_platformes, tileset }
+        return {spawnPoint, layer_platforms, tileset }
     }
 
-    createPlayer(x,y,layers) {
+    createPlayer(x, y, layers) {
 
-        this.player = new Player(this.spawnX, this.spawnY, 'player').setCollideWorldBounds();
+        this.player = new Player(this, x + 32, y, 'player').setCollideWorldBounds();
 
-        this.physics.add.collider(this.player, layers.calc_plateformes);
-        this.physics.add.collider(this.player, layers.calc_kill,this.restart,null,this);
+        //COLLISIONS
+
+        this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
+        //this.physics.add.collider(this.player, this.box, this.handleBoxCollision(), null, this);
+        //this.physics.add.collider(this.box, layers); // box > plateformes
         
     }
 

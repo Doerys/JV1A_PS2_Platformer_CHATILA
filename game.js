@@ -11,9 +11,9 @@ height: HEIGHT,
 zoomFactor: ZOOM_FACTOR,
 }
 
-const Scenes = [PreloadScene, TestScene]
-const createScene = Scene => new Scene(SHARED_CONFIG)
-const initScenes = () => Scenes.map(createScene)
+const Scenes = [PreloadScene, TestScene] // on liste les scènes
+const createScene = Scene => new Scene(SHARED_CONFIG) // on crée une scène qui possède les configs
+const initScenes = () => Scenes.map(createScene) // crée une scène pour chaque élément de la map. Lance la 1ere scène automatiquement
 
 const config = {
     type: Phaser.AUTO,
@@ -31,7 +31,7 @@ const config = {
     fps: {
         target: 60,
     },
-    scene: initScene()
+    scene: initScenes()
 }
 
 new Phaser.Game(config);

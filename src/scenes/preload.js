@@ -11,7 +11,7 @@ class Preload extends Phaser.Scene {
         // Box
         this.load.image('box', 'src/scenes/caisse.png'); //Tileset    
 
-
+        // fichier image du tileset
         this.load.image('tileset_image', 'src/scenes/placeholder_test.png'); //Tileset     
 
         // Maps (JSON)
@@ -20,11 +20,11 @@ class Preload extends Phaser.Scene {
 
     create() {
         console.log("PRELOAD ATTEINT");
-        /*this.scene.start("TestScene", {
+        this.scene.start("TestScene", {
             mapName: "map_test", // nom de la map
-            mapTileset: "plaholder_test", // nom du tileset sur TILED
+            mapTileset: "placeholder_test", // nom du tileset sur TILED
             mapTilesetImage: "tileset_image", // nom du fichier image du tileset
-        });*/
+        });
     }
 
 }
