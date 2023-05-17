@@ -225,7 +225,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 this.jumpPlayer();
 
-                this.facing = "right ";
+                this.facing = "right";
 
                 this.body.setAllowGravity(true); // réactive la gravité du joueur fixé au mur
                 this.grabLeft = false; // désactive la variable du wallGrab
@@ -300,7 +300,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if ((this.grabLeft || this.grabRight) && keyDown.isDown) {
 
             this.body.setAllowGravity(true);
-            this.setVelocityY(100);
+            this.setVelocityY(150);
             this.inputsMoveLocked = false;
         }
     }
