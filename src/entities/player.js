@@ -23,8 +23,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.startJumpRunTimer = false;
         this.canHighJump = false;
         this.jumpRunTimer = 0;
+        this.planeDisableTimer = 0;
         this.jumpCounter = 2;
         this.isJumping = false;
+
+        this.canPlane = false;
 
         this.isCharging = false;
 
@@ -34,6 +37,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.frictionGround = 50;
 
         this.inputsMoveLocked = false;
+
+        this.setDamping(true);
 
         this.create(); // fonction qui permet de déclencher la fonction create (ne se fait pas automatiquement, car ce n'est pas une scène)
     }
@@ -45,13 +50,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.keyD = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keyQ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        this.keyE = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.spaceBar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.keyShift = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
         /*this.input.gamepad.once('connected', function (pad) {
             controller = pad;
         });*/
-
         // animation joueur
         this.scene.anims.create({
             key: 'player_idle',
@@ -144,6 +149,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (keyLeft.isUp && keyRight.isUp && this.keyQ.isUp && this.keyD.isUp && /*!this.controller.left
             && !this.controller.right &&*/ (this.onGround || this.body.velocity.y == 0) && this.speedPlayer != 0) { // si aucune touche de déplacement pressée + bloqué au sol + pas de saut + pas déjà immobile
 
+            //this.setDragX(0.0001); // pas fonctionnel encore
+
             if (Math.abs(this.speedMoveX) <= this.frictionGround) { //Math.abs => met la valeur entre parenthèse positive. Si la vitesse speedMoveX est inférieure ou égale à la friction, alors on met 0 direction.
                 this.speedMoveX = 0
             }
@@ -152,44 +159,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
             else if (this.speedMoveX < 0) {
                 this.speedMoveX += this.frictionGround; // augmente la vitesse jusqu'à 0
-            }
-        }
-
-        // trigger de la charge
-        if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping) {
-            this.isCharging = true;
-        }
-
-        console.log(this.facing);
-
-        // charge
-        if (this.isCharging) {
-            this.inputsMoveLocked = true;
-
-            if (this.facing == 'right') {
-                this.setVelocityX(this.speedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
-
-                if (this.speedMoveX > this.speedXMax * 3) {
-                    this.speedMoveX += this.accelerationX;
-                }
-                else {
-                    this.speedMoveX = this.speedXMax * 3; // sinon, vitesse = vitesse max
-                }
-            }
-
-            else if (this.facing == "left") {
-                this.setVelocityX(this.speedMoveX)
-
-                if (this.speedMoveX > this.speedXMax * 3) {
-                    this.speedMoveX = -this.accelerationX;
-                }
-                else {
-                    this.speedMoveX = -this.speedXMax * 3; // sinon, vitesse = vitesse max
-                }
-            }
-
-            if (this.blockedLeft || this.blockedRight) {
-                this.stopCharge();
             }
         }
 
@@ -209,10 +178,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         else if (keyUp.isDown && this.canHighJump) { // si le curseur haut est pressé et jump timer =/= 0
             if (this.jumpRunTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                 this.canHighJump = false;
-            } else {
-                // jump higher if holding jump
+            } 
+            else {
+                // jump higher if holding jump 
                 this.setVelocityY(-this.speedMoveY);
             }
+            if (this.planeDisableTimer.getElapsedSeconds() > .4){
+                this.canPlane = true;
+            }
+        }
+
+        else if (keyUp.isDown && !this.canHighJump){
+            console.log("check")
+            this.setVelocityY(50);
         }
 
         // WALL JUMP
@@ -303,6 +281,58 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityY(150);
             this.inputsMoveLocked = false;
         }
+
+        // trigger de la charge
+        if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping) {
+            this.isCharging = true;
+        }
+
+        // charge
+        if (this.isCharging) {
+            this.inputsMoveLocked = true;
+
+            if (this.facing == 'right') {
+                this.setVelocityX(this.speedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+
+                if (this.speedMoveX > this.speedXMax * 3) {
+                    this.speedMoveX += this.accelerationX;
+                }
+                else {
+                    this.speedMoveX = this.speedXMax * 3; // sinon, vitesse = vitesse max
+                }
+            }
+
+            else if (this.facing == "left") {
+                this.setVelocityX(this.speedMoveX)
+
+                if (this.speedMoveX > this.speedXMax * 3) {
+                    this.speedMoveX = -this.accelerationX;
+                }
+                else {
+                    this.speedMoveX = -this.speedXMax * 3; // sinon, vitesse = vitesse max
+                }
+            }
+
+            if (this.blockedLeft || this.blockedRight) {
+                this.stopCharge();
+            }
+        }
+
+        // GRAPPIN
+        if (this.keyE.isDown){
+            this.body.setAllowGravity(false);
+            this.setVelocity(0, 0);
+
+            this.inputsMoveLocked = true;
+
+            //this.bout
+            
+            setTimeout(() => {
+                this.inputsMoveLocked = false;
+                this.body.setAllowGravity(true);
+            }, 100); // après un certain temps, on repasse la possibilité de sauter à true
+
+        }
     }
 
     jumpPlayer() {
@@ -312,6 +342,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.startJumpRunTimer = false;
             this.jumpRunTimer = this.scene.time.addEvent({
                 delay: 3000,                // ms
+                loop: false
+            });
+            this.planeDisableTimer = this.scene.time.addEvent({
+                delay: 4000,                // ms
                 loop: false
             });
         }
@@ -331,7 +365,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }, 100); // après un certain temps, on repasse la possibilité de sauter à true
     }
 
-    handleBoxCollision(player, box) {
+    /*handleBoxCollision(player, box) {
 
         console.log(this.player);
 
@@ -355,15 +389,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.player.x += 1 * 64; // Déplace le joueur de la même distance que la caisse
             }
         }
-    }
+    }*/
 
-    stopCharge(){
+    stopCharge() {
         this.inputsMoveLocked = false;
         this.setVelocityX(0);
         this.isCharging = false;
     }
 
-    pushBox(player, box) {
+    /*pushBox(player, box) {
         player.body.velocity.x = this.speedXMax - this.speedXMax - .25
         box.body.velocity.x = player.body.velocity.x
 
@@ -374,7 +408,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         player.body.velocity.x = this.speedXMax - this.speedXMax - .25
         box.body.velocity.x = player.body.velocity.x
 
-    }
+    }*/
 }
 
 export default Player

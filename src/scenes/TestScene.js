@@ -11,15 +11,15 @@ class TestScene extends SceneClass {
         this.mapName = data.mapName;
         this.mapTileset = data.mapTileset;
         this.mapTilesetImage = data.mapTilesetImage
-      };
+    };
 
-    create(){
-        
+    create() {
+
         this.spawnX = 96;
         this.spawnY = 1472;
 
         this.controller = false;
-        
+
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
 
@@ -27,18 +27,15 @@ class TestScene extends SceneClass {
         const layers = this.loadMap(levelMap);
 
         // création du player
-        //this.createPlayer(layers.spawnPoint.x,layers.spawnPoint.y,layers);
-        
-        this.mob = this.add.sprite(this.spawn.x +32, this.spawn.y, 'mob')
+        this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
+
+        /*this.mob = this.add.sprite(this.spawn.x +32, this.spawn.y, 'mob')
         .setInteractive({ useHandCursor: true })
         .on('pointerdown', function (){
         
             this.possessMob(this.mob, this.mob.x, this.mob.y, layers);
 
-        }, this)
-
-        // création d'une box
-        this.box = this.physics.add.sprite(400, 1472, 'box').setImmovable(true);
+        }, this)*/
 
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
@@ -51,9 +48,53 @@ class TestScene extends SceneClass {
 
         // caméra
         this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728); //format 16/9 
+
+        // éléments de décors
+        this.breaks = this.physics.add.staticGroup();
+        this.boxes = this.physics.add.group();
+
+        layers.layer_break.objects.forEach(break_create => {
+            const breaks = this.breaks.create(break_create.x + 32, break_create.y + 32, "break");
+            
+            // si collision pendant charge, détruit l'objet et stop la charge
+            this.physics.add.collider(this.player, breaks, function () {
+                if (this.player.isCharging && (this.player.body.touching.left || this.player.body.touching.right)) {
+                    breaks.destroy(); this.player.stopCharge()
+                }
+            }, null, this);
+        }, this)
+
+        layers.layer_box.objects.forEach(box => {
+            const boxes = this.boxes.create(box.x + 32, box.y + 32, "box").setDamping(true);
+            this.physics.add.collider(boxes, layers.layer_platforms, this.disablePushPlayer, null, this);
+
+            //this.physics.add.overlap(this.player, this.box, this.handleBoxCollision, null, this);
+
+            this.physics.add.collider(boxes, this.player/*, this.stopBox,
+                /*function() { 
+                if(this.player.isCharging && (this.player.body.touching.left || this.player.body.touching.right)){
+                breaks.destroy(); this.player.stopCharge()}
+            }, null, this*/);
+        }, this)
     }
 
-    update () {
+    update() { }
+
+    disablePushPlayer(box) {
+        if(box.body.blocked.down){
+            if (box.body.blocked.right || box.body.blocked.left) {
+                console.log("CHECK");
+                box.body.setImmovable(true);
+                box.setVelocity(0, 0);
+            }
+        box.setDragX(0.0001);
+        }
+    }
+
+    handleBoxCollision
+
+    stopBox(box) {
+        box.setVelocity(0);
     }
 }
 
