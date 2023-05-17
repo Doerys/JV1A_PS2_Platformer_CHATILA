@@ -8,8 +8,12 @@ class Preload extends Phaser.Scene {
         // Perso test
         this.load.spritesheet('player', 'src/scenes/player_test.png', { frameWidth: 64, frameHeight: 128});
 
+        this.load.spritesheet('mob', 'src/scenes/mob_test.png', { frameWidth: 64, frameHeight: 128});
+
         // Box
         this.load.image('box', 'src/scenes/caisse.png'); //Tileset    
+
+        this.load.image('break', 'src/scenes/break.png')
 
         // fichier image du tileset
         this.load.image('tileset_image', 'src/scenes/placeholder_test.png'); //Tileset     

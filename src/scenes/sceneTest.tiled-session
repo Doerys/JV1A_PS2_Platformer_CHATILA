@@ -23,11 +23,14 @@
             "scaleInDock": 1
         },
         "testScene.tmx": {
-            "scale": 0.5,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 3,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 252,
-                "y": 1370
+                "x": 138.33333333333331,
+                "y": 1505
             }
         },
         "testScene.tmx#placeholder_test": {
@@ -44,14 +47,13 @@
     "map.tileWidth": 64,
     "map.width": 48,
     "openFiles": [
-        "testScene.tmx",
-        "C:/Users/y.chatila/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/maps/Test niveau 1 - 3x.tmx"
+        "testScene.tmx"
     ],
     "project": "sceneTest.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "C:/Users/y.chatila/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/maps/Test niveau 1 - 3x.tmx",
-        "testScene.tmx"
+        "testScene.tmx",
+        "C:/Users/y.chatila/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/maps/Test niveau 1 - 3x.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

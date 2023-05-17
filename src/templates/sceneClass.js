@@ -29,14 +29,7 @@ class SceneClass extends Phaser.Scene {
         this.mapTilesetImage = data.mapTilesetImage
     }
 
-    create() {
-        
-        
-    }
-
-    update() { }
-
-    loadMap(levelMap) {;
+    loadMap(levelMap) {
 
         // on prend le tileset dans le TILED
         const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
@@ -44,6 +37,7 @@ class SceneClass extends Phaser.Scene {
         // on crée le calque plateformes
         const layer_platforms = levelMap.createLayer("layer_platforms", tileset);
         const layer_spawn = levelMap.getObjectLayer("Spawn");
+        const layer_break = levelMap.getObjectLayer("Break");
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide : true });
@@ -52,20 +46,29 @@ class SceneClass extends Phaser.Scene {
         const spawnPoint = layer_spawn.objects[0];
         this.spawn = layer_spawn.objects[0];
 
-        return {spawnPoint, layer_platforms, tileset }
+        return {spawnPoint, layer_platforms, layer_break, tileset }
     }
 
     createPlayer(x, y, layers) {
-
-        this.player = new Player(this, x + 32, y, 'player').setCollideWorldBounds();
+        this.player = new Player(this, x, y, 'player').setCollideWorldBounds();
 
         //COLLISIONS
 
         this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
         //this.physics.add.collider(this.player, this.box, this.handleBoxCollision(), null, this);
         //this.physics.add.collider(this.box, layers); // box > plateformes
-        
+
+        this.breaks = this.physics.add.staticGroup();
+
+        layers.layer_break.objects.forEach(break_create => {
+            const breaks = this.breaks.create(break_create.x + 32, break_create.y + 32, "break");
+            this.physics.add.collider(this.player, breaks, function() { breaks.destroy()}, null, this);
+        }, this)
     }
 
+    possessMob(mob, mobX, mobY, layers){
+        mob.destroy();
+        this.createPlayer(mobX, mobY, layers);
+    }
 }
 export default SceneClass;
