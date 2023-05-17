@@ -62,7 +62,7 @@ class SceneClass extends Phaser.Scene {
 
         layers.layer_break.objects.forEach(break_create => {
             const breaks = this.breaks.create(break_create.x + 32, break_create.y + 32, "break");
-            this.physics.add.collider(this.player, breaks, function() { breaks.destroy()}, null, this);
+            this.physics.add.collider(this.player, breaks, function() { breaks.destroy(); this.player.stopCharge()}, null, this);
         }, this)
     }
 

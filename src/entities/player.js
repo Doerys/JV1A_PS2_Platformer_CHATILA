@@ -156,49 +156,43 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // trigger de la charge
-        if(!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping){
+        if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping) {
             this.isCharging = true;
         }
 
         console.log(this.facing);
 
         // charge
-        if (this.isCharging){
+        if (this.isCharging) {
             this.inputsMoveLocked = true;
 
-            console.log(this.facing);
-
-            if(this.facing == 'right'){
+            if (this.facing == 'right') {
                 this.setVelocityX(this.speedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
 
-                if (this.speedMoveX > this.speedXMax*3) {
+                if (this.speedMoveX > this.speedXMax * 3) {
                     this.speedMoveX += this.accelerationX;
                 }
                 else {
-                    this.speedMoveX = this.speedXMax *3; // sinon, vitesse = vitesse max
+                    this.speedMoveX = this.speedXMax * 3; // sinon, vitesse = vitesse max
                 }
             }
-    
-            else if(this.facing == "left"){
 
-                console.log("CHECK")
+            else if (this.facing == "left") {
                 this.setVelocityX(this.speedMoveX)
 
-                if (this.speedMoveX > this.speedXMax*3) {
+                if (this.speedMoveX > this.speedXMax * 3) {
                     this.speedMoveX = -this.accelerationX;
                 }
                 else {
-                    this.speedMoveX = -this.speedXMax *3; // sinon, vitesse = vitesse max
+                    this.speedMoveX = -this.speedXMax * 3; // sinon, vitesse = vitesse max
                 }
             }
-            
-            if (this.blockedLeft || this.blockedRight){
-                this.inputsMoveLocked = false;
-                this.setVelocityX(0);
-                this.isCharging = false;
+
+            if (this.blockedLeft || this.blockedRight) {
+                this.stopCharge();
             }
         }
-        
+
         // SAUT (plus on appuie, plus on saut haut)
 
         // déclencheur du saut
@@ -363,6 +357,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    stopCharge(){
+        this.inputsMoveLocked = false;
+        this.setVelocityX(0);
+        this.isCharging = false;
+    }
 
     pushBox(player, box) {
         player.body.velocity.x = this.speedXMax - this.speedXMax - .25

@@ -27,15 +27,15 @@ class TestScene extends SceneClass {
         const layers = this.loadMap(levelMap);
 
         // création du player
-        this.createPlayer(layers.spawnPoint.x,layers.spawnPoint.y,layers);
+        //this.createPlayer(layers.spawnPoint.x,layers.spawnPoint.y,layers);
         
-        /*this.mob = this.add.sprite(this.spawn.x +32, this.spawn.y, 'mob')
+        this.mob = this.add.sprite(this.spawn.x +32, this.spawn.y, 'mob')
         .setInteractive({ useHandCursor: true })
         .on('pointerdown', function (){
         
             this.possessMob(this.mob, this.mob.x, this.mob.y, layers);
 
-        }, this)*/
+        }, this)
 
         // création d'une box
         this.box = this.physics.add.sprite(400, 1472, 'box').setImmovable(true);
