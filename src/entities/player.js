@@ -301,9 +301,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // trigger de la charge
-        if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping) {
+        /*if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping) {
             this.isCharging = true;
-        }
+        }*/
 
         // charge
         /*if (this.isCharging) {
@@ -350,8 +350,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.body.setAllowGravity(true);
             }, 100); // après un certain temps, on repasse la possibilité de sauter à true
         }
-
-        console.log(this.shoot);
 
         // TIR PLUME
         if (Phaser.Input.Keyboard.JustDown(this.keyShift)) {

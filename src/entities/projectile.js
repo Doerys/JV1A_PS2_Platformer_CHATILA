@@ -8,7 +8,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
     }
 
     init(){
-        this.speed = 250; 
+        this.speed = 500; 
         this.maxDistance = 150;
         this.traveledDistance = 0; 
         this.dir = null; 
@@ -29,7 +29,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
 
     }
 
-    hit(target){
+    /*hit(target){
         new SpriteEffect(this.scene, 0,0, "projectile_impact").playOn(target, this.y);
         if(target.protected){
             this.getDeflected();
@@ -51,7 +51,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
             this.dir= "right";
         }
         this.maxDistance = 500; 
-    }
+    }*/
 
 }
 
