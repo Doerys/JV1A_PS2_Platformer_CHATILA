@@ -31,6 +31,13 @@ class SceneClass extends Phaser.Scene {
 
     loadMap(levelMap) {
 
+        // résolution de l'écran
+        this.physics.world.setBounds(0, 0, 3072, 1728);
+        // PLAYER - Collision entre le joueur et les limites du niveau
+
+        // caméra
+        this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728); //format 16/9 
+
         // on prend le tileset dans le TILED
         const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
 
@@ -57,7 +64,6 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
         //this.physics.add.collider(this.player, this.box, this.handleBoxCollision(), null, this);
-
     }
 
     possessMob(mob, mobX, mobY, layers) {

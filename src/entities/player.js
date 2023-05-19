@@ -1,3 +1,5 @@
+import Projectile from "./projectile.js";
+
 class Player extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene, x, y) {
@@ -16,27 +18,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.speedMoveY = 500;
         //this.speedMoveY = 1000;
 
+        this.projectiles = new Phaser.GameObjects.Group;
+
         this.facing = 'right';
 
-        this.canJump = true;
+        this.inputsMoveLocked = false; // bloque les touches de déplacement latéraux
+        
+        this.canJump = true; // autorise le saut 
+        this.startJumpTimer = false; // déclencher le timer du saut
+        this.canHighJump = false; // autorise le fait de faire des sauts plus haut
+        this.isJumping = false; 
+        this.canPlane = false; // autorise de planer
+        this.newJump = false; // permet de différencier un début de jump d'une fin de jump (pour le wall grab)
 
-        this.startJumpRunTimer = false;
-        this.canHighJump = false;
-        this.jumpRunTimer = 0;
-        this.planeDisableTimer = 0;
-        this.jumpCounter = 2;
-        this.isJumping = false;
-
-        this.canPlane = false;
+        this.jumpTimer = 0; // temps en secondes sur lequel on appuie sur la touche saut
+        this.jumpCounter = 2; // le nombre de sauts restants (utile pour double jump)
 
         this.isCharging = false;
 
-        this.newJump = false; // permet de différencier un début de jump d'une fin de jump (pour le wall grab)
-
         this.accelerationX = 15;
         this.frictionGround = 50;
-
-        this.inputsMoveLocked = false;
 
         this.setDamping(true);
 
@@ -47,6 +48,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // commandes
         this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+        this.keyA = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
         this.keyD = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keyQ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -96,8 +99,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.onGround && !this.isCharging) {
             this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
             this.inputsMoveLocked = false;
+            
             this.jumpCounter = 2; // si le joueur est au sol, réinitialise son compteur de jump
             this.isJumping = false;
+            this.canPlane = false;
+        }
+
+        // Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
+        if (keyUp.isUp && !this.onGround){
+            this.canPlane = true;
         }
 
         // ANIMATIONS - DEPLACEMENT 2 DIRECTIONS
@@ -162,10 +172,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
-        // SAUT (plus on appuie, plus on saut haut)
+        if (this.keyA.isDown){
+            console.log(this.jumpTimer.getElapsedSeconds());
+            console.log(upOnce);
+        }
 
-        // déclencheur du saut
-        if (upOnce && this.canJump && this.jumpCounter > 0 && this.onGround && !this.canHighJump) { // si on vient de presser saut + peut sauter true + au sol
+        // SAUT (plus on appuie, plus on saut haut)
+        // déclencheur du saut - C'est OKAY
+        if (upOnce && this.canJump && this.jumpCounter > 0 && this.onGround) { // si on vient de presser saut + peut sauter true + au sol
             this.jumpPlayer();
         }
 
@@ -176,22 +190,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
         else if (keyUp.isDown && this.canHighJump) { // si le curseur haut est pressé et jump timer =/= 0
-            if (this.jumpRunTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
+            if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                 this.canHighJump = false;
+                setTimeout(() => {
+                    this.canPlane = true;
+                }, 300);
             } 
             else {
                 // jump higher if holding jump 
                 this.setVelocityY(-this.speedMoveY);
             }
-            if (this.planeDisableTimer.getElapsedSeconds() > .4){
-                this.canPlane = true;
-            }
         }
 
-        else if (keyUp.isDown && !this.canHighJump){
-            console.log("check")
+        // planer
+        /*else if (keyUp.isDown && this.canPlane){
             this.setVelocityY(50);
-        }
+        }*/
 
         // WALL JUMP
 
@@ -200,6 +214,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             // WALL JUMP depuis mur GAUCHE
             if ((upOnce || keyRight.isDown) && this.grabLeft) {
+
+                console.log("check wall jump gauche")
 
                 this.jumpPlayer();
 
@@ -210,15 +226,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 this.setVelocityX(this.speedXMax); // repousse sur la gauche
 
-                /*setTimeout(() => {    
+                /*setTimeout(() => {
                     if(!this.grabLeft || !this.grabRight){
                     this.inputsMoveLocked = false; // réactive les touches de mouvement du joueur
                     }
-                }, 1000);*/
+                }, 2500);*/
             }
 
             // WALL JUMP depuis mur DROIT
             if ((upOnce || keyLeft.isDown) && this.grabRight) {
+
+                console.log("check wall jump droit")
 
                 this.jumpPlayer();
 
@@ -233,7 +251,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     if(!this.grabLeft || !this.grabRight){
                     this.inputsMoveLocked = false; // réactive les touches de mouvement du joueur
                     }
-                }, 1000);*/
+                }, 2500);*/
             }
         }
 
@@ -242,9 +260,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // WALL GRAB GAUCHE
         if (this.blockedLeft && !this.onGround) { // si on est bloqué sur une paroi de gauche, et pas en contact avec le sol
 
-            console.log("check wall grab gauche")
+            if (!this.newJump) { // si le saut actuel n'est pas nouveau
 
-            if (!this.newJump) { // si on appuie pas sur la touche du haut
+                console.log("check wall grab gauche")
 
                 // fixe le joueur au mur
                 this.body.setAllowGravity(false);
@@ -260,9 +278,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // WALL GRAB DROIT
         else if (this.blockedRight && !this.onGround) { // si on est bloqué sur une paroi de droite, et pas en contact avec le sol
 
-            console.log("check wall grab droit")
+            if (!this.newJump) { // si le saut actuel n'est pas nouveau
 
-            if (!this.newJump) { // si on appuie pas sur la touche du haut
+                console.log("check wall grab droit")
 
                 // fixe le joueur au mur
                 this.body.setAllowGravity(false);
@@ -288,7 +306,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // charge
-        if (this.isCharging) {
+        /*if (this.isCharging) {
             this.inputsMoveLocked = true;
 
             if (this.facing == 'right') {
@@ -316,7 +334,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.blockedLeft || this.blockedRight) {
                 this.stopCharge();
             }
-        }
+        }*/
 
         // GRAPPIN
         if (this.keyE.isDown){
@@ -331,38 +349,43 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.inputsMoveLocked = false;
                 this.body.setAllowGravity(true);
             }, 100); // après un certain temps, on repasse la possibilité de sauter à true
+        }
 
+        console.log(this.shoot);
+
+        // TIR PLUME
+        if (Phaser.Input.Keyboard.JustDown(this.keyShift)) {
+
+                const feather = new Projectile(this.scene, this.x, this.y + 5);
+                this.projectiles.add(feather);
+                feather.shoot(this);
         }
     }
 
     jumpPlayer() {
-        this.startJumpRunTimer = true;
+        this.canJump = false; // ne peut plus sauter - FALSE
+        this.canHighJump = true; // peut faire un saut haut
+        this.newJump = true; // nouveau saut
 
-        if (this.startJumpRunTimer == true) {
-            this.startJumpRunTimer = false;
-            this.jumpRunTimer = this.scene.time.addEvent({
-                delay: 3000,                // ms
-                loop: false
-            });
-            this.planeDisableTimer = this.scene.time.addEvent({
-                delay: 4000,                // ms
+        this.isJumping = true; // est en train de sauter - TRUE
+        this.jumpCounter -= 1; // pour le double jump
+
+        this.setVelocityY(-this.speedMoveY); // On set la vélocité Y à la force de base
+
+        this.startJumpTimer = true; // on démarre le timer
+
+        if (this.startJumpTimer == true) {
+            this.startJumpTimer = false;
+            this.jumpTimer = this.scene.time.addEvent({
+                delay: 5000,                // ms
                 loop: false
             });
         }
 
-        this.canHighJump = true;
-
-        this.newJump = true;
-
-        this.canJump = false; // ne peut plus sauter - FALSE
-        this.jumpCounter -= 1; // pour le double jump
-        this.isJumping = true; // est en train de sauter - TRUE
-        this.setVelocityY(-this.speedMoveY); // On set la vélocité Y à la force de base
-
         setTimeout(() => {
             this.canJump = true;
             this.newJump = false;
-        }, 100); // après un certain temps, on repasse la possibilité de sauter à true
+        }, 100); // après un certain temps, on repasse la possibilité de sauter à true, et le saut n'est plus nouveau (pour le wall jump)
     }
 
     /*handleBoxCollision(player, box) {

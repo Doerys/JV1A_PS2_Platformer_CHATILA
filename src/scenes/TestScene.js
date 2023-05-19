@@ -37,11 +37,6 @@ class TestScene extends SceneClass {
 
         }, this)*/
 
-        // implémentation pour contrôle à la manette
-        this.input.gamepad.once('connected', function (pad) {
-            controller = pad;
-        });
-
         // résolution de l'écran
         this.physics.world.setBounds(0, 0, 3072, 1728);
         // PLAYER - Collision entre le joueur et les limites du niveau
@@ -76,26 +71,14 @@ class TestScene extends SceneClass {
                 breaks.destroy(); this.player.stopCharge()}
             }, null, this*/);
         }, this)
+
+        // implémentation pour contrôle à la manette
+        this.input.gamepad.once('connected', function (pad) {
+            controller = pad;
+        });
     }
 
     update() { }
-
-    disablePushPlayer(box) {
-        if(box.body.blocked.down){
-            if (box.body.blocked.right || box.body.blocked.left) {
-                console.log("CHECK");
-                box.body.setImmovable(true);
-                box.setVelocity(0, 0);
-            }
-        box.setDragX(0.0001);
-        }
-    }
-
-    handleBoxCollision
-
-    stopBox(box) {
-        box.setVelocity(0);
-    }
 }
 
 export default TestScene
