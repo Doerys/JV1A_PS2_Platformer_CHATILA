@@ -46,6 +46,7 @@ class SceneClass extends Phaser.Scene {
         const layer_spawn = levelMap.getObjectLayer("Spawn");
         const layer_break = levelMap.getObjectLayer("Break");
         const layer_box = levelMap.getObjectLayer("Box");
+        const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
@@ -54,7 +55,7 @@ class SceneClass extends Phaser.Scene {
         const spawnPoint = layer_spawn.objects[0];
         this.spawn = layer_spawn.objects[0];
 
-        return { spawnPoint, layer_platforms, layer_break, layer_box, tileset }
+        return { spawnPoint, layer_platforms, layer_break, layer_box, layer_ravenPlat, tileset }
     }
 
     createPlayer(x, y, layers) {

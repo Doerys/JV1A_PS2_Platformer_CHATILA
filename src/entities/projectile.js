@@ -19,7 +19,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
         if(player.facing == "right"){
             this.x = player.x + 15; 
             this.setVelocityX(this.speed); 
-            this.body.setAllowGravity(false);
+            //this.body.setAllowGravity(false);
         }else if(player.facing == "left"){
             this.x = player.x - 15;
             this.setFlipX(true); 
@@ -27,6 +27,17 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
             this.body.setAllowGravity(false);
         }
 
+    }
+
+    createPlat(proj, plat){
+        
+        this.scene.add.physics.sprite(plat.x, plat.y, "ravenPlatOn");
+        plat.destroy();
+        proj.destroy();
+        // créer une plateforme de telle taille, à telles coordonnées liées à la plateforme, 
+        // destroy proj
+        //destroy plat
+        
     }
 
     /*hit(target){

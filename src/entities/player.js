@@ -354,7 +354,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // TIR PLUME
         if (Phaser.Input.Keyboard.JustDown(this.keyShift)) {
 
-                const feather = new Projectile(this.scene, this.x, this.y + 5);
+                const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
                 this.projectiles.add(feather);
                 feather.shoot(this);
         }

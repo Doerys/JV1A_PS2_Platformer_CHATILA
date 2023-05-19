@@ -1,5 +1,6 @@
 import SceneClass from "../templates/sceneClass.js";
 import Player from "../entities/player.js";
+import Projectile from "../entities/projectile.js";
 
 class TestScene extends SceneClass {
 
@@ -47,6 +48,7 @@ class TestScene extends SceneClass {
         // éléments de décors
         this.breaks = this.physics.add.staticGroup();
         this.boxes = this.physics.add.group();
+        this.ravenPlats = this.physics.add.staticGroup();
 
         layers.layer_break.objects.forEach(break_create => {
             const breaks = this.breaks.create(break_create.x + 32, break_create.y + 32, "break");
@@ -63,15 +65,17 @@ class TestScene extends SceneClass {
             const boxes = this.boxes.create(box.x + 32, box.y + 32, "box").setDamping(true);
             this.physics.add.collider(boxes, layers.layer_platforms, this.disablePushPlayer, null, this);
 
-            //this.physics.add.overlap(this.player, this.box, this.handleBoxCollision, null, this);
-
-            this.physics.add.collider(boxes, this.player/*, this.stopBox,
-                /*function() { 
-                if(this.player.isCharging && (this.player.body.touching.left || this.player.body.touching.right)){
-                breaks.destroy(); this.player.stopCharge()}
-            }, null, this*/);
+            this.physics.add.collider(boxes, this.player);
         }, this)
 
+        layers.layer_ravenPlat.objects.forEach(ravenPlat => {
+            const ravenPlateform = this.ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
+            
+            // si collision pendant charge, détruit l'objet et stop la charge
+            this.physics.add.collider(this.player.projectiles, ravenPlateform, this.player.projectiles.createPlat(), null, this);
+
+        }, this)
+           
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
             controller = pad;
@@ -79,6 +83,17 @@ class TestScene extends SceneClass {
     }
 
     update() { }
+
+    disablePushPlayer(box) {
+        if(box.body.blocked.down){
+            if (box.body.blocked.right || box.body.blocked.left) {
+                console.log("CHECK");
+                box.body.setImmovable(true);
+                box.setVelocity(0, 0);
+            }
+        box.setDragX(0.0001);
+        }
+    }
 }
 
 export default TestScene

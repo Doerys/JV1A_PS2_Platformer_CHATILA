@@ -17,6 +17,9 @@ class Preload extends Phaser.Scene {
 
         this.load.image('feather', 'src/scenes/leather.png');
 
+        this.load.image('ravenPlatOff', 'src/scenes/ravenPlatOff.png');
+        this.load.image('ravenPlatOn', 'src/scenes/ravenPlatOn.png');
+
         // fichier image du tileset
         this.load.image('tileset_image', 'src/scenes/placeholder_test.png'); //Tileset     
 
