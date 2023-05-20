@@ -19,7 +19,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
         if(player.facing == "right"){
             this.x = player.x + 15; 
             this.setVelocityX(this.speed); 
-            //this.body.setAllowGravity(false);
+            this.body.setAllowGravity(false);
         }else if(player.facing == "left"){
             this.x = player.x - 15;
             this.setFlipX(true); 
@@ -29,7 +29,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
 
     }
 
-    createPlat(proj, plat){
+    /*createPlat(proj, plat){
         
         this.scene.add.physics.sprite(plat.x, plat.y, "ravenPlatOn");
         plat.destroy();
@@ -38,20 +38,15 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
         // destroy proj
         //destroy plat
         
+    }*/
+
+    hit(target){
+        console.log("check");
+        this.destroy();
+        target.destroy();
     }
 
-    /*hit(target){
-        new SpriteEffect(this.scene, 0,0, "projectile_impact").playOn(target, this.y);
-        if(target.protected){
-            this.getDeflected();
-        }else{
-            this.particleEmmiter.stop(); 
-            this.residuEmmiter.stop(); 
-            this.destroy();
-        }
-    }
-
-    getDeflected(){
+    /*getDeflected(){
         if(this.dir == "right"){
             this.setVelocityX(-this.speed); 
             this.setFlipX(true); 

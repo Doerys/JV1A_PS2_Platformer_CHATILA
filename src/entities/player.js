@@ -62,18 +62,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         });*/
         // animation joueur
         this.scene.anims.create({
-            key: 'player_idle',
+            key: 'player_left',
             frames: [{ key: 'player', frame: 0 }],
         });
 
         this.scene.anims.create({
-            key: 'player_left',
-            frames: [{ key: 'player', frame: 1 }],
-        });
-
-        this.scene.anims.create({
             key: 'player_right',
-            frames: [{ key: 'player', frame: 2 }],
+            frames: [{ key: 'player', frame: 1 }],
         });
     }
 

@@ -11,11 +11,13 @@ class Preload extends Phaser.Scene {
         this.load.spritesheet('mob', 'src/scenes/mob_test.png', { frameWidth: 64, frameHeight: 128});
 
         // Box
-        this.load.image('box', 'src/scenes/caisse.png'); //Tileset    
+        this.load.image('box', 'src/scenes/caisse.png');     
+
+        this.load.image('movingPlat', 'src/scenes/movingPlat.png');     
 
         this.load.image('break', 'src/scenes/break.png');
 
-        this.load.image('feather', 'src/scenes/leather.png');
+        //this.load.image('feather', 'src/scenes/feather.png');
 
         this.load.image('ravenPlatOff', 'src/scenes/ravenPlatOff.png');
         this.load.image('ravenPlatOn', 'src/scenes/ravenPlatOn.png');
