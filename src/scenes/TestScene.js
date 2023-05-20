@@ -1,5 +1,6 @@
 import SceneClass from "../templates/sceneClass.js";
 import Player from "../entities/player.js";
+import Mob from "../entities/mob.js";
 
 class TestScene extends SceneClass {
 
@@ -28,7 +29,7 @@ class TestScene extends SceneClass {
         const layers = this.loadMap(levelMap);
 
         // création du player
-        this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
+        //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
 
         // résolution de l'écran
         this.physics.world.setBounds(0, 0, 3072, 1728);
@@ -71,7 +72,7 @@ class TestScene extends SceneClass {
         }, this)*/
 
         // création du mob
-        this.mob = this.physics.add.group();       
+        /*this.mob = this.physics.add.group();
         
         this.mob.create(600, 1524, 'mob')        
         .setInteractive({ useHandCursor: true })
@@ -85,7 +86,19 @@ class TestScene extends SceneClass {
         this.physics.add.collider(this.mob, this.player);
         this.physics.add.collider(this.mob, layers.layer_platforms);
         
-        this.physics.add.collider(this.mob, this.player.projectiles, this.onProjectileCollision);
+        this.physics.add.collider(this.mob, this.player.projectiles, this.onProjectileCollision);*/
+
+        //Création du mob
+        this.mobTest = new Mob(this, 700, 1524, "right", "mob")
+        .setInteractive({ useHandCursor: true })
+        .on('pointerdown', function (){
+        
+            this.possessMob(this.mobTest, this.mobTest.x, this.mobTest.y, layers);
+
+        }, this)
+
+        this.physics.add.collider(this.mobTest, layers.layer_platforms);
+        this.physics.add.collider(this.mobTest, layers.layer_limits);
 
         // création de plateforme
         //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
@@ -95,9 +108,11 @@ class TestScene extends SceneClass {
             controller = pad;
         });
 
+        // plateforme qui bouge
+
         this.movingPlat = this.physics.add.image(1408, 1536, 'movingPlat')
             .setImmovable(true)
-            .setVelocity(100, -100);
+            .setVelocity(100, 0);
 
         this.movingPlat.body.setAllowGravity(false);
             

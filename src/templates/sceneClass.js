@@ -1,4 +1,5 @@
 import Player from "../entities/player.js";
+import Mob from "../entities/mob.js";
 
 class SceneClass extends Phaser.Scene {
 
@@ -43,6 +44,7 @@ class SceneClass extends Phaser.Scene {
 
         // on crée le calque plateformes
         const layer_platforms = levelMap.createLayer("layer_platforms", tileset);
+        const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(true);
         const layer_spawn = levelMap.getObjectLayer("Spawn");
         const layer_break = levelMap.getObjectLayer("Break");
         const layer_box = levelMap.getObjectLayer("Box");
@@ -50,12 +52,13 @@ class SceneClass extends Phaser.Scene {
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
+        layer_limits.setCollisionByProperty({ estSolide: true });
 
         // On enregistre le spawn dans une variable
         const spawnPoint = layer_spawn.objects[0];
         this.spawn = layer_spawn.objects[0];
 
-        return { spawnPoint, layer_platforms, layer_break, layer_box, layer_ravenPlat, tileset }
+        return { spawnPoint, layer_platforms, layer_limits, layer_break, layer_box, layer_ravenPlat, tileset }
     }
 
     createPlayer(x, y, layers) {
@@ -65,6 +68,7 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
         //this.physics.add.collider(this.player, this.box, this.handleBoxCollision(), null, this);
+
     }
 
     possessMob(mob, mobX, mobY, layers) {

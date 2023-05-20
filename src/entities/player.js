@@ -41,11 +41,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.setDamping(true);
 
-        this.create(); // fonction qui permet de déclencher la fonction create (ne se fait pas automatiquement, car ce n'est pas une scène)
-    }
-
-    create() {
-
         // commandes
         this.cursors = this.scene.input.keyboard.createCursorKeys();
 
