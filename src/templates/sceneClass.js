@@ -81,7 +81,12 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
-        return { spawnPoint, layer_platforms, layer_limits, breaks, boxes, layer_ravenPlat, tileset }
+        // création des plateformes qu'on peut créer en tirant dessus
+        layer_ravenPlat.objects.forEach(ravenPlat => {
+            ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
+        }, this)
+
+        return { spawnPoint, layer_platforms, layer_limits, breaks, boxes, ravenPlats, tileset }
     }
 
     createPlayer(x, y, layers, currentFacing, currentMob) {
@@ -105,6 +110,12 @@ class SceneClass extends Phaser.Scene {
 
         // collision boxes
         this.physics.add.collider(this.player, layers.boxes);
+
+        // collision avec les plateformes raven une fois créées
+        this.physics.add.collider(this.player, layers.ravenPlatOn);
+
+        // 
+        this.physics.add.collider(this.player.projectiles, layers.ravenPlats, this.createPlat, null, this);
     }
 
     // création du mob
@@ -162,6 +173,20 @@ class SceneClass extends Phaser.Scene {
         player.disablePlayer();
         player.destroy();
         this.createMob(possessedMob, playerX, playerY, layers, currentFacing, nature);
+    }
+
+    // METHODES POUR PLAYER = RAVEN ------
+
+    createPlat(proj, ravenPlatOff) {
+
+        console.log("check");
+
+        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y, "ravenPlatOn");
+        this.physics.add.collider(this.player, newRavenPlat);
+        
+        ravenPlatOff.destroy(ravenPlatOff.x, ravenPlatOff.y);
+        proj.destroy();
+
     }
 
     // METHODES POUR PLAYER = HOG ---------------

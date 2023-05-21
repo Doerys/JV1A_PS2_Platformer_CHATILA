@@ -17,7 +17,6 @@ class PlayerFrog extends Player {
         super.init();
 
         console.log("PLAYER = FROG");
-
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update

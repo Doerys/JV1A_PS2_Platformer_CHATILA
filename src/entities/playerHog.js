@@ -15,7 +15,6 @@ class PlayerHog extends Player {
 
     init() {
         super.init();
-        this.isCharging = false;
         
         console.log("PLAYER = HOG");
     }

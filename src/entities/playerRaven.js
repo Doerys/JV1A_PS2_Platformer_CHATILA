@@ -15,8 +15,9 @@ class PlayerRaven extends Player {
     }
 
     init() {
-
         super.init();
+
+        this.disableShoot = false;
 
         console.log("PLAYER = RAVEN");
     }
@@ -80,15 +81,19 @@ class PlayerRaven extends Player {
             */
 
             // TIR PLUME
-            if (Phaser.Input.Keyboard.JustDown(this.keyShift)) {
+            if (Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.disableShoot) {
 
                 const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
                 this.projectiles.add(feather);
+                this.disableShoot = true; 
                 feather.shoot(this);
+
+                setTimeout(() => {
+                    this.disableShoot = false; 
+                }, 500);
             }
         }
     }
 }
-
 
 export default PlayerRaven

@@ -26,35 +26,11 @@ class TestScene extends SceneClass {
         // chargement des calques
         const layers = this.loadMap(levelMap);
 
-        //this.player = this.physics.add.sprite(5000, 5000);
-
         // création du player
         //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
 
-        // création des plateformes qu'on peut créer en tirant dessus
-        /*layers.layer_ravenPlat.objects.forEach(ravenPlat => {
-            const ravenPlateform = this.ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
-            this.ravenPlatOn = this.physics.add.staticSprite(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOn").disableBody(true, true);
-        
-            this.physics.add.collider(this.ravenPlatOn, this.player);
-        }, this)*/
-
-        // création du mob
-        /*this.mob = this.physics.add.group();
-        
-        this.mob.create(600, 1524, 'mob')        
-        .setInteractive({ useHandCursor: true })
-        .on('pointerdown', function (){
-        
-            this.possessMob(this.mob, this.mob.x, this.mob.y, layers);
-
-        }, this)
-
-        // colliders avec le mob
-        this.physics.add.collider(this.mob, this.player);
-        this.physics.add.collider(this.mob, layers.layer_platforms);
-        
-        this.physics.add.collider(this.mob, this.player.projectiles, this.onProjectileCollision);*/
+        // création de plateforme
+        //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
 
         //Création du mob
         this.mob1 = this.createMob(this.mob1, 1440, 320, layers, "right", "frog");
@@ -63,10 +39,7 @@ class TestScene extends SceneClass {
         this.mob2 = this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
 
         //Création du mob
-        this.mob3 = this.createMob(this.mob3, 2208, 320, layers, "left", "raven");
-
-        // création de plateforme
-        //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
+        this.mob3 = this.createMob(this.mob3, 1184, 1024, layers, "left", "raven");
            
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
