@@ -1,8 +1,9 @@
 class Mob extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, facing){
+    constructor(scene, x, y, facing, currentMob){
         super(scene, x, y, 'mob');
 
         this.facing = facing;
+        this.currentMob = currentMob;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -13,6 +14,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     init() {
         this.speedMoveX = 100;
         this.isPassive = true;
+        this.isPossessed = false;
     }
 
     create() {
@@ -24,20 +26,28 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(time, delta) {
+    }
 
-        if(this.facing == "right"){
-            this.setVelocityX(this.speedMoveX);
+    patrolMob(){
+        if (this.isPassive){
+            if(this.facing == "right"){
+                this.setVelocityX(this.speedMoveX);
+            }
+            else if (this.facing == "left"){
+                this.setVelocityX(-this.speedMoveX);
+            }
+    
+            if(this.body.blocked.right){
+                this.facing = "left";
+            }
+            else if(this.body.blocked.left){
+                this.facing = "right";
+            }    
         }
-        else if (this.facing == "left"){
-            this.setVelocityX(-this.speedMoveX);
-        }
+    }
 
-        if(this.body.blocked.right){
-            this.facing = "left";
-        }
-        else if(this.body.blocked.left){
-            this.facing = "right";
-        }
+    disableIA() {
+        this.isPossessed = true;
     }
 }
 

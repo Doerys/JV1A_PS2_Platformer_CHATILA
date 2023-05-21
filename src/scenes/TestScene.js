@@ -16,11 +16,9 @@ class TestScene extends SceneClass {
 
     create() {
 
-        this.spawnX = 96;
-        this.spawnY = 1472;
-        this.switchRavenPlatOn = false;
-
         this.controller = false;
+
+        this.activePossession = false;
 
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
@@ -28,40 +26,10 @@ class TestScene extends SceneClass {
         // chargement des calques
         const layers = this.loadMap(levelMap);
 
+        //this.player = this.physics.add.sprite(5000, 5000);
+
         // création du player
         //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
-
-        // résolution de l'écran
-        this.physics.world.setBounds(0, 0, 3072, 1728);
-        // PLAYER - Collision entre le joueur et les limites du niveau
-
-        // caméra
-        this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728); //format 16/9 
-
-        // éléments de décors
-        this.breaks = this.physics.add.staticGroup();
-        this.boxes = this.physics.add.group();
-        this.ravenPlats = this.physics.add.staticGroup();
-
-        // création des éléments destructibles (charge)
-        layers.layer_break.objects.forEach(break_create => {
-            const breaks = this.breaks.create(break_create.x + 32, break_create.y + 32, "break");
-            
-            // si collision pendant charge, détruit l'objet et stop la charge
-            this.physics.add.collider(this.player, breaks, function () {
-                if (this.player.isCharging && (this.player.body.touching.left || this.player.body.touching.right)) {
-                    breaks.destroy(); this.player.stopCharge()
-                }
-            }, null, this);
-        }, this)
-
-        // création des box poussables
-        layers.layer_box.objects.forEach(box => {
-            const boxes = this.boxes.create(box.x + 32, box.y + 32, "box").setDamping(true);
-            this.physics.add.collider(boxes, layers.layer_platforms, this.disablePushPlayer, null, this);
-
-            this.physics.add.collider(boxes, this.player);
-        }, this)
 
         // création des plateformes qu'on peut créer en tirant dessus
         /*layers.layer_ravenPlat.objects.forEach(ravenPlat => {
@@ -89,16 +57,13 @@ class TestScene extends SceneClass {
         this.physics.add.collider(this.mob, this.player.projectiles, this.onProjectileCollision);*/
 
         //Création du mob
-        this.mobTest = new Mob(this, 700, 1524, "right", "mob")
-        .setInteractive({ useHandCursor: true })
-        .on('pointerdown', function (){
-        
-            this.possessMob(this.mobTest, this.mobTest.x, this.mobTest.y, layers);
+        this.mob1 = this.createMob(this.mob1, 1440, 320, layers, "right", "frog");
 
-        }, this)
+        //Création du mob
+        this.mob2 = this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
 
-        this.physics.add.collider(this.mobTest, layers.layer_platforms);
-        this.physics.add.collider(this.mobTest, layers.layer_limits);
+        //Création du mob
+        this.mob3 = this.createMob(this.mob3, 2208, 320, layers, "left", "raven");
 
         // création de plateforme
         //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
@@ -125,8 +90,7 @@ class TestScene extends SceneClass {
             ]
         });
 
-        this.physics.add.collider(this.player, this.movingPlat);
-        
+        //this.physics.add.collider(this.player, this.movingPlat);
     }
 
     update() { 
@@ -147,17 +111,6 @@ class TestScene extends SceneClass {
         proj.destroy(); 
         this.switchRavenPlatOn = true;
     }*/
-
-    disablePushPlayer(box) {
-        if(box.body.blocked.down){
-            if (box.body.blocked.right || box.body.blocked.left) {
-                console.log("CHECK");
-                box.body.setImmovable(true);
-                box.setVelocity(0, 0);
-            }
-        box.setDragX(0.0001);
-        }
-    }
 }
 
 export default TestScene

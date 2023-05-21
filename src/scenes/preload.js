@@ -8,6 +8,10 @@ class Preload extends Phaser.Scene {
         // Perso test
         this.load.spritesheet('player', 'src/scenes/player_test.png', { frameWidth: 64, frameHeight: 128});
 
+        this.load.spritesheet('frogImage', 'src/scenes/player_frog.png', { frameWidth: 64, frameHeight: 64});
+        this.load.spritesheet('hogImage', 'src/scenes/player_hog.png', { frameWidth: 128, frameHeight: 128});
+        this.load.spritesheet('ravenImage', 'src/scenes/player_raven.png', { frameWidth: 64, frameHeight: 96});
+
         this.load.spritesheet('mob', 'src/scenes/mob_test.png', { frameWidth: 64, frameHeight: 128});
 
         // Box
