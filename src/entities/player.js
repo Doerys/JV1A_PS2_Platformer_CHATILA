@@ -35,6 +35,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.isCharging = false;
 
+        this.speedHook = 300;
+        this.maxHookDistance = 192;
+
+        this.isHooking = true;
+
         this.accelerationX = 15;
         this.frictionGround = 50;
 

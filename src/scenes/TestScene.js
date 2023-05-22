@@ -69,6 +69,19 @@ class TestScene extends SceneClass {
             { x:    +200, y: 0, duration: 1000, ease: 'Stepped' },
             ]
         });*/
+
+        this.hook = this.physics.add.sprite(0, 0, 'hook')
+        .setCollideWorldBounds(true)
+        .setOrigin(0.5, 0.5)
+        .disableBody(true, true);
+
+        this.hook.body.setAllowGravity(false);
+
+        this.rope = this.physics.add.sprite(0, 0, 'rope')
+            .setOrigin(0, 0.5)
+        
+        this.rope.body.setAllowGravity(false);
+        this.rope.visible = false;
     }
 
     update() { 

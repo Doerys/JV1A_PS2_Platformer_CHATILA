@@ -16,6 +16,8 @@ class PlayerFrog extends Player {
     init() {
         super.init();
 
+        //this.physics.add.collider(this.hook, layersmurs);
+
         console.log("PLAYER = FROG");
         //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
     }
@@ -33,7 +35,7 @@ class PlayerFrog extends Player {
             if (this.onGround && !this.newJump) {
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
-    
+
                 this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
                 this.isJumping = false;
                 this.canPlane = false;
@@ -159,20 +161,64 @@ class PlayerFrog extends Player {
             }
 
             // GRAPPIN
-            if (this.keyE.isDown) {
+            if (Phaser.Input.Keyboard.JustDown(this.keyShift)) {
+
+                this.isHooking = true;
+
+                this.hook.x = this.x;
+                this.hook.y = this.y;
+
+                this.rope.x = this.x;
+                this.rope.y = this.y;
+
+                this.rope.visible = true;
+
                 this.body.setAllowGravity(false);
-                this.setVelocity(0, 0);
+                this.stop();
 
                 this.inputsMoveLocked = true;
 
                 //this.bout
 
+                if (this.facing == "right") {
+                    this.poids.setVelocityX(this.speedHook);
+                }
+
+                else if (this.facing == "left") {
+                    this.poids.flipX(true);
+                    this.poids.setVelocityX(-this.speedHook);
+                }
+
                 setTimeout(() => {
                     this.inputsMoveLocked = false;
                     this.body.setAllowGravity(true);
-                }, 100); // après un certain temps, on repasse la possibilité de sauter à true
+                }, 500); // après un certain temps, on repasse la possibilité de sauter à true
+            }
+
+            // si la vélocité est à 0, ça fait disparaître les éléments
+            if (this.hook.body.velocity.x == 0) {
+                this.hook.disableBody(true, true);
+                this.rope.visible = false;
+                this.isHooking = false;
+            }
+
+            // si le grappin atteint la distance max : stoppe le grappin
+            if (this.checkDistance(this.player.x, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
+                this.hook.setVelocity(0);
+                this.hook.visible = false;
+                this.rope.visible = false;
+                this.rope.stop();
+                this.rope.visible = false;
             }
         }
+    }
+
+    checkDistance(x1, x2) { // mesure la distance entre deux éléments
+        return Math.sqrt(x2 - x1) * 2;
+    }
+
+    hookAttract(){
+
     }
 }
 

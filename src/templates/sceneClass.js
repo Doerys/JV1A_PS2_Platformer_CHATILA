@@ -1,9 +1,7 @@
-import Player from "../entities/player.js";
 import PlayerFrog from "../entities/playerFrog.js";
 import PlayerHog from "../entities/playerHog.js";
 import PlayerRaven from "../entities/playerRaven.js";
 
-import Mob from "../entities/mob.js";
 import MobFrog from "../entities/mobFrog.js";
 import MobHog from "../entities/mobHog.js";
 import MobRaven from "../entities/mobRaven.js";
@@ -56,6 +54,7 @@ class SceneClass extends Phaser.Scene {
         const layer_break = levelMap.getObjectLayer("Break");
         const layer_box = levelMap.getObjectLayer("Box");
         const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
+        const layer_stake = levelMap.getObjectLayer("Stake");
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
@@ -69,6 +68,7 @@ class SceneClass extends Phaser.Scene {
         const breaks = this.physics.add.staticGroup();
         const boxes = this.physics.add.group();
         const ravenPlats = this.physics.add.staticGroup();
+        const stakes = this.physics.add.staticGroup();
 
         // création des éléments destructibles (charge)
         layer_break.objects.forEach(break_create => {
@@ -86,7 +86,12 @@ class SceneClass extends Phaser.Scene {
             ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
         }, this)
 
-        return { spawnPoint, layer_platforms, layer_limits, breaks, boxes, ravenPlats, tileset }
+        // création des poteaux sur lesquels on peut se grappiner
+        layer_stake.objects.forEach(stake => {
+            stakes.create(stake.x + 32, stake.y + 32, "stake");
+        }, this)
+
+        return { spawnPoint, layer_platforms, layer_limits, breaks, boxes, ravenPlats, stakes, tileset }
     }
 
     createPlayer(x, y, layers, currentFacing, currentMob) {
@@ -118,8 +123,10 @@ class SceneClass extends Phaser.Scene {
         // collision avec les plateformes raven une fois créées
         this.physics.add.collider(this.player, layers.ravenPlatOn);
 
-        // 
+        // collision entre projectiles et plateformes Off, pour créer plateformes
         this.physics.add.collider(this.player.projectiles, layers.ravenPlats, this.createPlat, null, this);
+
+        this.physics.add.overlap(this.hook, layers.stakes, this.goToHook, null, this) // collision hook et stake = grappin
     }
 
     // création du mob
@@ -177,6 +184,45 @@ class SceneClass extends Phaser.Scene {
         player.disablePlayer();
         player.destroy();
         this.createMob(possessedMob, playerX, playerY, layers, currentFacing, nature);
+    }
+
+    // METHODES POUR PLAYER = FROG ----
+
+    goToHook(hook, stake) {
+
+        hook.setVelocity(0);
+        hook.disableBody(true, true);
+        this.rope.stop();
+        hook.visible = false;
+        this.rope.visible = false;
+        
+        this.jumpHook = true;
+        if (this.jumpHook) {
+
+            if (this.facing == 'right') {
+                if (this.x < stake.x) {
+                    this.x += 6
+                    this.time.delayedCall(15, () => {
+                        this.jump(hook, stake)
+                    });
+                    //this.jump(poids,blocCible)
+                }
+                else {
+                    this.jumpHook = false;
+                }
+            }
+            else if (this.facing == 'left') {
+                if (this.x > stake.x) {
+                    this.x -= 6
+                    this.time.delayedCall(15, () => {
+                        this.jump(hook, stake)
+                    });
+                }
+                else {
+                    this.jumpHook = false;
+                }
+            }
+        }
     }
 
     // METHODES POUR PLAYER = RAVEN ------

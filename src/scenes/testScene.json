@@ -125,7 +125,7 @@
         {
          "draworder":"topdown",
          "id":5,
-         "name":"Poteau",
+         "name":"Stake",
          "objects":[
                 {
                  "class":"",
