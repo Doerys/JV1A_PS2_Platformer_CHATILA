@@ -581,9 +581,6 @@
  </objectgroup>
  <objectgroup id="2" name="Spawn">
   <object id="1" x="128" y="1472" width="64" height="64"/>
-  <object id="27" x="224" y="1536">
-   <point/>
-  </object>
  </objectgroup>
  <objectgroup id="6" name="RavenPlatform">
   <object id="11" x="1408" y="1024" width="64" height="64"/>

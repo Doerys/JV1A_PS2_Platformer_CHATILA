@@ -77,7 +77,7 @@ class SceneClass extends Phaser.Scene {
 
         // création des box poussables
         layer_box.objects.forEach(box => {
-            boxes.create(box.x +32, box.y +32, "box").setDamping(true)//.setImmovable(true);
+            boxes.create(box.x +32, box.y +32, "box").setDamping(true).setImmovable(true);
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
@@ -212,10 +212,6 @@ class SceneClass extends Phaser.Scene {
         }
         if ((player.body.blocked.right || player.body.blocked.left) && player.currentMob == "hog" && !player.isCharging) {
             box.setImmovable(false);
-        }
-        else {
-            //box.setImmovable(true);
-            //box.body.setAllowGravity(false);
         }
     }
 
