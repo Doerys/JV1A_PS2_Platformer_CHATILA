@@ -32,7 +32,7 @@ class PlayerFrog extends Player {
 
             this.basicMovements();
 
-            if (this.onGround && !this.isJumping) {
+            if (this.onGround && !this.newJump) {
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
     

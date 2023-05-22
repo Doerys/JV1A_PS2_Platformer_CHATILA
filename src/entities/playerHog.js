@@ -30,7 +30,7 @@ class PlayerHog extends Player {
 
             //console.log(this.jumpCounter)
 
-            if (this.onGround && !this.isCharging && !this.isJumping) {
+            if (this.onGround && !this.isCharging && !this.newJump) {
 
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;

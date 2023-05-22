@@ -18,6 +18,7 @@ class PlayerRaven extends Player {
         super.init();
 
         this.disableShoot = false;
+        this.secondJump = false;
         this.jumpCounter = 2; // le nombre de sauts restants (utile pour double jump)
 
         console.log("PLAYER = RAVEN");
@@ -35,21 +36,24 @@ class PlayerRaven extends Player {
 
             this.basicMovements();
 
-            if (this.onGround && !this.isJumping) {
+            if (this.onGround && !this.newJump) {
 
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
-    
+
                 this.jumpCounter = 2; // si le joueur est au sol, réinitialise son compteur de jump
                 this.isJumping = false;
                 this.canPlane = false;
+                this.secondJump = false;
             }
 
-            /*
+            
             // Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
             if (this.cursors.up.isUp && this.keyZ.isUp && !this.onGround) {
+                console.log("vole petit oiseau");
                 this.canPlane = true;
-            }*/
+            }
+
             // SAUT (plus on appuie, plus on saut haut)
 
             // déclencheur du saut
@@ -62,12 +66,10 @@ class PlayerRaven extends Player {
             }
 
             // déclencheur du saut en l'air (utile pour double jump)
-            else if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && !this.canHighJump && (!this.grabLeft || this.grabRight)) {
+            else if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && !this.canHighJump) {
                 this.jumpPlayer();
-            }
-
-            else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump) {
-                this.canHighJump = false; // on boucle pour le 2e saut
+                this.secondJump = true;
+                this.canPlane = false;
             }
 
             // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
@@ -75,6 +77,7 @@ class PlayerRaven extends Player {
                 if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                     this.canHighJump = false;
                     setTimeout(() => {
+                        console.log("check");
                         this.canPlane = true;
                     }, 300);
                 }
@@ -82,25 +85,23 @@ class PlayerRaven extends Player {
                     // jump higher if holding jump 
                     this.setVelocityY(-this.speedMoveY);
                 }
-            }            
+            }
 
-            /*
             // planer
             else if (this.cursors.up.isDown && this.canPlane) {
                 this.setVelocityY(50);
             }
-            */
 
             // TIR PLUME
             if (Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.disableShoot) {
 
                 const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
                 this.projectiles.add(feather);
-                this.disableShoot = true; 
+                this.disableShoot = true;
                 feather.shoot(this);
 
                 setTimeout(() => {
-                    this.disableShoot = false; 
+                    this.disableShoot = false;
                 }, 500);
             }
         }
