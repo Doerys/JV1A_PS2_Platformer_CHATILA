@@ -18,6 +18,7 @@ class PlayerRaven extends Player {
         super.init();
 
         this.disableShoot = false;
+        this.jumpCounter = 2; // le nombre de sauts restants (utile pour double jump)
 
         console.log("PLAYER = RAVEN");
     }
@@ -30,18 +31,20 @@ class PlayerRaven extends Player {
 
         if (this.currentlyPossess) {
 
+            console.log(this.jumpCounter);
+
             this.basicMovements();
 
-            if (this.onGround) {
+            if (this.onGround && !this.isJumping) {
+
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
-
+    
                 this.jumpCounter = 2; // si le joueur est au sol, réinitialise son compteur de jump
                 this.isJumping = false;
                 this.canPlane = false;
             }
 
-            
             /*
             // Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
             if (this.cursors.up.isUp && this.keyZ.isUp && !this.onGround) {
@@ -54,9 +57,17 @@ class PlayerRaven extends Player {
                 this.jumpPlayer();
             }
 
+            else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump) {
+                this.canHighJump = false; // évite de pouvoir spammer plutôt que de rester appuyer pour monter plus haut
+            }
+
             // déclencheur du saut en l'air (utile pour double jump)
             else if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && !this.canHighJump && (!this.grabLeft || this.grabRight)) {
                 this.jumpPlayer();
+            }
+
+            else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump) {
+                this.canHighJump = false; // on boucle pour le 2e saut
             }
 
             // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
@@ -71,7 +82,7 @@ class PlayerRaven extends Player {
                     // jump higher if holding jump 
                     this.setVelocityY(-this.speedMoveY);
                 }
-            }
+            }            
 
             /*
             // planer

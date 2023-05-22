@@ -33,13 +33,13 @@ class TestScene extends SceneClass {
         //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
 
         //Création du mob
-        this.mob1 = this.createMob(this.mob1, 1440, 320, layers, "right", "frog");
+        this.createMob(this.mob1, 1440, 320, layers, "right", "frog");
 
         //Création du mob
-        this.mob2 = this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
+        this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
 
         //Création du mob
-        this.mob3 = this.createMob(this.mob3, 1184, 1024, layers, "left", "raven");
+        this.createMob(this.mob3, 1184, 1024, layers, "left", "raven");
            
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {

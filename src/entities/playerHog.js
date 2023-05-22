@@ -17,6 +17,7 @@ class PlayerHog extends Player {
         super.init();
         
         console.log("PLAYER = HOG");
+        this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update
@@ -27,22 +28,29 @@ class PlayerHog extends Player {
 
         if (this.currentlyPossess) {
 
-            this.basicMovements();
+            //console.log(this.jumpCounter)
 
-            if (this.onGround && !this.isCharging) {
+            if (this.onGround && !this.isCharging && !this.isJumping) {
+
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
-
-                this.jumpCounter = 2; // si le joueur est au sol, réinitialise son compteur de jump
+    
+                this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
                 this.isJumping = false;
-                this.canPlane = false; // PAS UTILE
+                this.canPlane = false;
             }
+
+            this.basicMovements();
 
             // SAUT (plus on appuie, plus on saut haut)
 
             // déclencheur du saut
             if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround) { // si on vient de presser saut + peut sauter true + au sol
                 this.jumpPlayer();
+            }
+            
+            else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump) {
+                this.canHighJump = false; // évite de pouvoir spammer plutôt que de rester appuyer pour monter plus haut
             }
 
             // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer

@@ -179,8 +179,6 @@ class SceneClass extends Phaser.Scene {
 
     createPlat(proj, ravenPlatOff) {
 
-        console.log("check");
-
         const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y, "ravenPlatOn");
         this.physics.add.collider(this.player, newRavenPlat);
         

@@ -1,10 +1,11 @@
 import Mob from "./mob.js";
 
 class MobRaven extends Mob {
-    constructor(scene, x, y, facing) {
+    constructor(scene, x, y, facing, currentMob) {
         super(scene, x, y, 'mob');
 
         this.facing = facing;
+        this.currentMob = currentMob;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);

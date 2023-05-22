@@ -32,7 +32,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.newJump = false; // permet de différencier un début de jump d'une fin de jump (pour le wall grab)
 
         this.jumpTimer = 0; // temps en secondes sur lequel on appuie sur la touche saut
-        this.jumpCounter = 2; // le nombre de sauts restants (utile pour double jump)
 
         this.isCharging = false;
 
@@ -86,14 +85,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.blockedLeft = this.body.blocked.left; // verifie si le joueur est contre une paroi gauche
         this.blockedRight = this.body.blocked.right; // verifie si le joueur est contre une paroi droite
 
-        if (this.onGround && !this.isCharging) {
+        /*if (this.onGround && !this.isCharging) {
             this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
             this.inputsMoveLocked = false;
-            
-            this.jumpCounter = 2; // si le joueur est au sol, réinitialise son compteur de jump
+
+            this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
             this.isJumping = false;
             this.canPlane = false;
-        }
+        }*/
 
         /*// Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
         if (keyUp.isUp && this.keyZ.isUp && !this.onGround){
@@ -169,16 +168,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     jumpPlayer() {
-        this.canJump = false; // ne peut plus sauter - FALSE
-        this.canHighJump = true; // peut faire un saut haut
-        this.newJump = true; // nouveau saut
-
-        this.isJumping = true; // est en train de sauter - TRUE
-        this.jumpCounter -= 1; // pour le double jump
 
         this.setVelocityY(-this.speedMoveY); // On set la vélocité Y à la force de base
 
         this.startJumpTimer = true; // on démarre le timer
+        this.canJump = false; // ne peut plus sauter - FALSE
+        this.canHighJump = true; // peut faire un saut haut
+        this.isJumping = true; // est en train de sauter - TRUE
+        this.newJump = true; // nouveau saut
+
+        this.jumpCounter -= 1; // pour le double jump
 
         if (this.startJumpTimer == true) {
             this.startJumpTimer = false;
