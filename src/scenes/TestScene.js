@@ -36,7 +36,8 @@ class TestScene extends SceneClass {
         this.createMob(this.mob1, 1440, 320, layers, "right", "frog");
 
         //Création du mob
-        this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
+        //this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
+        this.createMob(this.mob2, 224, 1536, layers, "left", "hog");
 
         //Création du mob
         this.createMob(this.mob3, 1184, 1024, layers, "left", "raven");
@@ -46,29 +47,38 @@ class TestScene extends SceneClass {
             controller = pad;
         });
 
+        this.boxTest = this.physics.add.image(1984+32, 1600+32, 'box');
+        
+        this.boxTest.body.setAllowGravity(false).setImmovable(true);
+        
+        this.physics.add.collider(this.boxTest, layers.layer_platforms);
+
         // plateforme qui bouge
 
         this.movingPlat = this.physics.add.image(1408, 1536, 'movingPlat')
             .setImmovable(true)
-            .setVelocity(100, 0);
+            //.setVelocity(100, 0);
 
         this.movingPlat.body.setAllowGravity(false);
             
-        this.tweens.timeline({
+        /*this.tweens.timeline({
             targets: this.movingPlat.body.velocity,
             loop: -1,
             tweens: [
             { x:    -200, y: 0, duration: 1000, ease: 'Stepped' },
             { x:    +200, y: 0, duration: 1000, ease: 'Stepped' },
             ]
-        });
-
-        //this.physics.add.collider(this.player, this.movingPlat);
+        });*/
     }
 
     update() { 
         if(this.switchRavenPlatOn){
             this.ravenPlatOn.enableBody();
+        }
+
+        if (this.activePossession) {
+            console.log(this.player.blockedLeft)
+
         }
     }
 
@@ -78,12 +88,6 @@ class TestScene extends SceneClass {
         enemy.destroy();
         projectile.destroy(); 
     }
-    /*
-    createPlat(plat, proj){
-        plat.destroy();
-        proj.destroy(); 
-        this.switchRavenPlatOn = true;
-    }*/
 }
 
 export default TestScene

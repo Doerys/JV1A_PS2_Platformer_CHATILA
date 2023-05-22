@@ -28,7 +28,7 @@ class PlayerHog extends Player {
 
         if (this.currentlyPossess) {
 
-            //console.log(this.jumpCounter)
+            //console.log(this.body.velocity.y, " // ", this.body.velocity.x);
 
             if (this.onGround && !this.isCharging && !this.newJump) {
 

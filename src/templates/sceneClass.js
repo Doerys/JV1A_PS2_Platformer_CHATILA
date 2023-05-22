@@ -77,7 +77,7 @@ class SceneClass extends Phaser.Scene {
 
         // création des box poussables
         layer_box.objects.forEach(box => {
-            boxes.create(box.x + 32, box.y + 32, "box").setDamping(true);
+            boxes.create(box.x +32, box.y +32, "box").setDamping(true)//.setImmovable(true);
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
@@ -104,12 +104,16 @@ class SceneClass extends Phaser.Scene {
         //COLLISIONS
 
         this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
+
+        this.physics.add.collider(this.player, this.movingPlat);
         
         // collisions obstacles brisables
         this.physics.add.collider(this.player, layers.breaks, this.destroyIfCharge, null, this);
 
         // collision boxes
-        this.physics.add.collider(this.player, layers.boxes);
+        this.physics.add.collider(this.player, layers.boxes, this.pushBox, null, this);
+
+        this.physics.add.collider(this.player, this.boxTest, this.pushBox, null, this);
 
         // collision avec les plateformes raven une fois créées
         this.physics.add.collider(this.player, layers.ravenPlatOn);
@@ -189,6 +193,9 @@ class SceneClass extends Phaser.Scene {
 
     // METHODES POUR PLAYER = HOG ---------------
 
+    manageOnBox(player, box){
+    }
+
     // si collision pendant charge, détruit l'objet et stop la charge
     destroyIfCharge(player, breaks){
         if (player.isCharging && (player.body.touching.left || player.body.touching.right)) {
@@ -197,12 +204,26 @@ class SceneClass extends Phaser.Scene {
         }
     }
 
+    pushBox(player, box) {
+        if(player.body.blocked.down && !player.blockedLeft && !player.blockedLeft){
+            player.body.velocity.y = 0;
+            box.body.setAllowGravity(false);
+            box.setImmovable(true);
+        }
+        if ((player.body.blocked.right || player.body.blocked.left) && player.currentMob == "hog" && !player.isCharging) {
+            box.setImmovable(false);
+        }
+        else {
+            //box.setImmovable(true);
+            //box.body.setAllowGravity(false);
+        }
+    }
+
     // immobilise la box quand on ne la pousse pas
     slowBox(box) {
         if(box.body.blocked.down){
             if (box.body.blocked.right || box.body.blocked.left) {
-                console.log("CHECK");
-                box.body.setImmovable(true);
+                //box.body.setImmovable(true);
                 box.setVelocity(0, 0);
             }
         box.setDragX(0.0001);

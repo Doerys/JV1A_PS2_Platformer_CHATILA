@@ -28,8 +28,6 @@ class PlayerFrog extends Player {
 
         if (this.currentlyPossess) {
 
-            console.log(this.jumpCounter);
-
             this.basicMovements();
 
             if (this.onGround && !this.newJump) {

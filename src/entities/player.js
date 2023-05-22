@@ -100,9 +100,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }*/
 
         // ANIMATIONS - DEPLACEMENT 2 DIRECTIONS
-        if (this.blockedRight || this.blockedLeft) { // STOP la vitesse du joueur d'un coup s'il entre en contact avec un mur
+        /*if (this.blockedRight || this.blockedLeft) { // STOP la vitesse du joueur d'un coup s'il entre en contact avec un mur
             this.speedMoveX = 0;
-        }
+        }*/
 
         if (this.speedMoveX == 0) { // condition pour idle
             if (this.facing == 'right') {

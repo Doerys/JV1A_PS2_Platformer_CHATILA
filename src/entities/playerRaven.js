@@ -32,7 +32,7 @@ class PlayerRaven extends Player {
 
         if (this.currentlyPossess) {
 
-            console.log(this.jumpCounter);
+            console.log(this.body.velocity.y, " // ", this.body.velocity.x);
 
             this.basicMovements();
 
@@ -50,7 +50,6 @@ class PlayerRaven extends Player {
             
             // Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
             if (this.cursors.up.isUp && this.keyZ.isUp && !this.onGround) {
-                console.log("vole petit oiseau");
                 this.canPlane = true;
             }
 
@@ -77,7 +76,6 @@ class PlayerRaven extends Player {
                 if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                     this.canHighJump = false;
                     setTimeout(() => {
-                        console.log("check");
                         this.canPlane = true;
                     }, 300);
                 }

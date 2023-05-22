@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="26">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="28">
  <editorsettings>
   <export target="testScene.json" format="json"/>
  </editorsettings>
@@ -532,7 +532,7 @@
 79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,79,79,79,79,0,0,0,0,0,0,
 79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,79,79,79,79,0,0,0,0,0,0,
 79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,79,79,79,79,79,79,0,0,0,0,0,0,
-79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,79,79,79,79,79,79,79,0,0,0,0,0,0,
+79,0,0,0,0,0,79,0,0,0,0,0,0,0,0,79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,79,79,79,79,79,79,79,0,0,0,0,0,0,
 79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,79,79,79,79,79,79,79,0,0,0,0,0,0,
 79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,0,0,0,0,0,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79
 </data>
@@ -577,10 +577,13 @@
   <object id="10" x="1088" y="1024" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="4" name="Box">
-  <object id="8" x="2816" y="1600" width="64" height="64"/>
+  <object id="8" x="640" y="1536" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="2" name="Spawn">
   <object id="1" x="128" y="1472" width="64" height="64"/>
+  <object id="27" x="224" y="1536">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="6" name="RavenPlatform">
   <object id="11" x="1408" y="1024" width="64" height="64"/>
