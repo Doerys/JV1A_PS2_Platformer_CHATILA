@@ -129,6 +129,7 @@ class SceneClass extends Phaser.Scene {
         if (currentMob == "frog") {
             // collision hook et stake = grappin
             this.physics.add.overlap(this.player.hook, layers.stakes, this.goToHook, null, this);
+            this.physics.add.overlap(this.player.hook, layers.boxes, this.attrackHook, null, this);
             this.physics.add.collider(this.player.hook, layers.layer_platforms);
         }
     }
@@ -183,7 +184,7 @@ class SceneClass extends Phaser.Scene {
         return { sprite, nature }
     }
 
-    // METHODE POSSEDER MOB - On détruit le player, et on crée un mob à la place (en utilisant le mob sauvegardé préalablement dans le possessMob)
+    // METHODE POSSEDER AUTRE MOB - On détruit le player, et on crée un mob à la place (en utilisant le mob sauvegardé préalablement dans le possessMob)
     replacePlayer(player, playerX, playerY, layers, possessedMob, currentFacing, nature) {
         player.disablePlayer();
         player.destroy();
@@ -234,16 +235,49 @@ class SceneClass extends Phaser.Scene {
         }
     }
 
-    // METHODES POUR PLAYER = RAVEN ------
+    attrackHook(hook, box) {
+        this.player.boxCatched = true;
 
-    createPlat(proj, ravenPlatOff) {
+        hook.setVelocity(0);
+        hook.disableBody(true, true);
 
-        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y, "ravenPlatOn");
-        this.physics.add.collider(this.player, newRavenPlat);
+        //this.rope.stop();
+        hook.visible = false;
+        //this.rope.visible = false;
 
-        ravenPlatOff.destroy(ravenPlatOff.x, ravenPlatOff.y);
-        proj.destroy();
+        this.attrack = true;
 
+        if (this.attrack) {
+            if (this.player.facing == 'right') {
+                if (this.player.x + 32 < box.x) {
+                    box.body.setAllowGravity(false);
+                    box.x -= 6
+                    this.time.delayedCall(15, () => {
+                        this.attrackHook(hook, box)
+                    });
+                    //this.jump(poids,blocCible)
+                }
+                else {
+                    box.body.setAllowGravity(true);
+                    this.attrack = false;
+                    this.player.boxCatched = false;
+                }
+            }
+            else if (this.player.facing == 'left') {
+                if (this.player.x - 64 > box.x) {
+                    box.body.setAllowGravity(false);
+                    box.x += 6
+                    this.time.delayedCall(15, () => {
+                        this.attrackHook(hook, box)
+                    });
+                }
+                else {
+                    box.body.setAllowGravity(true);
+                    this.attrack = false;
+                    this.player.boxCatched = false;
+                }
+            }
+        }
     }
 
     // METHODES POUR PLAYER = HOG ---------------
@@ -279,6 +313,18 @@ class SceneClass extends Phaser.Scene {
             }
             box.setDragX(0.0001);
         }
+    }
+
+    // METHODES POUR PLAYER = RAVEN ------
+
+    createPlat(proj, ravenPlatOff) {
+
+        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y, "ravenPlatOn");
+        this.physics.add.collider(this.player, newRavenPlat);
+
+        ravenPlatOff.destroy(ravenPlatOff.x, ravenPlatOff.y);
+        proj.destroy();
+
     }
 }
 export default SceneClass;

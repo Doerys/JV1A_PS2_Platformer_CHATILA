@@ -26,6 +26,7 @@ class PlayerFrog extends Player {
         this.maxHookDistance = 192;
 
         this.stakeCatched = false;
+        this.boxCatched = false;
 
         this.hookCreated = false;
 
@@ -221,7 +222,7 @@ class PlayerFrog extends Player {
                 }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
-            if (!this.isHooking && !this.stakeCatched && !this.grabLeft && !this.grabRight){
+            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight){
                 this.inputsMoveLocked = false; // commandes débloquées
                 this.body.setAllowGravity(true); //gravité rétablie
             }
