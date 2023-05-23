@@ -40,12 +40,6 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
         
     }*/
 
-    hit(target){
-        console.log("check");
-        this.destroy();
-        target.destroy();
-    }
-
     /*getDeflected(){
         if(this.dir == "right"){
             this.setVelocityX(-this.speed); 

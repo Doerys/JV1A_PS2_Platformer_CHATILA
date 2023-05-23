@@ -18,6 +18,8 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.mobSpeedMoveX = 0;
         this.mobAccelerationX = 100;
         this.mobSpeedXMax = 100;
+
+        this.projectiles = new Phaser.GameObjects.Group;
     }
 
     create() {
@@ -30,20 +32,6 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
     update(time, delta) {
     }
-
-    /*classicBehavior() {
-        if (!this.isPossessed) {
-            this.patrolMob();
-
-            if (this.scene.activePossession) {
-                const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
-                console.log(detectionZone);
-                if (detectionZone < 150) {
-                    this.playerSpotted = true;
-                }
-            }
-        }
-    }*/
 
     patrolMob(){
         if (!this.playerSpotted){

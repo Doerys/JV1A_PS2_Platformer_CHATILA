@@ -26,9 +26,13 @@ class MobHog extends Mob {
 
     update(time, delta) {
 
+        // check que le mob n'est pas possédé
         if (!this.isPossessed) {
+
+            // aller retour si joueur n'est pas spotted
             this.patrolMob();
 
+            // si le joueur possède un mob, détection du joueur
             if (this.scene.activePossession) {
                 const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
                 
@@ -42,6 +46,9 @@ class MobHog extends Mob {
                     if (this.x > this.scene.player.x) {
                         this.facing = "left";
                     }
+                }
+                else {
+                    this.playerSpotted = false;
                 }
             }
 
@@ -73,8 +80,6 @@ class MobHog extends Mob {
                 }
             }
         }
-
-        //this.classicBehavior();
     }
 
     stopCharge() {

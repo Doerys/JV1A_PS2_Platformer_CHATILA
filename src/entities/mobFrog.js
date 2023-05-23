@@ -43,35 +43,35 @@ class MobFrog extends Mob {
                         this.facing = "right";
                     }
                 }
+                else {
+                    this.playerSpotted = false;
+                }
             }
 
             if(this.playerSpotted){
                 if (this.facing == 'right' && !this.body.blocked.left){ 
-                    this.setVelocityX(this.mobSpeedMoveX)*2 // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+                    this.setVelocityX(this.mobSpeedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
         
-                    if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax) { // tant que la vitesse est inférieure à la vitesse max, on accélère 
+                    if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax *2) { // tant que la vitesse est inférieure à la vitesse max, on accélère 
                         this.mobSpeedMoveX += this.mobAccelerationX;
                     }
                     else {
-                        this.mobSpeedMoveX = this.mobSpeedXMax; // sinon, vitesse = vitesse max
+                        this.mobSpeedMoveX = this.mobSpeedXMax *2; // sinon, vitesse = vitesse max
                     }
                 }
         
                 else if (this.facing == "left" && !this.body.blocked.right) {
-                    this.setVelocityX(this.mobSpeedMoveX)*2
+                    this.setVelocityX(this.mobSpeedMoveX)
         
-                    if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax) {
+                    if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax *2) {
                         this.mobSpeedMoveX -= this.mobAccelerationX;
                     }
                     else {
-                        this.mobSpeedMoveX = -this.mobSpeedXMax;
+                        this.mobSpeedMoveX = -this.mobSpeedXMax *2;
                     }
                 }
             }
         }
-
-
-        //this.classicBehavior();
     }
 }
 

@@ -124,6 +124,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player, layers.ravenPlatOn);
 
         // collision entre projectiles et plateformes Off, pour créer plateformes
+        this.physics.add.collider(this.player.projectiles, layers.layer_platforms);
         this.physics.add.collider(this.player.projectiles, layers.ravenPlats, this.createPlat, null, this);
 
         if (currentMob == "frog") {
@@ -153,8 +154,11 @@ class SceneClass extends Phaser.Scene {
 
                 nameMob.disableIA(); // désactive le update du mob pour éviter un crash
 
-                if (this.activePossession == true) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
+                if (this.activePossession) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
                     this.replacePlayer(this.player, this.player.x, this.player.y, layers, this.possessedMob.sprite, currentFacing, this.possessedMob.nature);
+                    
+                    this.physics.add.collider(nameMob.projectiles, this.player, this.hitProjectile, null, this);
+                    this.physics.add.collider(this.player.projectiles, nameMob, this.hitProjectile, null, this);
                 }
                 // possession du mob
                 this.possessedMob = this.possessMob(nameMob, nameMob.x, nameMob.y, layers, currentFacing, currentMob);
@@ -168,6 +172,8 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(nameMob, layers.layer_platforms);
         this.physics.add.collider(nameMob, layers.layer_limits);
+
+        this.physics.add.collider(nameMob.projectiles, layers.ravenPlats, this.createPlat, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -320,6 +326,13 @@ class SceneClass extends Phaser.Scene {
     }
 
     // METHODES POUR PLAYER = RAVEN ------
+
+    hitProjectile(projectile, target){
+        console.log("DIE DIE DIE");
+
+        projectile.destroy();
+        target.destroy();
+    }
 
     createPlat(proj, ravenPlatOff) {
 
