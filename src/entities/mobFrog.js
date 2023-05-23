@@ -25,9 +25,29 @@ class MobFrog extends Mob {
     }
 
     update(time, delta) {
+
         if (!this.isPossessed) {
             this.patrolMob();
+
+            if (this.scene.activePossession) {
+                const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
+                if (detectionZone < 300) {
+                    this.playerSpotted = true;
+
+                    this.directionSpot = this.scene.checkDistance(this.x, this.scene.player.x);
+
+                    if (this.directionSpot > 0) {
+                        this.facing = "right";
+                    }
+
+                    if (this.directionSpot < 0) {
+                        this.facing = "left";
+                    }
+                }
+            }
         }
+
+        //this.classicBehavior();
     }
 }
 

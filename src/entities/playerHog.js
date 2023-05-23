@@ -98,7 +98,7 @@ class PlayerHog extends Player {
                     }
                 }
 
-                if (this.blockedLeft || this.blockedRight) {
+                if (this.body.blocked.left || this.body.blocked.right) {
                     this.stopCharge();
                 }
             }

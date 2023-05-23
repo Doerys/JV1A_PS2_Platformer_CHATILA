@@ -237,7 +237,7 @@ class PlayerFrog extends Player {
                 }
 
                 // si le grappin atteint la distance max : stoppe le grappin
-                if (this.checkDistance(this.x, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
+                if (this.scene.checkDistance(this.x, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
                     this.hook.setVelocity(0);
                     this.hook.visible = false;
                     //this.rope.visible = false;
@@ -246,15 +246,6 @@ class PlayerFrog extends Player {
                 }
             }
         }
-    }
-
-    checkDistance(x1, x2) { // mesure la distance entre deux éléments
-        let distance = Math.abs(x2 - x1);
-        return distance
-    }
-
-    hookAttract() {
-
     }
 }
 

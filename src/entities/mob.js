@@ -12,9 +12,12 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     }
 
     init() {
-        this.speedMoveX = 100;
-        this.isPassive = true;
         this.isPossessed = false;
+        this.playerSpotted = false;
+
+        this.mobSpeedMoveX = 0;
+        this.mobAccelerationX = 100;
+        this.mobSpeedXMax = 100;
     }
 
     create() {
@@ -28,13 +31,45 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     update(time, delta) {
     }
 
-    patrolMob(){
-        if (this.isPassive){
-            if(this.facing == "right"){
-                this.setVelocityX(this.speedMoveX);
+    /*classicBehavior() {
+        if (!this.isPossessed) {
+            this.patrolMob();
+
+            if (this.scene.activePossession) {
+                const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
+                console.log(detectionZone);
+                if (detectionZone < 150) {
+                    this.playerSpotted = true;
+                }
             }
-            else if (this.facing == "left"){
-                this.setVelocityX(-this.speedMoveX);
+        }
+    }*/
+
+    patrolMob(){
+        if (!this.playerSpotted){
+
+            if (this.facing == "left" && !this.body.blocked.right) {
+
+                this.setVelocityX(this.mobSpeedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+
+                if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax) {
+                    this.mobSpeedMoveX -= this.mobAccelerationX;
+                }
+                else {
+                    this.mobSpeedMoveX = -this.mobSpeedXMax;
+                }
+            }
+            // DEPLACEMENT A DROITE =>
+            else if (this.facing == "right" && !this.body.blocked.left) {
+
+                this.setVelocityX(this.mobSpeedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+
+                if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax) { // tant que la vitesse est inférieure à la vitesse max, on accélère 
+                    this.mobSpeedMoveX += this.mobAccelerationX;
+                }
+                else {
+                    this.mobSpeedMoveX = this.mobSpeedXMax; // sinon, vitesse = vitesse max
+                }
             }
     
             if(this.body.blocked.right){

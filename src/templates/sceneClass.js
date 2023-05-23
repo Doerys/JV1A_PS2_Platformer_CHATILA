@@ -155,7 +155,6 @@ class SceneClass extends Phaser.Scene {
 
                 if (this.activePossession == true) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
                     this.replacePlayer(this.player, this.player.x, this.player.y, layers, this.possessedMob.sprite, currentFacing, this.possessedMob.nature);
-
                 }
                 // possession du mob
                 this.possessedMob = this.possessMob(nameMob, nameMob.x, nameMob.y, layers, currentFacing, currentMob);
@@ -192,6 +191,11 @@ class SceneClass extends Phaser.Scene {
     }
 
     // METHODES POUR PLAYER = FROG ----
+
+    checkDistance(x1, x2) { // mesure la distance entre deux éléments
+        let distance = Math.abs(x2 - x1);
+        return distance
+    }
 
     goToHook(hook, stake) {
 

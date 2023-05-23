@@ -24,10 +24,29 @@ class MobRaven extends Mob {
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
 
-    update(time, delta) {
+    update(time, delta) {      
+
         if (!this.isPossessed) {
             this.patrolMob();
+
+            if (this.scene.activePossession) {
+                const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
+                
+                if (detectionZone < 300) {
+                    this.playerSpotted = true;
+
+                    if (this.x < this.scene.player.x) {
+                        this.facing = "right";
+                    }
+
+                    if (this.x > this.scene.player.x) {
+                        this.facing = "left";
+                    }
+                }
+            }
         }
+
+        //this.classicBehavior();
     }
 }
 

@@ -32,8 +32,6 @@ class PlayerRaven extends Player {
 
         if (this.currentlyPossess) {
 
-            console.log(this.body.velocity.y, " // ", this.body.velocity.x);
-
             this.basicMovements();
 
             if (this.onGround && !this.newJump) {
