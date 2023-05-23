@@ -22,8 +22,10 @@ class PlayerFrog extends Player {
         console.log("PLAYER = FROG");
         //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
-        this.speedHook = 600;
-        this.maxHookDistance = 35;
+        this.speedHook = 1000;
+        this.maxHookDistance = 192;
+
+        this.stakeCatched = false;
 
         this.hookCreated = false;
 
@@ -31,7 +33,7 @@ class PlayerFrog extends Player {
             this.hook = new Hook(this.scene, this.x, this.y)
                 .setCollideWorldBounds(true)
                 .setOrigin(0.5, 0.5)
-                //.disableBody(true, true);
+                .disableBody(true, true);
 
             this.hook.body.setAllowGravity(false);
 
@@ -55,7 +57,7 @@ class PlayerFrog extends Player {
 
             this.basicMovements();
 
-            if (this.onGround && !this.newJump) {
+            if (this.onGround && !this.newJump && !this.isHooking) {
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
 
@@ -97,8 +99,6 @@ class PlayerFrog extends Player {
                 // WALL JUMP depuis mur GAUCHE
                 if ((this.upOnce || this.ZOnce || this.cursors.right.isDown) && this.grabLeft) {
 
-                    console.log("check wall jump gauche")
-
                     this.jumpPlayer();
 
                     this.facing = "right";
@@ -117,8 +117,6 @@ class PlayerFrog extends Player {
 
                 // WALL JUMP depuis mur DROIT
                 if ((this.upOnce || this.ZOnce || this.cursors.left.isDown) && this.grabRight) {
-
-                    console.log("check wall jump droit")
 
                     this.jumpPlayer();
 
@@ -144,8 +142,6 @@ class PlayerFrog extends Player {
 
                 if (!this.newJump) { // si le saut actuel n'est pas nouveau
 
-                    console.log("check wall grab gauche")
-
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
                     this.setVelocityY(0);
@@ -161,8 +157,6 @@ class PlayerFrog extends Player {
             else if (this.blockedRight && !this.onGround) { // si on est bloqué sur une paroi de droite, et pas en contact avec le sol
 
                 if (!this.newJump) { // si le saut actuel n'est pas nouveau
-
-                    console.log("check wall grab droit")
 
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
@@ -184,10 +178,16 @@ class PlayerFrog extends Player {
             }
 
             // GRAPPIN
-            if (Phaser.Input.Keyboard.JustDown(this.keyShift)) {
+            if (Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isHooking && this.canHook) {
 
+                console.log("check");
+                
                 this.isHooking = true;
+                this.canHook = false;
+                
+                this.hook.enableBody();
 
+                // place le hook à l'emplacement du personnage
                 this.hook.x = this.x;
                 this.hook.y = this.y;
 
@@ -196,12 +196,7 @@ class PlayerFrog extends Player {
 
                 this.rope.visible = true;*/
 
-                this.inputsMoveLocked = true;
-
-                this.body.setAllowGravity(false);
-                this.setVelocity(0,0);
-
-                //this.bout
+                //PROJECTION HOOK (en fonction de l'orientation du perso, projette le grappin à droite ou à gauche)
 
                 if (this.facing == "right") {
                     this.hook.setVelocityX(this.speedHook);
@@ -212,19 +207,33 @@ class PlayerFrog extends Player {
                     this.hook.setVelocityX(-this.speedHook);
                 }
 
+                // fixe le joueur sur place
+                this.inputsMoveLocked = true; // commandes bloquées
+                this.body.setAllowGravity(false); //gravité annulée 
+                this.setVelocity(0,0); // vélocité annulée
+
+                // réinitialise les variables et les mouvements du personnage
                 setTimeout(() => {
-                    this.inputsMoveLocked = false;
-                    this.body.setAllowGravity(true);
-                }, 2000); // après un certain temps, on repasse la possibilité de sauter à true
+                    this.canHook = true;
+                    //this.isHooking = false; // n'est plus en train de grappiner
+                    //this.inputsMoveLocked = false; // commandes débloquées
+                    //this.body.setAllowGravity(true); //gravité rétablie 
+                }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
+            }
+
+            if (!this.isHooking && !this.stakeCatched && !this.grabLeft && !this.grabRight){
+                this.inputsMoveLocked = false; // commandes débloquées
+                this.body.setAllowGravity(true); //gravité rétablie
             }
 
             if (this.hookCreated) {
+                                
                 // si la vélocité est à 0, ça fait disparaître les éléments
-                /*if (this.hook.body.velocity.x == 0) {
+                if (this.hook.body.velocity.x == 0) {
                     this.hook.disableBody(true, true);
                     //this.rope.visible = false;
                     this.isHooking = false;
-                }*/
+                }
 
                 // si le grappin atteint la distance max : stoppe le grappin
                 if (this.checkDistance(this.x, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
@@ -239,7 +248,8 @@ class PlayerFrog extends Player {
     }
 
     checkDistance(x1, x2) { // mesure la distance entre deux éléments
-        return Math.sqrt(x2 - x1) * 2;
+        let distance = Math.abs(x2 - x1);
+        return distance
     }
 
     hookAttract() {

@@ -77,7 +77,7 @@ class SceneClass extends Phaser.Scene {
 
         // création des box poussables
         layer_box.objects.forEach(box => {
-            boxes.create(box.x +32, box.y +32, "box").setDamping(true).setImmovable(true);
+            boxes.create(box.x + 32, box.y + 32, "box").setDamping(true).setImmovable(true);
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
@@ -96,13 +96,13 @@ class SceneClass extends Phaser.Scene {
 
     createPlayer(x, y, layers, currentFacing, currentMob) {
 
-        if (currentMob == "frog"){
+        if (currentMob == "frog") {
             this.player = new PlayerFrog(this, x, y, currentFacing, currentMob).setCollideWorldBounds();
         }
-        else if (currentMob == "hog"){
+        else if (currentMob == "hog") {
             this.player = new PlayerHog(this, x, y, currentFacing, currentMob).setCollideWorldBounds();
         }
-        else if (currentMob == "raven"){
+        else if (currentMob == "raven") {
             this.player = new PlayerRaven(this, x, y, currentFacing, currentMob).setCollideWorldBounds();
         }
 
@@ -111,7 +111,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
 
         this.physics.add.collider(this.player, this.movingPlat);
-        
+
         // collisions obstacles brisables
         this.physics.add.collider(this.player, layers.breaks, this.destroyIfCharge, null, this);
 
@@ -128,36 +128,37 @@ class SceneClass extends Phaser.Scene {
 
         if (currentMob == "frog") {
             // collision hook et stake = grappin
-            this.physics.add.overlap(this.player.hook, layers.stakes, this.goToHook, null, this); 
+            this.physics.add.overlap(this.player.hook, layers.stakes, this.goToHook, null, this);
+            this.physics.add.collider(this.player.hook, layers.layer_platforms);
         }
     }
 
     // création du mob
-    createMob(nameMob, x, y, layers, currentFacing, currentMob){
+    createMob(nameMob, x, y, layers, currentFacing, currentMob) {
 
-        if (currentMob == "frog"){
+        if (currentMob == "frog") {
             nameMob = new MobFrog(this, x, y, currentFacing, currentMob);
         }
-        else if (currentMob == "hog"){
+        else if (currentMob == "hog") {
             nameMob = new MobHog(this, x, y, currentFacing, currentMob);
         }
-        else if (currentMob == "raven"){
+        else if (currentMob == "raven") {
             nameMob = new MobRaven(this, x, y, currentFacing, currentMob);
         }
 
-        nameMob  
-        .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
-        .on('pointerdown', function (){ 
+        nameMob
+            .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
+            .on('pointerdown', function () {
 
-            nameMob.disableIA(); // désactive le update du mob pour éviter un crash
+                nameMob.disableIA(); // désactive le update du mob pour éviter un crash
 
-            if (this.activePossession == true){ // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
-                this.replacePlayer(this.player, this.player.x, this.player.y, layers, this.possessedMob.sprite, currentFacing, this.possessedMob.nature);
+                if (this.activePossession == true) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
+                    this.replacePlayer(this.player, this.player.x, this.player.y, layers, this.possessedMob.sprite, currentFacing, this.possessedMob.nature);
 
-            }
-            // possession du mob
-            this.possessedMob = this.possessMob(nameMob, nameMob.x, nameMob.y, layers, currentFacing, currentMob);
-        }, this)
+                }
+                // possession du mob
+                this.possessedMob = this.possessMob(nameMob, nameMob.x, nameMob.y, layers, currentFacing, currentMob);
+            }, this)
 
         // collisions obstacles brisables
         this.physics.add.collider(nameMob, layers.breaks, this.destroyIfCharge, null, this);
@@ -183,7 +184,7 @@ class SceneClass extends Phaser.Scene {
     }
 
     // METHODE POSSEDER MOB - On détruit le player, et on crée un mob à la place (en utilisant le mob sauvegardé préalablement dans le possessMob)
-    replacePlayer(player, playerX, playerY, layers, possessedMob, currentFacing, nature){
+    replacePlayer(player, playerX, playerY, layers, possessedMob, currentFacing, nature) {
         player.disablePlayer();
         player.destroy();
         this.createMob(possessedMob, playerX, playerY, layers, currentFacing, nature);
@@ -193,16 +194,18 @@ class SceneClass extends Phaser.Scene {
 
     goToHook(hook, stake) {
 
+        this.player.stakeCatched = true;
+
         hook.setVelocity(0);
         hook.disableBody(true, true);
-        
+
         //this.rope.stop();
         hook.visible = false;
         //this.rope.visible = false;
-        
-        this.jumpHook = true;
-        if (this.jumpHook) {
 
+        this.jumpHook = true;
+
+        if (this.jumpHook) {
             if (this.player.facing == 'right') {
                 if (this.player.x < stake.x) {
                     this.player.x += 6
@@ -213,6 +216,7 @@ class SceneClass extends Phaser.Scene {
                 }
                 else {
                     this.jumpHook = false;
+                    this.player.stakeCatched = false;
                 }
             }
             else if (this.player.facing == 'left') {
@@ -224,6 +228,7 @@ class SceneClass extends Phaser.Scene {
                 }
                 else {
                     this.jumpHook = false;
+                    this.player.stakeCatched = false;
                 }
             }
         }
@@ -235,7 +240,7 @@ class SceneClass extends Phaser.Scene {
 
         const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y, "ravenPlatOn");
         this.physics.add.collider(this.player, newRavenPlat);
-        
+
         ravenPlatOff.destroy(ravenPlatOff.x, ravenPlatOff.y);
         proj.destroy();
 
@@ -243,19 +248,19 @@ class SceneClass extends Phaser.Scene {
 
     // METHODES POUR PLAYER = HOG ---------------
 
-    manageOnBox(player, box){
+    manageOnBox(player, box) {
     }
 
     // si collision pendant charge, détruit l'objet et stop la charge
-    destroyIfCharge(player, breaks){
+    destroyIfCharge(player, breaks) {
         if (player.isCharging && (player.body.touching.left || player.body.touching.right)) {
-            breaks.destroy(breaks.x, breaks.y); 
+            breaks.destroy(breaks.x, breaks.y);
             this.player.stopCharge()
         }
     }
 
     pushBox(player, box) {
-        if(player.body.blocked.down && !player.blockedLeft && !player.blockedLeft){
+        if (player.body.blocked.down && !player.blockedLeft && !player.blockedLeft) {
             player.body.velocity.y = 0;
             box.body.setAllowGravity(false);
             box.setImmovable(true);
@@ -267,12 +272,12 @@ class SceneClass extends Phaser.Scene {
 
     // immobilise la box quand on ne la pousse pas
     slowBox(box) {
-        if(box.body.blocked.down){
+        if (box.body.blocked.down) {
             if (box.body.blocked.right || box.body.blocked.left) {
                 //box.body.setImmovable(true);
                 box.setVelocity(0, 0);
             }
-        box.setDragX(0.0001);
+            box.setDragX(0.0001);
         }
     }
 }

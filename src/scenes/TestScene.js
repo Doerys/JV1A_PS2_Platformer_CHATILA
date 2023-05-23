@@ -75,11 +75,6 @@ class TestScene extends SceneClass {
         if(this.switchRavenPlatOn){
             this.ravenPlatOn.enableBody();
         }
-
-        if (this.activePossession) {
-            console.log(this.player.blockedLeft)
-
-        }
     }
 
     onProjectileCollision(enemy, projectile){

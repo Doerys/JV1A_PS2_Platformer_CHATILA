@@ -17,7 +17,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //this.speedMoveY = 1000;
 
         this.projectiles = new Phaser.GameObjects.Group;
-        
+
         /*this.hook = new Phaser.GameObjects.Group;
         this.rope = new Phaser.GameObjects.Group;*/
 
@@ -26,11 +26,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.currentlyPossess = true; // actuellement en train de posséder qq   
 
         this.inputsMoveLocked = false; // bloque les touches de déplacement latéraux
-        
+
         this.canJump = true; // autorise le saut 
         this.startJumpTimer = false; // déclencher le timer du saut
         this.canHighJump = false; // autorise le fait de faire des sauts plus haut
-        this.isJumping = false; 
+        this.isJumping = false;
         this.canPlane = false; // autorise de planer
         this.newJump = false; // permet de différencier un début de jump d'une fin de jump (pour le wall grab)
 
@@ -38,7 +38,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.isCharging = false;
 
-        this.isHooking = true;
+        this.isHooking = false;
+        this.canHook = true;
 
         this.accelerationX = 15;
         this.frictionGround = 50;
@@ -53,7 +54,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.keyQ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.keyD = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keyZ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-        
+
         this.keyE = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.spaceBar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.keyShift = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
@@ -166,7 +167,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
-        if (this.keyA.isDown){
+        if (this.keyA.isDown) {
             console.log(this.jumpTimer.getElapsedSeconds());
             console.log(this.upOnce);
         }
@@ -201,7 +202,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     disablePlayer() {
         this.currentlyPossess = false;
     }
-    
 }
 
 export default Player
