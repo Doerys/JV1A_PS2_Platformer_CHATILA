@@ -31,21 +31,45 @@ class MobFrog extends Mob {
 
             if (this.scene.activePossession) {
                 const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
+                
                 if (detectionZone < 300) {
                     this.playerSpotted = true;
 
-                    this.directionSpot = this.scene.checkDistance(this.x, this.scene.player.x);
-
-                    if (this.directionSpot > 0) {
-                        this.facing = "right";
+                    if (this.x < this.scene.player.x) {
+                        this.facing = "left";
                     }
 
-                    if (this.directionSpot < 0) {
-                        this.facing = "left";
+                    if (this.x > this.scene.player.x) {
+                        this.facing = "right";
+                    }
+                }
+            }
+
+            if(this.playerSpotted){
+                if (this.facing == 'right' && !this.body.blocked.left){ 
+                    this.setVelocityX(this.mobSpeedMoveX)*2 // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+        
+                    if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax) { // tant que la vitesse est inférieure à la vitesse max, on accélère 
+                        this.mobSpeedMoveX += this.mobAccelerationX;
+                    }
+                    else {
+                        this.mobSpeedMoveX = this.mobSpeedXMax; // sinon, vitesse = vitesse max
+                    }
+                }
+        
+                else if (this.facing == "left" && !this.body.blocked.right) {
+                    this.setVelocityX(this.mobSpeedMoveX)*2
+        
+                    if (Math.abs(this.mobSpeedMoveX) < this.mobSpeedXMax) {
+                        this.mobSpeedMoveX -= this.mobAccelerationX;
+                    }
+                    else {
+                        this.mobSpeedMoveX = -this.mobSpeedXMax;
                     }
                 }
             }
         }
+
 
         //this.classicBehavior();
     }
