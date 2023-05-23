@@ -1,4 +1,5 @@
 import Player from "./player.js";
+import Hook from "./hook.js";
 
 class PlayerFrog extends Player {
     constructor(scene, x, y, facing, currentMob) {
@@ -20,6 +21,28 @@ class PlayerFrog extends Player {
 
         console.log("PLAYER = FROG");
         //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
+
+        this.speedHook = 600;
+        this.maxHookDistance = 35;
+
+        this.hookCreated = false;
+
+        if (!this.hookCreated) {
+            this.hook = new Hook(this.scene, this.x, this.y)
+                .setCollideWorldBounds(true)
+                .setOrigin(0.5, 0.5)
+                //.disableBody(true, true);
+
+            this.hook.body.setAllowGravity(false);
+
+            /*this.rope = this.physics.add.sprite(0, 0, 'rope')
+                .setOrigin(0, 0.5)
+            
+            this.rope.body.setAllowGravity(false);
+            this.rope.visible = false;*/
+
+            this.hookCreated = true;
+        }
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update
@@ -168,47 +191,49 @@ class PlayerFrog extends Player {
                 this.hook.x = this.x;
                 this.hook.y = this.y;
 
-                this.rope.x = this.x;
+                /*this.rope.x = this.x;
                 this.rope.y = this.y;
 
-                this.rope.visible = true;
-
-                this.body.setAllowGravity(false);
-                this.stop();
+                this.rope.visible = true;*/
 
                 this.inputsMoveLocked = true;
+
+                this.body.setAllowGravity(false);
+                this.setVelocity(0,0);
 
                 //this.bout
 
                 if (this.facing == "right") {
-                    this.poids.setVelocityX(this.speedHook);
+                    this.hook.setVelocityX(this.speedHook);
                 }
 
                 else if (this.facing == "left") {
-                    this.poids.flipX(true);
-                    this.poids.setVelocityX(-this.speedHook);
+                    this.hook.flipX=true;
+                    this.hook.setVelocityX(-this.speedHook);
                 }
 
                 setTimeout(() => {
                     this.inputsMoveLocked = false;
                     this.body.setAllowGravity(true);
-                }, 500); // après un certain temps, on repasse la possibilité de sauter à true
+                }, 2000); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
-            // si la vélocité est à 0, ça fait disparaître les éléments
-            if (this.hook.body.velocity.x == 0) {
-                this.hook.disableBody(true, true);
-                this.rope.visible = false;
-                this.isHooking = false;
-            }
+            if (this.hookCreated) {
+                // si la vélocité est à 0, ça fait disparaître les éléments
+                /*if (this.hook.body.velocity.x == 0) {
+                    this.hook.disableBody(true, true);
+                    //this.rope.visible = false;
+                    this.isHooking = false;
+                }*/
 
-            // si le grappin atteint la distance max : stoppe le grappin
-            if (this.checkDistance(this.player.x, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
-                this.hook.setVelocity(0);
-                this.hook.visible = false;
-                this.rope.visible = false;
-                this.rope.stop();
-                this.rope.visible = false;
+                // si le grappin atteint la distance max : stoppe le grappin
+                if (this.checkDistance(this.x, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
+                    this.hook.setVelocity(0);
+                    this.hook.visible = false;
+                    //this.rope.visible = false;
+                    //this.rope.stop();
+                    //this.rope.visible = false;
+                }
             }
         }
     }
@@ -217,7 +242,7 @@ class PlayerFrog extends Player {
         return Math.sqrt(x2 - x1) * 2;
     }
 
-    hookAttract(){
+    hookAttract() {
 
     }
 }

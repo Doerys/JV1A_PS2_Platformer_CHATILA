@@ -126,7 +126,10 @@ class SceneClass extends Phaser.Scene {
         // collision entre projectiles et plateformes Off, pour créer plateformes
         this.physics.add.collider(this.player.projectiles, layers.ravenPlats, this.createPlat, null, this);
 
-        this.physics.add.overlap(this.hook, layers.stakes, this.goToHook, null, this) // collision hook et stake = grappin
+        if (currentMob == "frog") {
+            // collision hook et stake = grappin
+            this.physics.add.overlap(this.player.hook, layers.stakes, this.goToHook, null, this); 
+        }
     }
 
     // création du mob
@@ -192,18 +195,19 @@ class SceneClass extends Phaser.Scene {
 
         hook.setVelocity(0);
         hook.disableBody(true, true);
-        this.rope.stop();
+        
+        //this.rope.stop();
         hook.visible = false;
-        this.rope.visible = false;
+        //this.rope.visible = false;
         
         this.jumpHook = true;
         if (this.jumpHook) {
 
-            if (this.facing == 'right') {
-                if (this.x < stake.x) {
-                    this.x += 6
+            if (this.player.facing == 'right') {
+                if (this.player.x < stake.x) {
+                    this.player.x += 6
                     this.time.delayedCall(15, () => {
-                        this.jump(hook, stake)
+                        this.goToHook(hook, stake)
                     });
                     //this.jump(poids,blocCible)
                 }
@@ -211,11 +215,11 @@ class SceneClass extends Phaser.Scene {
                     this.jumpHook = false;
                 }
             }
-            else if (this.facing == 'left') {
-                if (this.x > stake.x) {
-                    this.x -= 6
+            else if (this.player.facing == 'left') {
+                if (this.player.x > stake.x) {
+                    this.player.x -= 6
                     this.time.delayedCall(15, () => {
-                        this.jump(hook, stake)
+                        this.goToHook(hook, stake)
                     });
                 }
                 else {

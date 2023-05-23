@@ -17,6 +17,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //this.speedMoveY = 1000;
 
         this.projectiles = new Phaser.GameObjects.Group;
+        
+        /*this.hook = new Phaser.GameObjects.Group;
+        this.rope = new Phaser.GameObjects.Group;*/
 
         this.facing = 'right';
 
@@ -34,9 +37,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.jumpTimer = 0; // temps en secondes sur lequel on appuie sur la touche saut
 
         this.isCharging = false;
-
-        this.speedHook = 300;
-        this.maxHookDistance = 192;
 
         this.isHooking = true;
 

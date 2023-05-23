@@ -574,7 +574,7 @@
   <object id="6" x="2560" y="960" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="5" name="Stake">
-  <object id="10" x="1088" y="1024" width="64" height="64"/>
+  <object id="10" x="1728" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="4" name="Box">
   <object id="8" x="640" y="1536" width="64" height="64"/>
