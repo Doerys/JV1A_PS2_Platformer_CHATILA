@@ -33,8 +33,6 @@ class MobRaven extends Mob {
         // check que le mob n'est pas possédé
         if (!this.isPossessed) {
 
-            console.log(this.scene.playerKilled)
-
             // aller retour si joueur n'est pas spotted
             this.patrolMob();
 

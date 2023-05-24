@@ -58,7 +58,10 @@ class PlayerFrog extends Player {
 
             this.basicMovements();
 
+            console.log(this.inputsMoveLocked)
+
             if (this.onGround && !this.newJump && !this.isHooking) {
+
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
 
@@ -174,7 +177,7 @@ class PlayerFrog extends Player {
             if ((this.grabLeft || this.grabRight) && this.cursors.down.isDown) {
 
                 this.body.setAllowGravity(true);
-                this.setVelocityY(150);
+                this.setVelocityY(200);
                 this.inputsMoveLocked = false;
             }
 
@@ -222,7 +225,7 @@ class PlayerFrog extends Player {
                 }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
-            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight){
+            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight && this.onGround){
                 this.inputsMoveLocked = false; // commandes débloquées
                 this.body.setAllowGravity(true); //gravité rétablie
             }
