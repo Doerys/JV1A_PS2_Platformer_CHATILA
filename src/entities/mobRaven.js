@@ -3,7 +3,7 @@ import Projectile from "./projectile.js";
 
 class MobRaven extends Mob {
     constructor(scene, x, y, facing, currentMob) {
-        super(scene, x, y, 'mob');
+        super(scene, x, y, 'mobRaven');
 
         this.facing = facing;
         this.currentMob = currentMob;
@@ -68,7 +68,6 @@ class MobRaven extends Mob {
                 setTimeout(() => {
                     this.disableShoot = false;
                 }, 1000);
-             
             }
         }
     }

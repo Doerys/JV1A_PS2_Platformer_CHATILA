@@ -50,7 +50,9 @@ class SceneClass extends Phaser.Scene {
         // on crée le calque plateformes
         const layer_platforms = levelMap.createLayer("layer_platforms", tileset);
         const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(true);
-        const layer_spawn = levelMap.getObjectLayer("Spawn");
+        const layer_spawnFrog = levelMap.getObjectLayer("SpawnFrog");
+        const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
+        const layer_spawnRaven = levelMap.getObjectLayer("SpawnRaven");
         const layer_break = levelMap.getObjectLayer("Break");
         const layer_box = levelMap.getObjectLayer("Box");
         const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
@@ -61,8 +63,17 @@ class SceneClass extends Phaser.Scene {
         layer_limits.setCollisionByProperty({ estSolide: true });
 
         // On enregistre le spawn dans une variable
-        const spawnPoint = layer_spawn.objects[0];
-        this.spawn = layer_spawn.objects[0];
+        //const spawnPoint = layer_spawn.objects[0];
+        //this.spawn = layer_spawn.objects[0];
+
+        const spawnFrog = layer_spawnFrog.objects[0];
+        this.spawnFrog = layer_spawnFrog.objects[0];
+
+        const spawnHog = layer_spawnHog.objects[0];
+        this.spawnHog = layer_spawnHog.objects[0];
+
+        const spawnRaven = layer_spawnRaven.objects[0];
+        this.spawnRaven = layer_spawnRaven.objects[0];
 
         // éléments de décors
         const breaks = this.physics.add.staticGroup();
@@ -91,19 +102,65 @@ class SceneClass extends Phaser.Scene {
             stakes.create(stake.x + 32, stake.y + 32, "stake");
         }, this)
 
-        return { spawnPoint, layer_platforms, layer_limits, breaks, boxes, ravenPlats, stakes, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, breaks, boxes, ravenPlats, stakes, tileset }
     }
 
-    createPlayer(x, y, layers, currentFacing, currentMob) {
+    // création du mob
+    createMob(nameMob, x, y, layers, currentFacing, currentMob, groupMobs) {
 
         if (currentMob == "frog") {
-            this.player = new PlayerFrog(this, x, y, currentFacing, currentMob).setCollideWorldBounds();
+            nameMob = new MobFrog(this, x, y, currentFacing, currentMob);
         }
         else if (currentMob == "hog") {
-            this.player = new PlayerHog(this, x, y, currentFacing, currentMob).setCollideWorldBounds();
+            nameMob = new MobHog(this, x, y, currentFacing, currentMob);
         }
         else if (currentMob == "raven") {
-            this.player = new PlayerRaven(this, x, y, currentFacing, currentMob).setCollideWorldBounds();
+            nameMob = new MobRaven(this, x, y, currentFacing, currentMob);
+        }
+
+        nameMob
+            .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
+            .on('pointerdown', function () {
+
+                nameMob.disableIA(); // désactive le update du mob pour éviter un crash
+
+                if (this.activePossession) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
+                    this.replacePlayer(this.player, this.player.x, this.player.y, layers, this.possessedMob, currentFacing);
+                }
+                // possession du mob
+                this.possessedMob = this.possessMob(nameMob, nameMob.x, nameMob.y, layers, currentFacing, currentMob, groupMobs);
+            }, this)
+
+            this.physics.add.collider(nameMob, layers.layer_platforms);
+            this.physics.add.collider(nameMob, layers.layer_limits);
+            
+            // collisions obstacles brisables
+            this.physics.add.collider(nameMob, layers.breaks, this.destroyIfCharge, null, this);
+            // collision boxes
+            this.physics.add.collider(nameMob, layers.boxes);
+
+            this.physics.add.collider(nameMob.projectiles, layers.ravenPlats, this.createPlat, null, this);
+
+            this.physics.add.collider(nameMob.projectiles, this.player, this.hitProjectile, null, this);
+            this.physics.add.collider(this.player.projectiles, nameMob, this.hitProjectile, null, this);
+
+        //groupMobs.add(nameMob);
+    }
+
+    createPlayer(x, y, layers, currentFacing, currentPlayer, groupMobs) {
+
+        if (!this.activePossession){
+            this.player.enableBody();
+        }
+        
+        if (currentPlayer == "frog") {
+            this.player = new PlayerFrog(this, x, y, currentFacing, currentPlayer).setCollideWorldBounds();
+        }
+        else if (currentPlayer == "hog") {
+            this.player = new PlayerHog(this, x, y, currentFacing, currentPlayer).setCollideWorldBounds();
+        }
+        else if (currentPlayer == "raven") {
+            this.player = new PlayerRaven(this, x, y, currentFacing, currentPlayer).setCollideWorldBounds();
         }
 
         //COLLISIONS
@@ -127,73 +184,86 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player.projectiles, layers.layer_platforms);
         this.physics.add.collider(this.player.projectiles, layers.ravenPlats, this.createPlat, null, this);
 
-        if (currentMob == "frog") {
+        if (currentPlayer == "frog") {
             // collision hook et stake = grappin
             this.physics.add.overlap(this.player.hook, layers.stakes, this.goToHook, null, this);
             this.physics.add.overlap(this.player.hook, layers.boxes, this.attrackHook, null, this);
             this.physics.add.collider(this.player.hook, layers.layer_platforms);
         }
+
+    //this.addMobsCollisions(groupMobs, layers);
     }
 
-    // création du mob
-    createMob(nameMob, x, y, layers, currentFacing, currentMob) {
+    /*loadMob(layers, facingFrog, facingHog, facingRaven) {
+        const frogs = this.physics.add.group();
+        const hogs = this.physics.add.group();
+        const ravens = this.physics.add.group();
 
-        if (currentMob == "frog") {
-            nameMob = new MobFrog(this, x, y, currentFacing, currentMob);
-        }
-        else if (currentMob == "hog") {
-            nameMob = new MobHog(this, x, y, currentFacing, currentMob);
-        }
-        else if (currentMob == "raven") {
-            nameMob = new MobRaven(this, x, y, currentFacing, currentMob);
-        }
+        layer_spawnFrog.objects.forEach(stake => {
+            frogs.createMob(frogs, layers.spawnFrog.x, layers.spawnFrog.y, layers, facingFrog, "frog");
+        })
 
-        nameMob
-            .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
-            .on('pointerdown', function () {
+        layer_spawnFrog.objects.forEach(stake => {
+            hogs.createMob(hogs, layers.spawnHog.x, layers.spawnHog.y, layers, facingHog, "frog");
+        })
 
-                nameMob.disableIA(); // désactive le update du mob pour éviter un crash
+        layer_spawnFrog.objects.forEach(stake => {
+            ravens.createMob(ravens, layers.spawnRaven.x, layers.spawnRaven.y, layers, facingRaven, "frog");
+        })
 
-                if (this.activePossession) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
-                    this.replacePlayer(this.player, this.player.x, this.player.y, layers, this.possessedMob.sprite, currentFacing, this.possessedMob.nature);
-                    
-                    this.physics.add.collider(nameMob.projectiles, this.player, this.hitProjectile, null, this);
-                    this.physics.add.collider(this.player.projectiles, nameMob, this.hitProjectile, null, this);
-                }
-                // possession du mob
-                this.possessedMob = this.possessMob(nameMob, nameMob.x, nameMob.y, layers, currentFacing, currentMob);
-            }, this)
+        return { frogs, hogs, ravens, facingFrog, facingHog, facingRaven }
+    }*/
 
+    addMobsCollisions(groupMobs, layers) {
+        this.physics.add.collider(groupMobs, layers.layer_platforms);
+        this.physics.add.collider(groupMobs, layers.layer_limits);
+        
         // collisions obstacles brisables
-        this.physics.add.collider(nameMob, layers.breaks, this.destroyIfCharge, null, this);
-
+        this.physics.add.collider(groupMobs, layers.breaks, this.destroyIfCharge, null, this);
         // collision boxes
-        //this.physics.add.collider(nameMob, layers.boxes);
+        this.physics.add.collider(groupMobs, layers.boxes);
 
-        this.physics.add.collider(nameMob, layers.layer_platforms);
-        this.physics.add.collider(nameMob, layers.layer_limits);
-
-        this.physics.add.collider(nameMob.projectiles, layers.ravenPlats, this.createPlat, null, this);
+        //this.physics.add.collider(groupMobs.getChildren()[2].projectiles, layers.ravenPlats, this.createPlat, null, this);
+        
+        /*
+        if (this.activePossession) {
+            this.physics.add.collider(groupMobs.children.projectiles, this.player, this.hitProjectile, null, this);
+            this.physics.add.collider(this.player.projectiles, groupMobs, this.hitProjectile, null, this);
+        }*
+        */
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
 
     // METHODE POSSEDER MOB - On détruit le mob, et on crée un player à la place
     possessMob(mob, mobX, mobY, layers, currentFacing, currentMob) {
-        const sprite = mob; // permet de sauvegarder toutes les infos liées au mob, pour le recréer plus tard
-        const nature = currentMob; // permet de sauvegarder quel type de mob recréer plus tard
-        mob.destroy();
+        //const nature = currentMob; // permet de sauvegarder quel type de mob recréer plus tard
+        
+        // on fait disparaître le mob contrôlé
+        mob.body = false;
+        mob.setImmovable(true);
+
+        // on crée un mob qui est à l'image du mob contrôlé
         this.createPlayer(mobX, mobY, layers, currentFacing, currentMob);
         this.activePossession = true;
 
-        return { sprite, nature }
+        return { mob }
     }
 
     // METHODE POSSEDER AUTRE MOB - On détruit le player, et on crée un mob à la place (en utilisant le mob sauvegardé préalablement dans le possessMob)
-    replacePlayer(player, playerX, playerY, layers, possessedMob, currentFacing, nature) {
+    replacePlayer(player, playerX, playerY, layers, possessedMob, currentFacing) {
+        
+        // on fait réapparaître le mob contrôlé
+        this.possessedMob.enableBody(true, playerX, playerY);
+        
+        // on place le mob contrôlé aux coordonnées X et Y
+        this.possessedMob.x = playerX;
+        this.possessedMob.y = playerY
+        
+        // on efface le player
         player.disablePlayer();
         player.destroy();
-        this.createMob(possessedMob, playerX, playerY, layers, currentFacing, nature);
+        //this.createMob(possessedMob, playerX, playerY, layers, currentFacing, nature, groupMobs);
     }
 
     // METHODES POUR PLAYER = FROG ----
@@ -292,9 +362,6 @@ class SceneClass extends Phaser.Scene {
 
     // METHODES POUR PLAYER = HOG ---------------
 
-    manageOnBox(player, box) {
-    }
-
     // si collision pendant charge, détruit l'objet et stop la charge
     destroyIfCharge(player, breaks) {
         if (player.isCharging && (player.body.touching.left || player.body.touching.right)) {
@@ -327,13 +394,6 @@ class SceneClass extends Phaser.Scene {
 
     // METHODES POUR PLAYER = RAVEN ------
 
-    hitProjectile(projectile, target){
-        console.log("DIE DIE DIE");
-
-        projectile.destroy();
-        target.destroy();
-    }
-
     createPlat(proj, ravenPlatOff) {
 
         const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y, "ravenPlatOn");
@@ -341,7 +401,13 @@ class SceneClass extends Phaser.Scene {
 
         ravenPlatOff.destroy(ravenPlatOff.x, ravenPlatOff.y);
         proj.destroy();
+    }
 
+    hitProjectile(projectile, target) {
+        console.log("DIE DIE DIE");
+
+        projectile.destroy();
+        target.destroy();
     }
 }
 export default SceneClass;
