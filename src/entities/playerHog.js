@@ -26,7 +26,7 @@ class PlayerHog extends Player {
 
     update(time, delta) {
 
-        if (this.currentlyPossess) {
+        if (this.isPossessed) {
 
             //console.log(this.body.velocity.y, " // ", this.body.velocity.x);
 

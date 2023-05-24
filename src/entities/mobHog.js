@@ -4,6 +4,8 @@ class MobHog extends Mob {
     constructor(scene, x, y, facing, currentMob) {
         super(scene, x, y, 'mobHog');
 
+        this.spawnX = x;
+        this.spawnY = y;
         this.facing = facing;
         this.currentMob = currentMob;
 

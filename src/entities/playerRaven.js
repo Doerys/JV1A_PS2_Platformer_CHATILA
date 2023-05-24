@@ -30,7 +30,7 @@ class PlayerRaven extends Player {
 
     update(time, delta) {
 
-        if (this.currentlyPossess) {
+        if (this.isPossessed) {
 
             this.basicMovements();
 

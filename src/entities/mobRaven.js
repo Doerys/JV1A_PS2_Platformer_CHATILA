@@ -5,6 +5,8 @@ class MobRaven extends Mob {
     constructor(scene, x, y, facing, currentMob) {
         super(scene, x, y, 'mobRaven');
 
+        this.spawnX = x;
+        this.spawnY = y;
         this.facing = facing;
         this.currentMob = currentMob;
         scene.add.existing(this);
@@ -36,6 +38,7 @@ class MobRaven extends Mob {
 
             // si le joueur possède un mob, détection du joueur
             if (this.scene.activePossession) {
+
                 const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
                 
                 if (detectionZone < 300) {
@@ -53,21 +56,23 @@ class MobRaven extends Mob {
                 else {
                     this.playerSpotted = false;
                 }
-            }
 
-            if(this.playerSpotted && !this.disableShoot){
+                if(this.playerSpotted && !this.disableShoot){
 
-                this.setVelocity(0, 0);
+                    console.log("FEEEUU")
 
-                const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
-                this.scene.projectilesMob.add(feather);
-                this.disableShoot = true;
+                    this.setVelocity(0, 0);
 
-                feather.shoot(this);
+                    const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
+                    this.scene.projectilesMob.add(feather);
+                    this.disableShoot = true;
 
-                setTimeout(() => {
-                    this.disableShoot = false;
-                }, 1000);
+                    feather.shoot(this);
+
+                    setTimeout(() => {
+                        this.disableShoot = false;
+                    }, 1000);
+                }
             }
         }
     }

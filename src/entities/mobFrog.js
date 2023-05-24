@@ -4,6 +4,8 @@ class MobFrog extends Mob {
     constructor(scene, x, y, facing, currentMob) {
         super(scene, x, y, 'mobFrog');
 
+        this.spawnX = x;
+        this.spawnY = y;
         this.facing = facing;
         this.currentMob = currentMob;
 
@@ -17,7 +19,9 @@ class MobFrog extends Mob {
 
         super.init();
 
-        console.log("new MOB FROG");
+        console.log("CREATION FROG :" + this.x + "//" + this.y)
+
+        //console.log("new MOB FROG");
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update

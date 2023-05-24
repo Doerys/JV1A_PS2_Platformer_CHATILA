@@ -23,7 +23,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.facing = 'right';
 
-        this.currentlyPossess = true; // actuellement en train de posséder qq   
+        this.isPossessed = true; // actuellement en train de posséder qq   
 
         this.inputsMoveLocked = false; // bloque les touches de déplacement latéraux
 
@@ -200,7 +200,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     disablePlayer() {
-        this.currentlyPossess = false;
+        this.isPossessed = false;
     }
 }
 

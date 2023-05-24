@@ -26,6 +26,8 @@ class TestScene extends SceneClass {
         // chargement des calques
         const layers = this.loadMap(levelMap);
 
+        this.layers = layers;
+
         // création du player
         //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
 
@@ -52,12 +54,6 @@ class TestScene extends SceneClass {
         this.input.gamepad.once('connected', function (pad) {
             controller = pad;
         });
-
-        this.boxTest = this.physics.add.image(1984+32, 1600+32, 'box');
-        
-        this.boxTest.body.setAllowGravity(false).setImmovable(true);
-        
-        this.physics.add.collider(this.boxTest, layers.layer_platforms);
 
         // plateforme qui bouge
 
