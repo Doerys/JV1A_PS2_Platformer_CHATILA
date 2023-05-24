@@ -19,6 +19,9 @@ class MobHog extends Mob {
 
         super.init();
 
+        this.canCharge = true;
+        this.isCharging = false;
+
         console.log("new MOB HOG");
     }
 
@@ -38,7 +41,7 @@ class MobHog extends Mob {
             if (this.scene.activePossession) {
                 const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
                 
-                if (detectionZone < 300 && !this.scene.playerKilled) {
+                if (detectionZone < 300 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
                     this.playerSpotted = true;
 
                     if (this.x < this.scene.player.x) {
@@ -51,9 +54,10 @@ class MobHog extends Mob {
                 }
                 else if (detectionZone > 300 || this.scene.playerKilled) {
                     this.playerSpotted = false;
+                    this.isCharging = false;
                 }
                 
-                if(this.playerSpotted){
+                if(this.playerSpotted && this.canCharge){
                     if (this.facing == 'right'){ 
                         this.setVelocityX(this.mobSpeedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
             
@@ -75,6 +79,8 @@ class MobHog extends Mob {
                             this.mobSpeedMoveX = -this.mobSpeedXMax * 3; // sinon, vitesse = vitesse max
                         }
                     }
+
+                    this.isCharging = true;
             
                     if (this.body.blocked.left || this.body.blocked.right) {
                         this.stopCharge();
@@ -86,6 +92,12 @@ class MobHog extends Mob {
 
     stopCharge() {
         this.setVelocityX(0);
+        this.canCharge = false;
+        this.isCharging = false;
+
+        setTimeout(() => {
+        this.canCharge = true;
+        }, 500);
     }
 }
 

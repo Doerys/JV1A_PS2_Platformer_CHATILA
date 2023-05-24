@@ -122,6 +122,8 @@ class SceneClass extends Phaser.Scene {
             nameMob = new MobRaven(this, x, y, facing, currentMob);
         }
 
+        this.mobGroup.add(nameMob);
+
         nameMob
             .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
             .on('pointerdown', function () {
@@ -134,6 +136,8 @@ class SceneClass extends Phaser.Scene {
                 // possession du mob
                 this.possessMob(nameMob, nameMob.x, nameMob.y, this.layers, facing, currentMob);
             }, this)
+
+        this.physics.add.collider(nameMob, this.playerGroup, this.checkCharge, null, this);
 
         this.physics.add.collider(nameMob, layers.layer_platforms);
         this.physics.add.collider(nameMob, layers.layer_limits);
@@ -169,6 +173,8 @@ class SceneClass extends Phaser.Scene {
             this.player = new PlayerRaven(this, x, y, facing, currentMob).setCollideWorldBounds();
         }
 
+        this.playerGroup.add(this.player);
+
         //COLLISIONS
 
         this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
@@ -198,6 +204,8 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.overlap(this.player.hook, layers.boxes, this.attrackHook, null, this);
             this.physics.add.collider(this.player.hook, layers.layer_platforms);
         }
+
+        this.physics.add.collider(this.player, this.mobGroup, this.checkCharge, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -353,6 +361,12 @@ class SceneClass extends Phaser.Scene {
         if (player.isCharging && (player.body.touching.left || player.body.touching.right)) {
             breaks.destroy(breaks.x, breaks.y);
             this.player.stopCharge()
+        }
+    }
+    
+    checkCharge(hog, target) {
+        if(hog.isCharging){
+            this.kill(target);
         }
     }
 

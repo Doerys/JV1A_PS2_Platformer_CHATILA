@@ -39,7 +39,12 @@ class TestScene extends SceneClass {
 
         this.projectilesPlayer = new Phaser.GameObjects.Group;
 
+        this.playerGroup = this.physics.add.group();
+        this.mobGroup = this.physics.add.group();
+
         this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
+
+        this.playerGroup.add(this.player);
 
         //Création du mob
         this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog");

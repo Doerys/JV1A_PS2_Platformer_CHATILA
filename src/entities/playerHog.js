@@ -18,6 +18,8 @@ class PlayerHog extends Player {
         
         console.log("PLAYER = HOG");
         this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
+
+        this.canCharge = true;
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update
@@ -30,7 +32,7 @@ class PlayerHog extends Player {
 
             //console.log(this.body.velocity.y, " // ", this.body.velocity.x);
 
-            if (this.onGround && !this.isCharging && !this.newJump) {
+            if (this.onGround && !this.isCharging && !this.newJump && this.canCharge) {
 
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
                 this.inputsMoveLocked = false;
@@ -68,7 +70,7 @@ class PlayerHog extends Player {
             }
 
             // trigger de la charge
-            if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping) {
+            if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isJumping && this.canCharge) {
                 this.isCharging = true;
             }
 
@@ -106,9 +108,16 @@ class PlayerHog extends Player {
     }
 
     stopCharge() {
-        this.inputsMoveLocked = false;
         this.setVelocityX(0);
         this.isCharging = false;
+        this.canJump = false;
+        this.canCharge = false;
+
+        setTimeout(() => {
+            this.canCharge = true;
+            this.inputsMoveLocked = false;
+            this.canJump = true;
+        }, 500);
     }
 }
 
