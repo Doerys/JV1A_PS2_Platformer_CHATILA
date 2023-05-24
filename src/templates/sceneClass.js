@@ -137,7 +137,7 @@ class SceneClass extends Phaser.Scene {
                 this.possessMob(nameMob, nameMob.x, nameMob.y, this.layers, facing, currentMob);
             }, this)
 
-        this.physics.add.collider(nameMob, this.playerGroup, this.checkCharge, null, this);
+        this.physics.add.overlap(nameMob, this.playerGroup, this.checkCharge, null, this);
 
         this.physics.add.collider(nameMob, layers.layer_platforms);
         this.physics.add.collider(nameMob, layers.layer_limits);
@@ -205,7 +205,7 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(this.player.hook, layers.layer_platforms);
         }
 
-        this.physics.add.collider(this.player, this.mobGroup, this.checkCharge, null, this);
+        this.physics.add.overlap(this.player, this.mobGroup, this.checkCharge, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -249,15 +249,18 @@ class SceneClass extends Phaser.Scene {
     }
 
     respawnMob(target){
-        if (target.currentMob == "frog") {
-            this.createMob(target, this.layers.spawnFrog.x, this.layers.spawnFrog.y, this.layers, target.facing, target.currentMob)
-        }
-        else if (target.currentMob == "hog") {
-            this.createMob(target, this.layers.spawnHog.x, this.layers.spawnHog.y, this.layers, target.facing, target.currentMob)
-        }
-        else if (target.currentMob == "raven") {
-            this.createMob(target, this.layers.spawnRaven.x, this.layers.spawnRaven.y, this.layers, target.facing, target.currentMob)
-        }
+
+        setTimeout( () => {
+            if (target.currentMob == "frog") {
+                this.createMob(target, this.layers.spawnFrog.x, this.layers.spawnFrog.y, this.layers, target.facing, target.currentMob)
+            }
+            else if (target.currentMob == "hog") {
+                this.createMob(target, this.layers.spawnHog.x, this.layers.spawnHog.y, this.layers, target.facing, target.currentMob)
+            }
+            else if (target.currentMob == "raven") {
+                this.createMob(target, this.layers.spawnRaven.x, this.layers.spawnRaven.y, this.layers, target.facing, target.currentMob)
+            }
+        }, 500);
     }
 
     // METHODES POUR PLAYER = FROG ----

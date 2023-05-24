@@ -44,8 +44,6 @@ class MobRaven extends Mob {
                 if (detectionZone < 300 && !this.scene.playerKilled) {
                     this.playerSpotted = true;
 
-                    console.log("check");
-
                     if (this.x < this.scene.player.x) {
                         this.facing = "right";
                     }
