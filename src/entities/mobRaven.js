@@ -33,6 +33,8 @@ class MobRaven extends Mob {
         // check que le mob n'est pas possédé
         if (!this.isPossessed) {
 
+            console.log(this.scene.playerKilled)
+
             // aller retour si joueur n'est pas spotted
             this.patrolMob();
 
@@ -41,7 +43,7 @@ class MobRaven extends Mob {
 
                 const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
                 
-                if (detectionZone < 300) {
+                if (detectionZone < 300 && !this.scene.playerKilled) {
                     this.playerSpotted = true;
 
                     if (this.x < this.scene.player.x) {
@@ -53,13 +55,11 @@ class MobRaven extends Mob {
                     }
                 }
 
-                else {
+                else if (detectionZone > 300 || this.scene.playerKilled) {
                     this.playerSpotted = false;
                 }
 
                 if(this.playerSpotted && !this.disableShoot){
-
-                    console.log("FEEEUU")
 
                     this.setVelocity(0, 0);
 

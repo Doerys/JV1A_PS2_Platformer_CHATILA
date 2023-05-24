@@ -40,11 +40,14 @@ class SceneClass extends Phaser.Scene {
     // load des CALQUES / OBJETS / SPAWNS MOBS dans une constante liée à chaque niveau 
     loadMap(levelMap) {
 
-        // résolution de l'écran
-        this.physics.world.setBounds(0, 0, 3072, 1728);
+        // résolution de l'écran (+ 3 cases que la caméra, pour créer une dead zone où le joueur disparaît)
+        this.physics.world.setBounds(0, 0, 3072, 1920);
 
         // caméra
-        this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728); //format 16/9 
+        this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728).setOrigin(0, 0); //format 16/9 
+        
+        //Enlever commentaire pour voir la deadZone
+        //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
 
         // on prend le tileset dans le TILED
         const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
@@ -52,6 +55,7 @@ class SceneClass extends Phaser.Scene {
         // on crée le calque plateformes
         const layer_platforms = levelMap.createLayer("layer_platforms", tileset);
         const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(true);
+        const layer_deadZone = levelMap.createLayer("layer_deadZone", tileset);
         const layer_spawnFrog = levelMap.getObjectLayer("SpawnFrog");
         const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
         const layer_spawnRaven = levelMap.getObjectLayer("SpawnRaven");
@@ -63,6 +67,7 @@ class SceneClass extends Phaser.Scene {
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
         layer_limits.setCollisionByProperty({ estSolide: true });
+        layer_deadZone.setCollisionByProperty({ estSolide: true });
 
         // spawns de chaque mob
         const spawnFrog = layer_spawnFrog.objects[0];
@@ -101,7 +106,7 @@ class SceneClass extends Phaser.Scene {
             stakes.create(stake.x + 32, stake.y + 32, "stake");
         }, this)
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, breaks, boxes, ravenPlats, stakes, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, ravenPlats, stakes, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -132,6 +137,7 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(nameMob, layers.layer_platforms);
         this.physics.add.collider(nameMob, layers.layer_limits);
+        this.physics.add.collider(nameMob, layers.layer_deadZone, this.kill, null, this);
 
         // collisions obstacles brisables
         this.physics.add.collider(nameMob, layers.breaks, this.destroyIfCharge, null, this);
@@ -166,6 +172,8 @@ class SceneClass extends Phaser.Scene {
         //COLLISIONS
 
         this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
+
+        this.physics.add.collider(this.player, layers.layer_deadZone, this.kill, null, this);
 
         this.physics.add.collider(this.player, this.movingPlat);
 
@@ -361,18 +369,26 @@ class SceneClass extends Phaser.Scene {
 
     hitProjectile(projectile, target) {
         projectile.destroy();
-        target.destroy();
+        this.kill(target);
+    }
 
-        if(!target.isPossessed){
-            target.disableIA();
+    kill(victim){
+        victim.destroy();
+
+        if(!victim.isPossessed){
+            victim.disableIA();
         }
-        else if (target.isPossessed){
-            console.log("CHECKEU");
-            target.disablePlayer();
-            this.activePossession = false;
+        else if (victim.isPossessed){
+            victim.disablePlayer();
+            this.playerKilled = true;
+            this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
+            
+            setTimeout(() => {
+                this.activePossession = false;
+            }, 100);
         }
 
-        this.respawnMob(target);
+        this.respawnMob(victim);
     }
 
 }

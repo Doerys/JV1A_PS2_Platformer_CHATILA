@@ -19,6 +19,7 @@ class TestScene extends SceneClass {
         this.controller = false;
 
         this.activePossession = false;
+        this.playerKilled = false;
 
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
