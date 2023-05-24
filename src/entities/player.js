@@ -16,7 +16,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.speedMoveY = 500;
         //this.speedMoveY = 1000;
 
-        this.projectiles = new Phaser.GameObjects.Group;
+        //this.projectiles = new Phaser.GameObjects.Group;
 
         /*this.hook = new Phaser.GameObjects.Group;
         this.rope = new Phaser.GameObjects.Group;*/

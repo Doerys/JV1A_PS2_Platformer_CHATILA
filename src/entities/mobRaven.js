@@ -60,7 +60,7 @@ class MobRaven extends Mob {
                 this.setVelocity(0, 0);
 
                 const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
-                this.projectiles.add(feather);
+                this.scene.projectilesMob.add(feather);
                 this.disableShoot = true;
 
                 feather.shoot(this);

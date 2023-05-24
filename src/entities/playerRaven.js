@@ -92,7 +92,7 @@ class PlayerRaven extends Player {
             if (Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.disableShoot) {
 
                 const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
-                this.projectiles.add(feather);
+                this.scene.projectilesPlayer.add(feather);
                 this.disableShoot = true;
                 feather.shoot(this);
 

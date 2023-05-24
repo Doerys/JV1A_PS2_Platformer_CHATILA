@@ -19,7 +19,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.mobAccelerationX = 100;
         this.mobSpeedXMax = 100;
 
-        this.projectiles = new Phaser.GameObjects.Group;
+        //this.projectiles = new Phaser.GameObjects.Group;
     }
 
     create() {
