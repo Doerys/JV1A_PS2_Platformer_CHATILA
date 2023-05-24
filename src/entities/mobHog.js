@@ -14,7 +14,7 @@ class MobHog extends Mob {
     }
 
     init() {
-
+        this.name = "Hog";
         super.init();
 
         console.log("new MOB HOG");

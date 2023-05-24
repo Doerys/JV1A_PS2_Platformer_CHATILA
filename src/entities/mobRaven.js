@@ -14,7 +14,7 @@ class MobRaven extends Mob {
     }
 
     init() {
-
+        this.name = "Raven";
         super.init();
 
         this.disableShoot = false;
@@ -26,8 +26,7 @@ class MobRaven extends Mob {
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
 
-    update(time, delta) {      
-
+    update(time, delta) {    
         // check que le mob n'est pas possédé
         if (!this.isPossessed) {
 

@@ -179,63 +179,41 @@
         }, 
         {
          "draworder":"topdown",
-         "id":9,
-         "name":"SpawnRaven",
+         "id":10,
+         "name":"Spawn",
          "objects":[
                 {
                  "class":"",
                  "height":64,
-                 "id":33,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1152,
-                 "y":960
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":8,
-         "name":"SpawnHog",
-         "objects":[
-                {
-                 "class":"",
-                 "height":64,
-                 "id":30,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1792,
-                 "y":256
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":2,
-         "name":"SpawnFrog",
-         "objects":[
-                {
-                 "class":"",
-                 "height":64,
-                 "id":1,
-                 "name":"",
+                 "id":34,
+                 "name":"frog",
                  "rotation":0,
                  "visible":true,
                  "width":64,
                  "x":1408,
                  "y":256
+                }, 
+                {
+                 "class":"",
+                 "height":64,
+                 "id":35,
+                 "name":"hog",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":1789.21212121212,
+                 "y":249.818181818182
+                }, 
+                {
+                 "class":"",
+                 "height":64,
+                 "id":36,
+                 "name":"raven",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":1152,
+                 "y":960
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -298,8 +276,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":34,
+ "nextlayerid":11,
+ "nextobjectid":37,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

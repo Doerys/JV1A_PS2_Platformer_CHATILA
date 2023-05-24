@@ -14,8 +14,9 @@ class MobFrog extends Mob {
     }
 
     init() {
-
+        this.name = "Frog";
         super.init();
+        this.isPossessed = false;
 
         console.log("new MOB FROG");
     }
@@ -25,7 +26,7 @@ class MobFrog extends Mob {
     }
 
     update(time, delta) {
-
+    
         if (!this.isPossessed) {
             this.patrolMob();
 

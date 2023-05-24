@@ -1,19 +1,32 @@
-class Projectile extends Phaser.Physics.Arcade.Sprite{
+class Projectile extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(scene, x, y){
+    constructor(scene, x, y) {
         super(scene, x, y, "feather");
 
         scene.physics.add.existing(this);
         this.init();
     }
 
-    init(){
-        this.speed = 500; 
+    init() {
+        //false = enemi, true = player
+        this.type = false
+        this.speed = 500;
         this.maxDistance = 150;
-        this.traveledDistance = 0; 
-        this.dir = null; 
+        this.traveledDistance = 0;
+        this.dir = null;
     }
 
+
+
+    shoot() {
+        this.setVelocityX(this.speed);
+        this.body.setAllowGravity(false);
+    }
+
+}
+
+
+/*
     shoot(player){
     
         if(player.facing == "right"){
@@ -28,7 +41,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
         }
 
     }
-
+*/
     /*createPlat(proj, plat){
         
         this.scene.add.physics.sprite(plat.x, plat.y, "ravenPlatOn");
@@ -53,6 +66,6 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
         this.maxDistance = 500; 
     }*/
 
-}
+
 
 export default Projectile

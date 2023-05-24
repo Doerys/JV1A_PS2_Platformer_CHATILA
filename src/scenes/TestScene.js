@@ -26,6 +26,8 @@ class TestScene extends SceneClass {
         // chargement des calques
         const layers = this.loadMap(levelMap);
 
+        this.mobs = this.createMob(layers.layer_spawn, layers.layer_platforms);
+
         // création du player
         //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
 
@@ -34,8 +36,20 @@ class TestScene extends SceneClass {
 
         //const mobs = this.physics.add.group();
 
-        this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
+        this.player = new Player(this, 0, 0, "right", "frog").disableBody(true, true);
+/*
+        this.mobs.on('pointerdown', function () {
+            console.log("check")
+            this.mobs.disableIA(); // désactive le update du mob pour éviter un crash
 
+            if (this.activePossession) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
+                this.replacePlayer(this.player, layers, this.possessedMob.sprite, currentFacing, this.possessedMob.nature);
+            }
+            // possession du mob
+            this.possessedMob = this.possessMob(mob, mob.x, mob.y, layers, currentFacing, currentMob, player);
+        }, this)
+*/
+        /*
         //Création du mob
         this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", this.player);
 
@@ -45,28 +59,28 @@ class TestScene extends SceneClass {
 
         //Création du mob
         this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", this.player);
-
+        */
         //this.addMobsCollisions(mobs, layers);
-           
+
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
             controller = pad;
         });
 
-        this.boxTest = this.physics.add.image(1984+32, 1600+32, 'box');
-        
+        this.boxTest = this.physics.add.image(1984 + 32, 1600 + 32, 'box');
+
         this.boxTest.body.setAllowGravity(false).setImmovable(true);
-        
+
         this.physics.add.collider(this.boxTest, layers.layer_platforms);
 
         // plateforme qui bouge
 
         this.movingPlat = this.physics.add.image(1408, 1536, 'movingPlat')
             .setImmovable(true)
-            //.setVelocity(100, 0);
+        //.setVelocity(100, 0);
 
         this.movingPlat.body.setAllowGravity(false);
-            
+
         /*this.tweens.timeline({
             targets: this.movingPlat.body.velocity,
             loop: -1,
@@ -77,17 +91,17 @@ class TestScene extends SceneClass {
         });*/
     }
 
-    update() { 
-        if(this.switchRavenPlatOn){
+    update() {
+        if (this.switchRavenPlatOn) {
             this.ravenPlatOn.enableBody();
         }
     }
 
-    onProjectileCollision(enemy, projectile){
+    onProjectileCollision(enemy, projectile) {
         //enemy.getHit(projectile); 
         //projectile.hit(enemy);
         enemy.destroy();
-        projectile.destroy(); 
+        projectile.destroy();
     }
 }
 

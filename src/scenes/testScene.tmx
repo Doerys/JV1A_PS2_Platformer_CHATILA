@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="64" tileheight="64" infinite="0" nextlayerid="10" nextobjectid="34">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="37">
  <editorsettings>
   <export target="testScene.json" format="json"/>
  </editorsettings>
@@ -580,14 +580,10 @@
   <object id="8" x="640" y="1536" width="64" height="64"/>
   <object id="28" x="768" y="1536" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="9" name="SpawnRaven">
-  <object id="33" x="1152" y="960" width="64" height="64"/>
- </objectgroup>
- <objectgroup id="8" name="SpawnHog">
-  <object id="30" x="1792" y="256" width="64" height="64"/>
- </objectgroup>
- <objectgroup id="2" name="SpawnFrog">
-  <object id="1" x="1408" y="256" width="64" height="64"/>
+ <objectgroup id="10" name="Spawn">
+  <object id="34" name="frog" x="1408" y="256" width="64" height="64"/>
+  <object id="35" name="hog" x="1789.21" y="249.818" width="64" height="64"/>
+  <object id="36" name="raven" x="1152" y="960" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="6" name="RavenPlatform">
   <object id="11" x="1408" y="1024" width="64" height="64"/>
