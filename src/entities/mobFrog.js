@@ -2,7 +2,7 @@ import Mob from "./mob.js";
 
 class MobFrog extends Mob {
     constructor(scene, x, y, facing, currentMob) {
-        super(scene, x, y, 'mob');
+        super(scene, x, y, 'mobFrog');
 
         this.facing = facing;
         this.currentMob = currentMob;

@@ -102,8 +102,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":256,
-                 "y":960
+                 "x":1664,
+                 "y":1600
                 }, 
                 {
                  "class":"",
@@ -113,8 +113,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2560,
-                 "y":960
+                 "x":1920,
+                 "y":1600
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -135,8 +135,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1728,
-                 "y":320
+                 "x":704,
+                 "y":1024
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -168,8 +168,52 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1088,
-                 "y":320
+                 "x":768,
+                 "y":1536
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":9,
+         "name":"SpawnRaven",
+         "objects":[
+                {
+                 "class":"",
+                 "height":64,
+                 "id":33,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":1152,
+                 "y":960
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":8,
+         "name":"SpawnHog",
+         "objects":[
+                {
+                 "class":"",
+                 "height":64,
+                 "id":30,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":1792,
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",

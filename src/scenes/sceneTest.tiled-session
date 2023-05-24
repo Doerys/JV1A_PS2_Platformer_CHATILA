@@ -26,15 +26,15 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.25,
-            "selectedLayer": 0,
+            "scale": 0.33,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 2144,
-                "y": 916
+                "x": 3275.7575757575755,
+                "y": 651.5151515151516
             }
         },
         "testScene.tmx#placeholder_test": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.5,
             "scaleInEditor": 1
         }
     },
