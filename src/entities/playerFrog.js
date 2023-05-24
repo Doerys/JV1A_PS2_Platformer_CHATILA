@@ -58,8 +58,6 @@ class PlayerFrog extends Player {
 
             this.basicMovements();
 
-            console.log(this.inputsMoveLocked)
-
             if (this.onGround && !this.newJump && !this.isHooking) {
 
                 this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
@@ -183,8 +181,6 @@ class PlayerFrog extends Player {
 
             // GRAPPIN
             if (Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isHooking && this.canHook) {
-
-                console.log("check");
                 
                 this.isHooking = true;
                 this.canHook = false;

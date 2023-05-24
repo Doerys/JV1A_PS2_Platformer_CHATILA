@@ -218,6 +218,28 @@ class SceneClass extends Phaser.Scene {
         this.createMob(possessedMob, playerX, playerY, layers, possessedMob.facing, possessedMob.currentMob);
     }
 
+    // METHODES DE MORT ET DE RESPAWN
+
+    kill(victim){
+        victim.destroy();
+
+        if(!victim.isPossessed){
+            victim.disableIA();
+        }
+        else if (victim.isPossessed){
+            victim.disablePlayer();
+            this.playerKilled = true;
+            this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
+            
+            setTimeout(() => {
+                this.activePossession = false;
+                this.playerKilled = false;
+            }, 100);
+        }
+
+        this.respawnMob(victim);
+    }
+
     respawnMob(target){
         if (target.currentMob == "frog") {
             this.createMob(target, this.layers.spawnFrog.x, this.layers.spawnFrog.y, this.layers, target.facing, target.currentMob)
@@ -371,25 +393,5 @@ class SceneClass extends Phaser.Scene {
         projectile.destroy();
         this.kill(target);
     }
-
-    kill(victim){
-        victim.destroy();
-
-        if(!victim.isPossessed){
-            victim.disableIA();
-        }
-        else if (victim.isPossessed){
-            victim.disablePlayer();
-            this.playerKilled = true;
-            this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
-            
-            setTimeout(() => {
-                this.activePossession = false;
-            }, 100);
-        }
-
-        this.respawnMob(victim);
-    }
-
 }
 export default SceneClass;
