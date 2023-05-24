@@ -27,14 +27,14 @@
                 2
             ],
             "scale": 0.33,
-            "selectedLayer": 4,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 1706.0606060606065,
-                "y": 1045.4545454545455
+                "x": 3275.7575757575755,
+                "y": 651.5151515151516
             }
         },
         "testScene.tmx#placeholder_test": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.5,
             "scaleInEditor": 1
         }
     },
