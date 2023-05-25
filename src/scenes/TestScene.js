@@ -47,14 +47,14 @@ class TestScene extends SceneClass {
         this.playerGroup.add(this.player);
 
         //Création du mob
-        this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog");
+        this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
 
         //Création du mob
         //this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
-        this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog");
+        this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog", false, false);
 
         //Création du mob
-        this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven");
+        this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", true, false);
            
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {

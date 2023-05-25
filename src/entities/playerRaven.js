@@ -2,11 +2,13 @@ import Player from "./player.js";
 import Projectile from "./projectile.js";
 
 class PlayerRaven extends Player {
-    constructor(scene, x, y, facing, currentMob) {
+    constructor(scene, x, y, facing, currentMob, haveCure) {
         super(scene, x, y, 'player');
 
         this.facing = facing;
         this.currentMob = currentMob;
+
+        this.haveCure = haveCure;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);

@@ -63,6 +63,7 @@ class SceneClass extends Phaser.Scene {
         const layer_box = levelMap.getObjectLayer("Box");
         const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
         const layer_stake = levelMap.getObjectLayer("Stake");
+        const layer_cure = levelMap.getObjectLayer("Cure");
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
@@ -84,6 +85,7 @@ class SceneClass extends Phaser.Scene {
         const boxes = this.physics.add.group();
         const ravenPlats = this.physics.add.staticGroup();
         const stakes = this.physics.add.staticGroup();
+        const cures = this.physics.add.staticGroup();
 
         // création des éléments destructibles (charge)
         layer_break.objects.forEach(break_create => {
@@ -106,36 +108,42 @@ class SceneClass extends Phaser.Scene {
             stakes.create(stake.x + 32, stake.y + 32, "stake");
         }, this)
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, ravenPlats, stakes, tileset }
+        layer_cure.objects.forEach(cure => {
+            cures.create(cure.x + 32, cure.y + 32, "cure");
+        })
+
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, ravenPlats, stakes, cures, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
-    createMob(nameMob, x, y, layers, facing, currentMob) {
+    createMob(nameMob, x, y, layers, facing, currentMob, isCorrupted, haveCure) {
 
         if (currentMob == "frog") {
-            nameMob = new MobFrog(this, x, y, facing, currentMob);
+            nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure);
         }
         else if (currentMob == "hog") {
-            nameMob = new MobHog(this, x, y, facing, currentMob);
+            nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure);
         }
         else if (currentMob == "raven") {
-            nameMob = new MobRaven(this, x, y, facing, currentMob);
+            nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure);
         }
 
         this.mobGroup.add(nameMob);
 
-        nameMob
+        if (!isCorrupted) {
+            nameMob
             .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
             .on('pointerdown', function () {
 
                 nameMob.disableIA(); // désactive le update du mob pour éviter un crash
 
                 if (this.activePossession) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
-                    this.replacePlayer(this.player, this.player.x, this.player.y, layers, this.saveMob);
+                    this.replacePlayer(this.player, layers, this.saveMob);
                 }
                 // possession du mob
-                this.possessMob(nameMob, nameMob.x, nameMob.y, this.layers, facing, currentMob);
+                this.possessMob(nameMob, nameMob.x, nameMob.y, this.layers);
             }, this)
+        }
 
         this.physics.add.overlap(nameMob, this.playerGroup, this.checkCharge, null, this);
 
@@ -157,20 +165,20 @@ class SceneClass extends Phaser.Scene {
 
 
     // création du Player appelée à chaque POSSESSION de mob
-    createPlayer(x, y, layers, facing, currentMob) {
+    createPlayer(x, y, layers, facing, currentMob, haveCure) {
 
         if (!this.activePossession) {
             this.player.enableBody();
         }
 
         if (currentMob == "frog") {
-            this.player = new PlayerFrog(this, x, y, facing, currentMob).setCollideWorldBounds();
+            this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds();
         }
         else if (currentMob == "hog") {
-            this.player = new PlayerHog(this, x, y, facing, currentMob).setCollideWorldBounds();
+            this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds();
         }
         else if (currentMob == "raven") {
-            this.player = new PlayerRaven(this, x, y, facing, currentMob).setCollideWorldBounds();
+            this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds();
         }
 
         this.playerGroup.add(this.player);
@@ -198,6 +206,8 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(this.projectilesMob, this.player, this.hitProjectile, null, this);
 
+        this.physics.add.overlap(this.player, layers.cures, this.getCure, null, this);
+
         if (currentMob == "frog") {
             // collision hook et stake = grappin
             this.physics.add.overlap(this.player.hook, layers.stakes, this.goToHook, null, this);
@@ -215,15 +225,15 @@ class SceneClass extends Phaser.Scene {
         this.saveMob = mob; // permet de sauvegarder toutes les infos liées au mob, pour le recréer plus tard
         //const nature = currentMob; // permet de sauvegarder quel type de mob recréer plus tard
         mob.destroy();
-        this.createPlayer(mobX, mobY, layers, mob.facing, mob.currentMob);
+        this.createPlayer(mobX, mobY, layers, mob.facing, mob.currentMob, mob.haveCure);
         this.activePossession = true;
     }
 
     // METHODE POSSEDER AUTRE MOB - On détruit le player, et on crée un mob à la place (en utilisant le mob sauvegardé préalablement dans le possessMob)
-    replacePlayer(player, playerX, playerY, layers, possessedMob) {
+    replacePlayer(player, layers, possessedMob) {
         player.disablePlayer();
         player.destroy();
-        this.createMob(possessedMob, playerX, playerY, layers, possessedMob.facing, possessedMob.currentMob);
+        this.createMob(possessedMob, player.x, player.y, layers, possessedMob.facing, possessedMob.currentMob, possessedMob.isCorrupted, player.haveCure);
     }
 
     // METHODES DE MORT ET DE RESPAWN
@@ -261,6 +271,19 @@ class SceneClass extends Phaser.Scene {
                 this.createMob(target, this.layers.spawnRaven.x, this.layers.spawnRaven.y, this.layers, target.facing, target.currentMob)
             }
         }, 500);
+    }
+
+    // METHODES POUR PURIFIER MOB
+
+    getCure(player, cure) {
+        cure.destroy();
+        player.haveCure = true;
+    }
+
+    isCured(mob, cure) {
+        cure.destroy();
+        mob.destroy();
+        
     }
 
     // METHODES POUR PLAYER = FROG ----

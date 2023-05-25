@@ -1,11 +1,12 @@
 import Player from "./player.js";
 
 class PlayerHog extends Player {
-    constructor(scene, x, y, facing, currentMob) {
+    constructor(scene, x, y, facing, currentMob, haveCure) {
         super(scene, x, y, 'player');
 
         this.facing = facing;
         this.currentMob = currentMob;
+        this.haveCure = haveCure;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);

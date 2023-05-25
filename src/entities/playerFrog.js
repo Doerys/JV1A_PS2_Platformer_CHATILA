@@ -2,11 +2,12 @@ import Player from "./player.js";
 import Hook from "./hook.js";
 
 class PlayerFrog extends Player {
-    constructor(scene, x, y, facing, currentMob) {
+    constructor(scene, x, y, facing, currentMob, haveCure) {
         super(scene, x, y, 'player');
 
         this.facing = facing;
         this.currentMob = currentMob;
+        this.haveCure = haveCure;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -55,6 +56,8 @@ class PlayerFrog extends Player {
     update(time, delta) {
 
         if (this.isPossessed) {
+
+            console.log(this.haveCure);
 
             this.basicMovements();
 
@@ -221,7 +224,7 @@ class PlayerFrog extends Player {
                 }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
-            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight && this.onGround){
+            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight && !this.canHook){
                 this.inputsMoveLocked = false; // commandes débloquées
                 this.body.setAllowGravity(true); //gravité rétablie
             }
