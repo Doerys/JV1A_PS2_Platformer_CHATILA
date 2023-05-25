@@ -131,6 +131,8 @@ class SceneClass extends Phaser.Scene {
         this.mobGroup.add(nameMob);
 
         if (!isCorrupted) {
+            console.log("CREATION MOB PUR")
+
             nameMob
             .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
             .on('pointerdown', function () {
@@ -155,6 +157,8 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(nameMob, layers.breaks, this.destroyIfCharge, null, this);
         // collision boxes
         this.physics.add.collider(nameMob, layers.boxes);
+
+        this.physics.add.overlap(nameMob, layers.cures, this.isCured, null, this);
 
         this.physics.add.collider(this.projectilesMob, layers.ravenPlats, this.createPlat, null, this);
 
@@ -281,9 +285,14 @@ class SceneClass extends Phaser.Scene {
     }
 
     isCured(mob, cure) {
-        cure.destroy();
-        mob.destroy();
-        
+        console.log("SOIN");
+
+        if(mob.isCorrupted) {
+            mob.disableIA();
+            cure.destroy();
+            mob.destroy();
+            this.createMob(mob, mob.x, mob.y, this.layers, mob.facing, mob.currentMob, false, mob.haveCure);
+        }
     }
 
     // METHODES POUR PLAYER = FROG ----
