@@ -1,9 +1,8 @@
 class Mob extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, facing, currentMob){
-        super(scene, x, y, 'mob');
+    constructor(scene, x, y, facing, sprite){
+        super(scene, x, y, sprite);
 
         this.facing = facing;
-        this.currentMob = currentMob;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);

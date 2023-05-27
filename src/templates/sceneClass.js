@@ -41,10 +41,14 @@ class SceneClass extends Phaser.Scene {
     loadMap(levelMap) {
 
         // résolution de l'écran (+ 3 cases que la caméra, pour créer une dead zone où le joueur disparaît)
-        this.physics.world.setBounds(0, 0, 3072, 1920);
+        //this.physics.world.setBounds(0, 0, 3072, 1920);
 
         // caméra
         this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728).setOrigin(0, 0); //format 16/9 
+
+        // ARRIERE PLAN - BACKGROUND
+        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background").setOrigin(0, 0);
+
         
         //Enlever commentaire pour voir la deadZone
         //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
@@ -53,8 +57,10 @@ class SceneClass extends Phaser.Scene {
         const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
 
         // on crée le calque plateformes
-        const layer_platforms = levelMap.createLayer("layer_platforms", tileset);
-        const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(true);
+        const layer_platforms = levelMap.createLayer("layer_platforms", tileset).setDepth(1);
+        const layer_decos1 = levelMap.createLayer("layer_decos1", tileset).setDepth(2);
+        const layer_decos2 = levelMap.createLayer("layer_decos2", tileset).setDepth(3);
+        const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(false);
         const layer_deadZone = levelMap.createLayer("layer_deadZone", tileset);
         const layer_spawnFrog = levelMap.getObjectLayer("SpawnFrog");
         const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
@@ -119,19 +125,18 @@ class SceneClass extends Phaser.Scene {
     createMob(nameMob, x, y, layers, facing, currentMob, isCorrupted, haveCure) {
 
         if (currentMob == "frog") {
-            nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure);
+            nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(52, 64).setOffset(8, 0);
         }
         else if (currentMob == "hog") {
-            nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure);
+            nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(128, 96).setOffset(64, 32);
         }
         else if (currentMob == "raven") {
-            nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure);
+            nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(64, 96).setOffset(0, 32);
         }
 
         this.mobGroup.add(nameMob);
 
         if (!isCorrupted) {
-            console.log("CREATION MOB PUR")
 
             nameMob
             .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
@@ -176,10 +181,10 @@ class SceneClass extends Phaser.Scene {
         }
 
         if (currentMob == "frog") {
-            this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds();
+            this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds().setSize(48, 64);
         }
         else if (currentMob == "hog") {
-            this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds();
+            this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds().setSize(128, 96).setOffset(64, 32);
         }
         else if (currentMob == "raven") {
             this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds();
@@ -285,7 +290,6 @@ class SceneClass extends Phaser.Scene {
     }
 
     isCured(mob, cure) {
-        console.log("SOIN");
 
         if(mob.isCorrupted) {
             mob.disableIA();

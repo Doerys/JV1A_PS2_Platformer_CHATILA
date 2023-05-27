@@ -1,7 +1,7 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-
     constructor(scene, x, y, sprite) {
         super(scene, x, y, sprite);
+
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.init();
@@ -110,14 +110,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.speedMoveX = 0;
         }*/
 
-        if (this.speedMoveX == 0) { // condition pour idle
+        /*if (this.speedMoveX == 0) { // condition pour idle
             if (this.facing == 'right') {
                 this.play('player_right', true);
             }
             if (this.facing == 'left') {
                 this.play('player_left', true);
             }
-        }
+        }*/
 
         // DEPLACEMENT A GAUCHE <=
         if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la gauche pressée
@@ -125,7 +125,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
 
             this.facing = 'left'; // rotation
-            this.play('player_left', true);
+            //this.play('player_left', true);
 
             if (Math.abs(this.speedMoveX) < this.speedXMax) {
                 this.speedMoveX -= this.accelerationX;
@@ -139,7 +139,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
 
-            this.play('player_right', true);
+            //this.play('player_right', true);
             this.facing = 'right'; // rotation
 
             if (Math.abs(this.speedMoveX) < this.speedXMax) { // tant que la vitesse est inférieure à la vitesse max, on accélère 

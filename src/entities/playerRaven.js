@@ -3,7 +3,7 @@ import Projectile from "./projectile.js";
 
 class PlayerRaven extends Player {
     constructor(scene, x, y, facing, currentMob, haveCure) {
-        super(scene, x, y, 'player');
+        super(scene, x, y, 'ravenImage');
 
         this.facing = facing;
         this.currentMob = currentMob;

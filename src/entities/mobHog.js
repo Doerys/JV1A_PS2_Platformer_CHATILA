@@ -2,7 +2,7 @@ import Mob from "./mob.js";
 
 class MobHog extends Mob {
     constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
-        super(scene, x, y, 'mobHog');
+        super(scene, x, y, facing, 'hogImage');
 
         this.spawnX = x;
         this.spawnY = y;

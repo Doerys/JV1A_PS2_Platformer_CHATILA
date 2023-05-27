@@ -6,43 +6,53 @@ class Preload extends Phaser.Scene {
 
     preload() {
         // Perso test
-        this.load.spritesheet('player', 'src/scenes/player_test.png', { frameWidth: 64, frameHeight: 128});
+        this.load.spritesheet('player', 'assets/player_test.png', { frameWidth: 64, frameHeight: 128});
 
-        this.load.spritesheet('frogImage', 'src/scenes/player_frog.png', { frameWidth: 64, frameHeight: 64});
-        this.load.spritesheet('hogImage', 'src/scenes/player_hog.png', { frameWidth: 128, frameHeight: 128});
-        this.load.spritesheet('ravenImage', 'src/scenes/player_raven.png', { frameWidth: 64, frameHeight: 96});
+        this.load.spritesheet('frogImage', 'assets/player_frog.png', { frameWidth: 64, frameHeight: 64});
+        this.load.spritesheet('hogImage', 'assets/player_hog.png', { frameWidth: 256, frameHeight: 128});
+        this.load.spritesheet('ravenImage', 'assets/player_raven.png', { frameWidth: 128, frameHeight: 128});
 
-        this.load.spritesheet('mob', 'src/scenes/mob_test.png', { frameWidth: 64, frameHeight: 128});
+        this.load.spritesheet('mob', 'assets/mob_test.png', { frameWidth: 64, frameHeight: 128});
+
+        this.load.image('background', 'assets/background.png');
 
         // Box
-        this.load.image('box', 'src/scenes/caisse.png');     
+        this.load.image('box', 'assets/caisse.png');     
 
-        this.load.image('movingPlat', 'src/scenes/movingPlat.png');     
+        this.load.image('movingPlat', 'assets/movingPlat.png');     
 
-        this.load.image('break', 'src/scenes/break.png');
+        this.load.image('break', 'assets/break.png');
 
         //this.load.image('feather', 'src/scenes/feather.png');
 
-        this.load.image('ravenPlatOff', 'src/scenes/ravenPlatOff.png');
-        this.load.image('ravenPlatOn', 'src/scenes/ravenPlatOn.png');
+        this.load.image('ravenPlatOff', 'assets/ravenPlatOff.png');
+        this.load.image('ravenPlatOn', 'assets/ravenPlatOn.png');
 
-        this.load.image('hook', 'src/scenes/hook.png');
-        this.load.image('rope', 'src/scenes/rope.png');
-        this.load.image('stake', 'src/scenes/stake.png');
+        this.load.image('hook', 'assets/hook.png');
+        this.load.image('rope', 'assets/rope.png');
+        this.load.image('stake', 'assets/stake.png');
 
-        this.load.image('cure', 'src/scenes/cure.png');
+        this.load.image('cure', 'assets/cure.png');
 
         // fichier image du tileset
-        this.load.image('tileset_image', 'src/scenes/placeholder_test.png'); //Tileset     
+        this.load.image('tilesetTest_image', 'assets/placeholder_test.png'); //Tileset test
+        
+        this.load.image('tileset_image', 'assets/tileset.png'); //Tileset officiel
 
         // Maps (JSON)
-        this.load.tilemapTiledJSON('map_test', 'src/scenes/testScene.json');
+        this.load.tilemapTiledJSON('map_test', 'maps/test/testScene.json');
+        this.load.tilemapTiledJSON('map_01', 'maps/level_01.json');      
     }
 
     create() {
-        this.scene.start("TestScene", {
-            mapName: "map_test", // nom de la map
-            mapTileset: "placeholder_test", // nom du tileset sur TILED
+        this.scene.start("Level_01", {
+            // POUR LA TESTROOM :
+            //mapName: "map_test", // nom de la map
+            //mapTileset: "placeholder_test", // nom du tileset sur TILED
+            //mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
+            
+            mapName: "map_01", // nom de la map
+            mapTileset: "tileset", // nom du tileset sur TILED
             mapTilesetImage: "tileset_image", // nom du fichier image du tileset
         });
     }

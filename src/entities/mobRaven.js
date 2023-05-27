@@ -3,7 +3,7 @@ import Projectile from "./projectile.js";
 
 class MobRaven extends Mob {
     constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
-        super(scene, x, y, 'mobRaven');
+        super(scene, x, y, facing, "ravenImage");
 
         this.spawnX = x;
         this.spawnY = y;

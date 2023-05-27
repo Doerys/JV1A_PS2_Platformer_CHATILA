@@ -2,10 +2,10 @@ import SceneClass from "../templates/sceneClass.js";
 import Player from "../entities/player.js";
 import Mob from "../entities/mob.js";
 
-class TestScene extends SceneClass {
+class Level_01 extends SceneClass {
 
     constructor() {
-        super('TestScene');
+        super('Level_01');
     }
 
     init(data) {
@@ -51,10 +51,10 @@ class TestScene extends SceneClass {
 
         //Création du mob
         //this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
-        this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog", false, false);
+        //this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog", false, false);
 
         //Création du mob
-        this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
+        //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
            
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
@@ -63,20 +63,20 @@ class TestScene extends SceneClass {
 
         // plateforme qui bouge
 
-        this.movingPlat = this.physics.add.image(1408, 1536, 'movingPlat')
+        this.movingPlat = this.physics.add.image(2688, 512, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0);
 
         this.movingPlat.body.setAllowGravity(false);
             
-        /*this.tweens.timeline({
+        this.tweens.timeline({
             targets: this.movingPlat.body.velocity,
             loop: -1,
             tweens: [
             { x:    -200, y: 0, duration: 1000, ease: 'Stepped' },
             { x:    +200, y: 0, duration: 1000, ease: 'Stepped' },
             ]
-        });*/
+        });
     }
 
     update() { 
@@ -93,4 +93,4 @@ class TestScene extends SceneClass {
     }
 }
 
-export default TestScene
+export default Level_01

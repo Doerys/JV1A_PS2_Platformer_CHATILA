@@ -2,7 +2,7 @@ import Player from "./player.js";
 
 class PlayerHog extends Player {
     constructor(scene, x, y, facing, currentMob, haveCure) {
-        super(scene, x, y, 'player');
+        super(scene, x, y, 'hogImage');
 
         this.facing = facing;
         this.currentMob = currentMob;

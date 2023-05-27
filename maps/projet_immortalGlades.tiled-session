@@ -1,0 +1,67 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "test/testScene.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "test"
+    ],
+    "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
+    "fileStates": {
+        "": {
+            "scaleInEditor": 1
+        },
+        "level_01.tmx": {
+            "expandedGroupLayers": [
+                5
+            ],
+            "scale": 0.33,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 2333.333333333333,
+                "y": 900
+            }
+        },
+        "level_01.tmx#tileset": {
+            "scaleInDock": 1
+        },
+        "test/testScene.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.33,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 454.5454545454545,
+                "y": 1539.3939393939395
+            }
+        },
+        "test/testScene.tmx#placeholder_test": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/Yann/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/maps",
+    "last.imagePath": "C:/Users/Yann/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/assets",
+    "map.height": 30,
+    "map.lastUsedExportFilter": "Fichiers de carte JSON (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 48,
+    "openFiles": [
+        "test/testScene.tmx"
+    ],
+    "project": "projet_immortalGlades.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "level_01.tmx",
+        "test/testScene.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    }
+}

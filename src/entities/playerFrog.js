@@ -3,7 +3,7 @@ import Hook from "./hook.js";
 
 class PlayerFrog extends Player {
     constructor(scene, x, y, facing, currentMob, haveCure) {
-        super(scene, x, y, 'player');
+        super(scene, x, y, 'frogImage');
 
         this.facing = facing;
         this.currentMob = currentMob;
@@ -24,7 +24,7 @@ class PlayerFrog extends Player {
         //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
         this.speedHook = 1000;
-        this.maxHookDistance = 192;
+        this.maxHookDistance = 256;
 
         this.stakeCatched = false;
         this.boxCatched = false;

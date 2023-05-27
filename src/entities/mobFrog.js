@@ -2,7 +2,7 @@ import Mob from "./mob.js";
 
 class MobFrog extends Mob {
     constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
-        super(scene, x, y, 'mobFrog');
+        super(scene, x, y, facing, "frogImage");
 
         this.spawnX = x;
         this.spawnY = y;
@@ -22,9 +22,7 @@ class MobFrog extends Mob {
 
         super.init();
 
-        console.log("CREATION FROG :" + this.x + "//" + this.y)
-
-        //console.log("new MOB FROG");
+        console.log("new MOB FROG");
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update
