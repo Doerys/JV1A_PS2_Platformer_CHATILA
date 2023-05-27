@@ -41,7 +41,7 @@ class SceneClass extends Phaser.Scene {
     loadMap(levelMap) {
 
         // résolution de l'écran (+ 3 cases que la caméra, pour créer une dead zone où le joueur disparaît)
-        //this.physics.world.setBounds(0, 0, 3072, 1920);
+        this.physics.world.setBounds(0, 0, 3072, 1920);
 
         // caméra
         this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728).setOrigin(0, 0); //format 16/9 
@@ -125,13 +125,13 @@ class SceneClass extends Phaser.Scene {
     createMob(nameMob, x, y, layers, facing, currentMob, isCorrupted, haveCure) {
 
         if (currentMob == "frog") {
-            nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(52, 64).setOffset(8, 0);
+            nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure).setCollideWorldBounds(true).setSize(52, 64).setOffset(8, 0);
         }
         else if (currentMob == "hog") {
-            nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(128, 96).setOffset(64, 32);
+            nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure).setCollideWorldBounds(true).setSize(128, 96).setOffset(64, 32);
         }
         else if (currentMob == "raven") {
-            nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(64, 96).setOffset(0, 32);
+            nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure).setCollideWorldBounds(true).setSize(64, 96).setOffset(0, 32);
         }
 
         this.mobGroup.add(nameMob);

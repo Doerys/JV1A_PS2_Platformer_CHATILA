@@ -23,14 +23,6 @@ class PlayerFrog extends Player {
         console.log("PLAYER = FROG");
         //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
-        this.speedHook = 1000;
-        this.maxHookDistance = 256;
-
-        this.stakeCatched = false;
-        this.boxCatched = false;
-
-        this.hookCreated = false;
-
         if (!this.hookCreated) {
             this.hook = new Hook(this.scene, this.x, this.y)
                 .setCollideWorldBounds(true)
@@ -57,88 +49,13 @@ class PlayerFrog extends Player {
 
         if (this.isPossessed) {
 
-            console.log(this.haveCure);
+            //console.log(this.inputsMoveLocked);
 
             this.basicMovements();
 
-            if (this.onGround && !this.newJump && !this.isHooking) {
-
-                this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
-                this.inputsMoveLocked = false;
-
-                this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
-                this.isJumping = false;
-                this.canPlane = false;
-            }
-
             // SAUT (plus on appuie, plus on saut haut)
 
-            // déclencheur du saut
-            if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround) { // si on vient de presser saut + peut sauter true + au sol
-                this.jumpPlayer();
-            }
-
-            else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump) {
-                this.canHighJump = false; // évite de pouvoir spammer plutôt que de rester appuyer pour monter plus haut
-            }
-
-            // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
-            else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump) { // si le curseur haut est pressé et jump timer =/= 0
-                if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
-                    this.canHighJump = false;
-                    setTimeout(() => {
-                        this.canPlane = true;
-                    }, 300);
-                }
-                else {
-                    // jump higher if holding jump 
-                    this.setVelocityY(-this.speedMoveY);
-                }
-            }
-
-            // WALL JUMP
-
-            // déclencheur du saut sans être en l'air
-            else if (!this.onGround) {
-
-                // WALL JUMP depuis mur GAUCHE
-                if ((this.upOnce || this.ZOnce || this.cursors.right.isDown) && this.grabLeft) {
-
-                    this.jumpPlayer();
-
-                    this.facing = "right";
-
-                    this.body.setAllowGravity(true); // réactive la gravité du joueur fixé au mur
-                    this.grabLeft = false; // désactive la variable du wallGrab
-
-                    this.setVelocityX(this.speedXMax); // repousse sur la gauche
-
-                    /*setTimeout(() => {
-                        if(!this.grabLeft || !this.grabRight){
-                        this.inputsMoveLocked = false; // réactive les touches de mouvement du joueur
-                        }
-                    }, 2500);*/
-                }
-
-                // WALL JUMP depuis mur DROIT
-                if ((this.upOnce || this.ZOnce || this.cursors.left.isDown) && this.grabRight) {
-
-                    this.jumpPlayer();
-
-                    this.facing = "left";
-
-                    this.body.setAllowGravity(true); // réactive la gravité du joueur fixé au mur
-                    this.grabRight = false; // désactive la variable du wallGrab
-
-                    this.setVelocityX(- this.speedXMax); // repousse sur la gauche
-
-                    /*setTimeout(() => {
-                        if(!this.grabLeft || !this.grabRight){
-                        this.inputsMoveLocked = false; // réactive les touches de mouvement du joueur
-                        }
-                    }, 2500);*/
-                }
-            }
+            this.jumpMovements();
 
             // WALL GRAB - on se fixe au mur une fois en contact avec lui
 
@@ -175,7 +92,7 @@ class PlayerFrog extends Player {
             }
 
             // permet de désactiver le wall jump pour descendre, en pressant la touche du bas
-            if ((this.grabLeft || this.grabRight) && this.cursors.down.isDown) {
+            if ((this.grabLeft || this.grabRight) && (this.cursors.down.isDown || this.keyS.isDown)) {
 
                 this.body.setAllowGravity(true);
                 this.setVelocityY(200);
@@ -183,8 +100,8 @@ class PlayerFrog extends Player {
             }
 
             // GRAPPIN
-            if (Phaser.Input.Keyboard.JustDown(this.keyShift) && !this.isHooking && this.canHook) {
-                
+            if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isHooking && this.canHook) {
+
                 this.isHooking = true;
                 this.canHook = false;
                 
@@ -224,7 +141,7 @@ class PlayerFrog extends Player {
                 }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
-            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight && !this.canHook){
+            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight && this.canHook){              
                 this.inputsMoveLocked = false; // commandes débloquées
                 this.body.setAllowGravity(true); //gravité rétablie
             }

@@ -21,6 +21,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         /*this.hook = new Phaser.GameObjects.Group;
         this.rope = new Phaser.GameObjects.Group;*/
 
+        // VARIABLES UNIVERSELLES A TOUS LES MOBS
+
         this.facing = 'right';
 
         this.isPossessed = true; // actuellement en train de posséder qq   
@@ -31,18 +33,33 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.startJumpTimer = false; // déclencher le timer du saut
         this.canHighJump = false; // autorise le fait de faire des sauts plus haut
         this.isJumping = false;
-        this.canPlane = false; // autorise de planer
         this.newJump = false; // permet de différencier un début de jump d'une fin de jump (pour le wall grab)
 
         this.jumpTimer = 0; // temps en secondes sur lequel on appuie sur la touche saut
 
-        this.isCharging = false;
-
-        this.isHooking = false;
-        this.canHook = true;
-
         this.accelerationX = 15;
         this.frictionGround = 50;
+
+        // VARIABLES FROG
+        this.hookCreated = false;
+        
+        this.canHook = true;
+        this.isHooking = false;
+
+        this.speedHook = 1000;
+        this.maxHookDistance = 256;
+
+        this.stakeCatched = false;
+        this.boxCatched = false;
+
+        // VARIABLES HOG
+        this.isCharging = false;
+        this.canCharge = true;
+
+        // VARIABLES RAVEN
+        this.canPlane = false; // autorise de planer
+        this.disableShoot = false;
+        this.secondJump = false;
 
         this.setDamping(true);
 
@@ -54,6 +71,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.keyQ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.keyD = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keyZ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
         this.keyE = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.spaceBar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -85,7 +103,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     basicMovements() {
 
         this.upOnce = Phaser.Input.Keyboard.JustDown(this.cursors.up); // variable correspondant à une pression instantanée du jump
-        this.zOnce = Phaser.Input.Keyboard.JustDown(this.keyZ); // variable correspondant à une pression instantanée du jump
+        this.ZOnce = Phaser.Input.Keyboard.JustDown(this.keyZ); // variable correspondant à une pression instantanée du jump
 
         this.onGround = this.body.blocked.down; // verifie que le joueur est au sol
         this.blockedLeft = this.body.blocked.left; // verifie si le joueur est contre une paroi gauche
@@ -173,7 +191,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    jumpPlayer() {
+    simpleJump() {
 
         this.setVelocityY(-this.speedMoveY); // On set la vélocité Y à la force de base
 
@@ -197,6 +215,104 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.canJump = true;
             this.newJump = false;
         }, 100); // après un certain temps, on repasse la possibilité de sauter à true, et le saut n'est plus nouveau (pour le wall jump)
+    }
+
+    jumpMovements() {
+        if (this.onGround && !this.newJump && !this.isHooking && !this.isCharging && this.canCharge) {
+
+            this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+            this.inputsMoveLocked = false;
+        
+            this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
+            this.isJumping = false;
+            
+            // REINITIALISATION RAVEN
+            this.canPlane = false;
+            this.secondJump = false;
+        }
+        
+        // SAUT (plus on appuie, plus on saut haut)
+        
+        // déclencheur du saut
+        if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround) { // si on vient de presser saut + peut sauter true + au sol
+            this.simpleJump();
+        }
+        
+        else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump) {
+            this.canHighJump = false; // évite de pouvoir spammer plutôt que de rester appuyer pour monter plus haut
+        }
+        
+        // déclencheur du saut en l'air (utile pour double jump)
+        else if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && !this.canHighJump && this.currentMob == "raven") {
+            this.simpleJump();
+            this.secondJump = true;
+            this.canPlane = false;
+        }
+        
+        // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
+        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump && !this.isHooking) { // si le curseur haut est pressé et jump timer =/= 0
+            console.log("HIGH JUMMMP")
+            
+            if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
+                this.canHighJump = false;
+                setTimeout(() => {
+                    this.canPlane = true;
+                }, 300);
+            }
+            else {
+                // jump higher if holding jump 
+                this.setVelocityY(-this.speedMoveY);
+            }
+        }
+        
+        // planer - MECANIQUE RAVEN
+        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canPlane && this.currentMob == "raven") {
+            this.setVelocityY(50);
+        }
+        
+        // WALL JUMP - MECANIQUE FROG
+        
+        // déclencheur du saut sans être en l'air
+        else if (!this.onGround && this.currentMob == "frog") {
+        
+            // WALL JUMP depuis mur GAUCHE
+            if ((this.upOnce || this.ZOnce || this.cursors.right.isDown || this.keyD.isDown) && this.grabLeft) {
+        
+                this.simpleJump();
+        
+                this.facing = "right";
+        
+                this.body.setAllowGravity(true); // réactive la gravité du joueur fixé au mur
+                this.grabLeft = false; // désactive la variable du wallGrab
+        
+                this.setVelocityX(this.speedXMax + 10); // repousse sur la gauche
+        
+                /*setTimeout(() => {
+                    if(!this.grabLeft || !this.grabRight){
+                    this.inputsMoveLocked = false; // réactive les touches de mouvement du joueur
+                    }
+                }, 2500);*/
+            }
+        
+            // WALL JUMP depuis mur DROIT
+            if ((this.upOnce || this.ZOnce || this.cursors.left.isDown || this.keyQ.isDown) && this.grabRight) {
+        
+                this.simpleJump();
+        
+                this.facing = "left";
+        
+                this.body.setAllowGravity(true); // réactive la gravité du joueur fixé au mur
+                this.grabRight = false; // désactive la variable du wallGrab
+        
+                this.setVelocityX(- this.speedXMax - 10); // repousse sur la gauche
+        
+                /*setTimeout(() => {
+                    if(!this.grabLeft || !this.grabRight){
+                    this.inputsMoveLocked = false; // réactive les touches de mouvement du joueur
+                    }
+                }, 2500);*/
+            }
+        }
     }
 
     disablePlayer() {
