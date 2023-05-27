@@ -15,12 +15,10 @@ class TestScene extends SceneClass {
     };
 
     create() {
+        this.activePossession = true;
 
-        this.controller = false;
-
-        this.activePossession = false;
-        this.playerKilled = false;
-
+        this.loadVar();
+        
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
 
@@ -74,11 +72,6 @@ class TestScene extends SceneClass {
 
         //Création du mob
         this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
-           
-        // implémentation pour contrôle à la manette
-        this.input.gamepad.once('connected', function (pad) {
-            controller = pad;
-        });
     }
 
     update() { 

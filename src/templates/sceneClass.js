@@ -37,6 +37,25 @@ class SceneClass extends Phaser.Scene {
         this.mapTilesetImage = data.mapTilesetImage
     }
 
+    loadVar() {
+        this.controller = false;
+
+        this.playerKilled = false;
+        this.hasSaveMob = false;
+
+        this.projectilesMob = new Phaser.GameObjects.Group;
+
+        this.projectilesPlayer = new Phaser.GameObjects.Group;
+
+        this.playerGroup = this.physics.add.group();
+        this.mobGroup = this.physics.add.group();
+
+        // implémentation pour contrôle à la manette
+        this.input.gamepad.once('connected', function (pad) {
+            controller = pad;
+        });
+    }
+
     // load des CALQUES / OBJETS / SPAWNS MOBS dans une constante liée à chaque niveau 
     loadMap(levelMap) {
 

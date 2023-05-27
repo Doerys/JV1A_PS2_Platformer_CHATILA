@@ -15,13 +15,10 @@ class Level_02 extends SceneClass {
     };
 
     create() {
-
-        this.controller = false;
-
         this.activePossession = true;
-        this.playerKilled = false;
-        this.hasSaveMob = false;
 
+        this.loadVar();
+        
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
 
@@ -68,7 +65,16 @@ class Level_02 extends SceneClass {
         .setOrigin(0, 0);
 
         this.movingPlat3.body.setAllowGravity(false);
-            
+
+        /*this.tweens.timeline({
+            targets: this.movingPlat3.body.velocity,
+            loop: -1,
+            tweens: [
+            { x:    -120, y: 0, duration: 1800, ease: 'Stepped' },
+            { x:    +120, y: 0, duration: 1800, ease: 'Stepped' },
+            ]
+        });*/
+
         this.physics.add.collider(layers.boxes, this.movingPlat1, this.slowBox, null, this);
         this.physics.add.collider(layers.boxes, this.movingPlat2, this.slowBox, null, this);
         this.physics.add.collider(layers.boxes, this.movingPlat3, this.slowBox, null, this);
@@ -81,27 +87,11 @@ class Level_02 extends SceneClass {
         this.physics.add.collider(layers.stakes, this.movingPlat2);
         this.physics.add.collider(layers.stakes, this.movingPlat3);
 
-        /*this.tweens.timeline({
-            targets: this.movingPlat3.body.velocity,
-            loop: -1,
-            tweens: [
-            { x:    -120, y: 0, duration: 1800, ease: 'Stepped' },
-            { x:    +120, y: 0, duration: 1800, ease: 'Stepped' },
-            ]
-        });*/
-
         // création du player
         //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
 
         // création de plateforme
         //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
-
-        this.projectilesMob = new Phaser.GameObjects.Group;
-
-        this.projectilesPlayer = new Phaser.GameObjects.Group;
-
-        this.playerGroup = this.physics.add.group();
-        this.mobGroup = this.physics.add.group();
 
         this.createPlayer(layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", 'frog', false);
 
@@ -117,11 +107,6 @@ class Level_02 extends SceneClass {
 
         //Création du mob
         //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
-           
-        // implémentation pour contrôle à la manette
-        this.input.gamepad.once('connected', function (pad) {
-            controller = pad;
-        });
     }
 
     update() { 
