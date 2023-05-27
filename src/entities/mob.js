@@ -18,6 +18,13 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.mobAccelerationX = 100;
         this.mobSpeedXMax = 100;
 
+        // VARIABLES MOB HOG
+        this.isCharging = false;
+        this.canCharge = true
+
+        // VARIABLES RAVEN
+        this.disableShoot = false;
+
         //this.projectiles = new Phaser.GameObjects.Group;
     }
 
@@ -65,6 +72,40 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             else if(this.body.blocked.left){
                 this.facing = "right";
             }    
+        }
+    }
+
+    detectionPlayer(x1, y1, x2, y2) {
+        const distanceX = this.scene.checkDistance(x2, x1);
+
+        const distanceY = this.scene.checkDistance(y2, y1);
+                
+        if (distanceX < 300 && distanceY < 64 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
+            this.playerSpotted = true;
+
+            if (this.currentMob == "raven" || this.currentMob == "hog"){
+                if (x1 < x2) {
+                    this.facing = "left";
+                }
+    
+                if (x1 > x2) {
+                    this.facing = "right";
+                }
+            }
+            else {
+                if (x1 < x2) {
+                    this.facing = "right";
+                }
+    
+                if (x1 > x2) {
+                    this.facing = "left";
+                }
+            }
+        }
+
+        else if (distanceX > 300 || distanceY > 64 || this.scene.playerKilled) {
+            this.playerSpotted = false;
+            this.isCharging = false;
         }
     }
 

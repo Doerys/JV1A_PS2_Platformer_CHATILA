@@ -56,20 +56,24 @@ class SceneClass extends Phaser.Scene {
         // on prend le tileset dans le TILED
         const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
 
-        // on crée le calque plateformes
+        // Calques layers
         const layer_platforms = levelMap.createLayer("layer_platforms", tileset).setDepth(1);
         const layer_decos1 = levelMap.createLayer("layer_decos1", tileset).setDepth(2);
         const layer_decos2 = levelMap.createLayer("layer_decos2", tileset).setDepth(3);
         const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(false);
         const layer_deadZone = levelMap.createLayer("layer_deadZone", tileset);
+
+        // Calques objets
         const layer_spawnFrog = levelMap.getObjectLayer("SpawnFrog");
         const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
         const layer_spawnRaven = levelMap.getObjectLayer("SpawnRaven");
         const layer_break = levelMap.getObjectLayer("Break");
         const layer_box = levelMap.getObjectLayer("Box");
+        const layer_bigBox = levelMap.getObjectLayer("BigBox");
         const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
         const layer_stake = levelMap.getObjectLayer("Stake");
         const layer_cure = levelMap.getObjectLayer("Cure");
+        const layer_pics = levelMap.getObjectLayer("Pics");
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
@@ -89,19 +93,32 @@ class SceneClass extends Phaser.Scene {
         // éléments de décors
         const breaks = this.physics.add.staticGroup();
         const boxes = this.physics.add.group();
+        const bigBoxes = this.physics.add.group();
         const ravenPlats = this.physics.add.staticGroup();
         const stakes = this.physics.add.staticGroup();
         const cures = this.physics.add.staticGroup();
+        const pics = this.physics.add.staticGroup();
+
+        // GROUP MIS DE COTE POUR L'INSTANT (non fonctionnel)
+        const movingPlats = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
 
         // création des éléments destructibles (charge)
         layer_break.objects.forEach(break_create => {
-            breaks.create(break_create.x + 32, break_create.y + 32, "break");
+            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128,256);
         }, this)
 
         // création des box poussables
         layer_box.objects.forEach(box => {
-            boxes.create(box.x + 32, box.y + 32, "box").setDamping(true).setImmovable(true);
+            boxes.create(box.x, box.y, "box").setDamping(true).setImmovable(true);
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
+        }, this)
+
+        layer_bigBox.objects.forEach(bigBox => {
+            boxes.create(bigBox.x + 32, bigBox.y + 32, "bigBox").setDamping(true).setImmovable(true);
+            this.physics.add.collider(bigBoxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
         // création des plateformes qu'on peut créer en tirant dessus
@@ -115,10 +132,14 @@ class SceneClass extends Phaser.Scene {
         }, this)
 
         layer_cure.objects.forEach(cure => {
-            cures.create(cure.x + 32, cure.y + 32, "cure");
+            cures.create(cure.x + 32, cure.y, "cure");
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, ravenPlats, stakes, cures, tileset }
+        layer_pics.objects.forEach(pic => {
+            pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
+        })
+
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, bigBoxes, ravenPlats, stakes, cures, movingPlats, pics, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -165,6 +186,8 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.overlap(nameMob, layers.cures, this.isCured, null, this);
 
+        this.physics.add.overlap(nameMob, layers.pics, this.kill, null, this);
+
         this.physics.add.collider(this.projectilesMob, layers.ravenPlats, this.createPlat, null, this);
 
         this.physics.add.collider(this.projectilesPlayer, nameMob, this.hitProjectile, null, this);
@@ -198,7 +221,12 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(this.player, layers.layer_deadZone, this.kill, null, this);
 
-        this.physics.add.collider(this.player, this.movingPlat);
+        //this.physics.add.collider(this.player, layers.movingPlats);
+        //this.physics.add.collider(this.player, this.movingPlat);
+
+        this.physics.add.collider(this.player, this.movingPlat1);
+
+        this.physics.add.collider(this.player, this.movingPlat2);
 
         // collisions obstacles brisables
         this.physics.add.collider(this.player, layers.breaks, this.destroyIfCharge, null, this);
@@ -225,6 +253,8 @@ class SceneClass extends Phaser.Scene {
         }
 
         this.physics.add.overlap(this.player, this.mobGroup, this.checkCharge, null, this);
+
+        this.physics.add.overlap(this.player, layers.pics, this.kill, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -285,8 +315,21 @@ class SceneClass extends Phaser.Scene {
     // METHODES POUR PURIFIER MOB
 
     getCure(player, cure) {
-        cure.destroy();
-        player.haveCure = true;
+        if(!this.player.haveCure && Phaser.Input.Keyboard.JustDown(this.player.keyE)){
+            cure.destroy();
+            player.haveCure = true;
+        }
+    }
+
+    dropCure() {
+        if(this.player.haveCure && this.player.onGround && Phaser.Input.Keyboard.JustDown(this.player.keyE)) {
+            
+            this.player.haveCure = false;
+            
+            const newCure = this.physics.add.staticSprite(this.player.x, this.player.y, 'cure');
+
+            this.layers.cures.add(newCure);
+        }
     }
 
     isCured(mob, cure) {
@@ -301,8 +344,8 @@ class SceneClass extends Phaser.Scene {
 
     // METHODES POUR PLAYER = FROG ----
 
-    checkDistance(x1, x2) { // mesure la distance entre deux éléments
-        let distance = Math.abs(x2 - x1);
+    checkDistance(a, b) { // mesure la distance entre deux éléments
+        let distance = Math.abs(a - b);
         return distance
     }
 

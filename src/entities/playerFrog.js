@@ -49,6 +49,8 @@ class PlayerFrog extends Player {
 
         if (this.isPossessed) {
 
+            console.log(this.haveCure)
+
             //console.log(this.inputsMoveLocked);
 
             this.basicMovements();
@@ -56,6 +58,8 @@ class PlayerFrog extends Player {
             // SAUT (plus on appuie, plus on saut haut)
 
             this.jumpMovements();
+
+            this.scene.dropCure();
 
             // WALL GRAB - on se fixe au mur une fois en contact avec lui
 
@@ -141,7 +145,10 @@ class PlayerFrog extends Player {
                 }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
-            if (!this.isHooking && !this.stakeCatched && !this.boxCatched && !this.grabLeft && !this.grabRight && this.canHook){              
+            // ELLE POSE SOUCIS LA GUEUSE =>
+
+            if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook && !this.isWallJumping){              
+                
                 this.inputsMoveLocked = false; // commandes débloquées
                 this.body.setAllowGravity(true); //gravité rétablie
             }

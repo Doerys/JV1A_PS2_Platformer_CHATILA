@@ -22,9 +22,6 @@ class MobHog extends Mob {
 
         super.init();
 
-        this.canCharge = true;
-        this.isCharging = false;
-
         console.log("new MOB HOG");
     }
 
@@ -41,53 +38,35 @@ class MobHog extends Mob {
             this.patrolMob();
 
             // si le joueur possède un mob, détection du joueur
-            if (this.scene.activePossession) {
-                const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
+            this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
                 
-                if (detectionZone < 300 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
-                    this.playerSpotted = true;
-
-                    if (this.x < this.scene.player.x) {
-                        this.facing = "right";
+            if(this.playerSpotted && this.canCharge){
+                if (this.facing == 'right'){ 
+                    this.setVelocityX(this.mobSpeedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+        
+                    if (this.mobSpeedMoveX > this.mobSpeedXMax * 3) {
+                        this.mobSpeedMoveX += this.mobAccelerationX;
                     }
-
-                    if (this.x > this.scene.player.x) {
-                        this.facing = "left";
+                    else {
+                        this.mobSpeedMoveX = this.mobSpeedXMax * 3; // sinon, vitesse = vitesse max
                     }
                 }
-                else if (detectionZone > 300 || this.scene.playerKilled) {
-                    this.playerSpotted = false;
-                    this.isCharging = false;
+        
+                else if (this.facing == "left") {
+                    this.setVelocityX(this.mobSpeedMoveX)
+        
+                    if (this.mobSpeedMoveX > this.mobSpeedXMax * 3) {
+                        this.mobSpeedMoveX = -this.mobAccelerationX;
+                    }
+                    else {
+                        this.mobSpeedMoveX = -this.mobSpeedXMax * 3; // sinon, vitesse = vitesse max
+                    }
                 }
-                
-                if(this.playerSpotted && this.canCharge){
-                    if (this.facing == 'right'){ 
-                        this.setVelocityX(this.mobSpeedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
-            
-                        if (this.mobSpeedMoveX > this.mobSpeedXMax * 3) {
-                            this.mobSpeedMoveX += this.mobAccelerationX;
-                        }
-                        else {
-                            this.mobSpeedMoveX = this.mobSpeedXMax * 3; // sinon, vitesse = vitesse max
-                        }
-                    }
-            
-                    else if (this.facing == "left") {
-                        this.setVelocityX(this.mobSpeedMoveX)
-            
-                        if (this.mobSpeedMoveX > this.mobSpeedXMax * 3) {
-                            this.mobSpeedMoveX = -this.mobAccelerationX;
-                        }
-                        else {
-                            this.mobSpeedMoveX = -this.mobSpeedXMax * 3; // sinon, vitesse = vitesse max
-                        }
-                    }
 
-                    this.isCharging = true;
-            
-                    if (this.body.blocked.left || this.body.blocked.right) {
-                        this.stopCharge();
-                    }
+                this.isCharging = true;
+        
+                if (this.body.blocked.left || this.body.blocked.right) {
+                    this.stopCharge();
                 }
             }
         }

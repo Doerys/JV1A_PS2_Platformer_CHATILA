@@ -29,6 +29,23 @@ class Level_01 extends SceneClass {
 
         this.layers = layers;
 
+        // plateforme qui bouge
+
+        this.movingPlat1 = this.physics.add.image(2752, 512, 'movingPlat')
+            .setImmovable(true)
+            .setVelocity(100, 0);
+
+        this.movingPlat1.body.setAllowGravity(false);
+            
+        this.tweens.timeline({
+            targets: this.movingPlat1.body.velocity,
+            loop: -1,
+            tweens: [
+            { x:    -90, y: 0, duration: 1500, ease: 'Stepped' },
+            { x:    +90, y: 0, duration: 1500, ease: 'Stepped' },
+            ]
+        });
+
         // création du player
         //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
 
@@ -59,23 +76,6 @@ class Level_01 extends SceneClass {
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
             controller = pad;
-        });
-
-        // plateforme qui bouge
-
-        this.movingPlat = this.physics.add.image(2688, 512, 'movingPlat')
-            .setImmovable(true)
-            .setVelocity(100, 0);
-
-        this.movingPlat.body.setAllowGravity(false);
-            
-        this.tweens.timeline({
-            targets: this.movingPlat.body.velocity,
-            loop: -1,
-            tweens: [
-            { x:    -200, y: 0, duration: 1000, ease: 'Stepped' },
-            { x:    +200, y: 0, duration: 1000, ease: 'Stepped' },
-            ]
         });
     }
 

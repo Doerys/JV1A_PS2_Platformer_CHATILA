@@ -1,6 +1,7 @@
 import PreloadScene from "./src/scenes/preload.js";
 import TestScene from "./src/scenes/TestScene.js";
 import Level_01 from "./src/scenes/level_01.js";
+import Level_02 from "./src/scenes/level_02.js";
 
 const WIDTH = 3072;
 const HEIGHT = 1728;
@@ -12,7 +13,7 @@ height: HEIGHT,
 zoomFactor: ZOOM_FACTOR,
 }
 
-const Scenes = [PreloadScene, TestScene, Level_01] // on liste les scènes
+const Scenes = [PreloadScene, TestScene, Level_01, Level_02] // on liste les scènes
 const createScene = Scene => new Scene(SHARED_CONFIG) // on crée une scène qui possède les configs
 const initScenes = () => Scenes.map(createScene) // crée une scène pour chaque élément de la map. Lance la 1ere scène automatiquement
 

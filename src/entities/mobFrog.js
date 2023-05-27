@@ -35,22 +35,8 @@ class MobFrog extends Mob {
             this.patrolMob();
 
             if (this.scene.activePossession) {
-                const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
-                
-                if (detectionZone < 300 && !this.scene.playerKilled) {
-                    this.playerSpotted = true;
 
-                    if (this.x < this.scene.player.x) {
-                        this.facing = "left";
-                    }
-
-                    if (this.x > this.scene.player.x) {
-                        this.facing = "right";
-                    }
-                }
-                else if (detectionZone > 300 || this.scene.playerKilled) {
-                    this.playerSpotted = false;
-                }
+                this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
                 
                 if(this.playerSpotted){
                     if (this.facing == 'right' && !this.body.blocked.left){ 

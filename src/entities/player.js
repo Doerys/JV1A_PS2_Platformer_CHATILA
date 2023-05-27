@@ -41,6 +41,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.frictionGround = 50;
 
         // VARIABLES FROG
+        this.isWallJumping = false;
+
         this.hookCreated = false;
         
         this.canHook = true;
@@ -72,24 +74,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.keyD = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keyZ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-
         this.keyE = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        
         this.spaceBar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.keyShift = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
         /*this.input.gamepad.once('connected', function (pad) {
             controller = pad;
         });*/
-        // animation joueur
-        this.scene.anims.create({
-            key: 'player_left',
-            frames: [{ key: 'player', frame: 0 }],
-        });
-
-        this.scene.anims.create({
-            key: 'player_right',
-            frames: [{ key: 'player', frame: 1 }],
-        });
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update
@@ -128,14 +120,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.speedMoveX = 0;
         }*/
 
-        /*if (this.speedMoveX == 0) { // condition pour idle
-            if (this.facing == 'right') {
-                this.play('player_right', true);
+        if (this.speedMoveX == 0) { // condition pour idle
+            if(this.currentMob == "frog") {
+                if (this.facing == 'right') {
+                    this.play('player_frog_right', true);
+                }
+                if (this.facing == 'left') {
+                    this.play('player_frog_left', true);
+                }
             }
-            if (this.facing == 'left') {
-                this.play('player_left', true);
-            }
-        }*/
+        }
 
         // DEPLACEMENT A GAUCHE <=
         if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la gauche pressée
@@ -229,6 +223,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             // REINITIALISATION RAVEN
             this.canPlane = false;
             this.secondJump = false;
+
+            // REINITIALISATION FROG
+
+            this.isWallJumping = false;
         }
         
         // SAUT (plus on appuie, plus on saut haut)
@@ -251,7 +249,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         
         // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
         else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump && !this.isHooking) { // si le curseur haut est pressé et jump timer =/= 0
-            console.log("HIGH JUMMMP")
             
             if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                 this.canHighJump = false;
@@ -279,6 +276,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if ((this.upOnce || this.ZOnce || this.cursors.right.isDown || this.keyD.isDown) && this.grabLeft) {
         
                 this.simpleJump();
+
+                this.isWallJumping = true;
         
                 this.facing = "right";
         
@@ -300,6 +299,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.simpleJump();
         
                 this.facing = "left";
+
+                this.isWallJumping = true;
         
                 this.body.setAllowGravity(true); // réactive la gravité du joueur fixé au mur
                 this.grabRight = false; // désactive la variable du wallGrab

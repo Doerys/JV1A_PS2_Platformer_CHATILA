@@ -34,6 +34,8 @@ class PlayerRaven extends Player {
 
             this.basicMovements();
 
+            this.scene.dropCure();
+
             // Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
             if (this.cursors.up.isUp && this.keyZ.isUp && !this.onGround) {
                 this.canPlane = true;

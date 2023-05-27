@@ -37,6 +37,8 @@ class PlayerHog extends Player {
 
             this.jumpMovements();
 
+            this.scene.dropCure();
+
             // trigger de la charge
             if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isJumping && this.canCharge) {
                 this.isCharging = true;

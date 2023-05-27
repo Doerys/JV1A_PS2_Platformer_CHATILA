@@ -23,8 +23,6 @@ class MobRaven extends Mob {
 
         super.init();
 
-        this.disableShoot = false;
-
         console.log("new MOB RAVEN");
     }
 
@@ -41,25 +39,8 @@ class MobRaven extends Mob {
             this.patrolMob();
 
             // si le joueur possède un mob, détection du joueur
-            if (this.scene.activePossession) {
-
-                const detectionZone = Phaser.Math.Distance.Between(this.scene.player.x, this.scene.player.y, this.x, this.y);
-                
-                if (detectionZone < 300 && !this.scene.playerKilled) {
-                    this.playerSpotted = true;
-
-                    if (this.x < this.scene.player.x) {
-                        this.facing = "right";
-                    }
-
-                    if (this.x > this.scene.player.x) {
-                        this.facing = "left";
-                    }
-                }
-
-                else if (detectionZone > 300 || this.scene.playerKilled) {
-                    this.playerSpotted = false;
-                }
+            // si le joueur possède un mob, détection du joueur
+            this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
 
                 if(this.playerSpotted && !this.disableShoot){
 
@@ -75,7 +56,6 @@ class MobRaven extends Mob {
                         this.disableShoot = false;
                     }, 1000);
                 }
-            }
         }
     }
 }
