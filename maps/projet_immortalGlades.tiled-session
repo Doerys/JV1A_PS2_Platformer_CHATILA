@@ -60,11 +60,11 @@
                 16,
                 6
             ],
-            "scale": 0.5,
-            "selectedLayer": 15,
+            "scale": 0.33,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 2808,
-                "y": 1078
+                "x": 1827.2727272727273,
+                "y": 824.2424242424242
             }
         },
         "level_02.tmx#tileset": {

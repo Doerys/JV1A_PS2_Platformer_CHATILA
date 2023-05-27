@@ -21,6 +21,7 @@ class PlayerFrog extends Player {
         //this.physics.add.collider(this.hook, layersmurs);
 
         console.log("PLAYER = FROG");
+
         //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
         if (!this.hookCreated) {
@@ -48,6 +49,8 @@ class PlayerFrog extends Player {
     update(time, delta) {
 
         if (this.isPossessed) {
+
+            console.log(this.jumpCounter);
 
             //console.log(this.inputsMoveLocked);
 
@@ -91,6 +94,11 @@ class PlayerFrog extends Player {
                     this.inputsMoveLocked = true;
                     this.grabRight = true;
                 }
+            }
+
+            else if (!this.blockedLeft && !this.blockedRight && !this.onGround) {
+                this.grabRight = false;
+                this.grabLeft = false;
             }
 
             // permet de désactiver le wall jump pour descendre, en pressant la touche du bas
@@ -143,8 +151,7 @@ class PlayerFrog extends Player {
                 }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
-            // ELLE POSE SOUCIS LA GUEUSE =>
-
+            // débloque les commandes après l'utilisation du grappin
             if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook && !this.isWallJumping){              
                 
                 this.inputsMoveLocked = false; // commandes débloquées

@@ -41,6 +41,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.frictionGround = 50;
 
         // VARIABLES FROG
+        this.grabLeft = false;
+        this.grabRight = false;
         this.isWallJumping = false;
 
         this.hookCreated = false;
@@ -209,6 +211,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             // REINITIALISATION FROG
 
             this.isWallJumping = false;
+            
+            this.grabRight = false;
+            this.grabLeft = false;
         }
         
         // SAUT (plus on appuie, plus on saut haut)
