@@ -20,6 +20,7 @@ class Level_02 extends SceneClass {
 
         this.activePossession = true;
         this.playerKilled = false;
+        this.hasSaveMob = false;
 
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);

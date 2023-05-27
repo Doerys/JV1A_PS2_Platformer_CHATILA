@@ -49,7 +49,7 @@ class SceneClass extends Phaser.Scene {
         // ARRIERE PLAN - BACKGROUND
         this.background = this.add.tileSprite(0, 0, 3072, 1728, "background").setOrigin(0, 0);
 
-        
+
         //Enlever commentaire pour voir la deadZone
         //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
 
@@ -110,12 +110,12 @@ class SceneClass extends Phaser.Scene {
 
         // création des éléments destructibles (charge)
         layer_break.objects.forEach(break_create => {
-            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128,256);
+            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128, 256);
         }, this)
 
         // création des box poussables
         layer_box.objects.forEach(box => {
-            boxes.create(box.x +32, box.y, "box").setDamping(true).setImmovable(true);
+            boxes.create(box.x + 32, box.y, "box").setDamping(true).setImmovable(true);
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
@@ -168,17 +168,22 @@ class SceneClass extends Phaser.Scene {
         if (!isCorrupted) {
 
             nameMob
-            .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
-            .on('pointerdown', function () {
+                .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
+                .on('pointerdown', function () {
 
-                nameMob.disableIA(); // désactive le update du mob pour éviter un crash
+                    nameMob.disableIA(); // désactive le update du mob pour éviter un crash
 
-                if (this.activePossession) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
-                    this.replacePlayer(this.player, layers, this.saveMob);
-                }
-                // possession du mob
-                this.possessMob(nameMob, nameMob.x, nameMob.y, this.layers);
-            }, this)
+                    if (this.activePossession) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
+                        if (this.hasSaveMob) {
+                            this.replaceMobBySaveMob(this.player, layers, this.saveMob);
+                        }
+                        else if (!this.hasSaveMob) { // si on contrôlait déjà un mob, on remplace notre ancien corps "player" par un mob 
+                            this.replaceMobByPlayer(this.player, layers);
+                        }
+                    }
+                    // possession du mob
+                    this.possessMob(nameMob, nameMob.x, nameMob.y, this.layers);
+                }, this)
         }
 
         this.physics.add.overlap(nameMob, this.playerGroup, this.checkCharge, null, this);
@@ -279,25 +284,32 @@ class SceneClass extends Phaser.Scene {
     }
 
     // METHODE POSSEDER AUTRE MOB - On détruit le player, et on crée un mob à la place (en utilisant le mob sauvegardé préalablement dans le possessMob)
-    replacePlayer(player, layers, possessedMob) {
+    replaceMobBySaveMob(player, layers, possessedMob) {
         player.disablePlayer();
         player.destroy();
         this.createMob(possessedMob, player.x, player.y, layers, possessedMob.facing, possessedMob.currentMob, possessedMob.isCorrupted, player.haveCure);
     }
 
+    replaceMobByPlayer(player, layers) {
+        player.disablePlayer();
+        player.destroy();
+        this.createMob(this.mob1, player.x, player.y, layers, player.facing, player.currentMob, player.isCorrupted, player.haveCure);
+        this.hasSaveMob = true;
+    }
+
     // METHODES DE MORT ET DE RESPAWN
 
-    kill(victim){
+    kill(victim) {
         victim.destroy();
 
-        if(!victim.isPossessed){
+        if (!victim.isPossessed) {
             victim.disableIA();
         }
-        else if (victim.isPossessed){
+        else if (victim.isPossessed) {
             victim.disablePlayer();
             this.playerKilled = true;
-            this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
-            
+            this.player = new Player(this, 0, 0, "right", "frog").disableBody(true, true);
+
             setTimeout(() => {
                 this.activePossession = false;
                 this.playerKilled = false;
@@ -307,9 +319,9 @@ class SceneClass extends Phaser.Scene {
         this.respawnMob(victim);
     }
 
-    respawnMob(target){
+    respawnMob(target) {
 
-        setTimeout( () => {
+        setTimeout(() => {
             if (target.currentMob == "frog") {
                 this.createMob(target, this.layers.spawnFrog.x, this.layers.spawnFrog.y, this.layers, target.facing, target.currentMob)
             }
@@ -321,7 +333,7 @@ class SceneClass extends Phaser.Scene {
             }
         }, 500);
     }
-    
+
     destroyPlat(player, platform) {
         if (player.currentMob == "hog" && player.onGround) {
             platform.disableBody();
@@ -329,26 +341,26 @@ class SceneClass extends Phaser.Scene {
                 platform.destroy();
             }, 50);*/
 
-            setTimeout(() => { 
+            setTimeout(() => {
                 platform.enableBody();
             }, 2000);
         }
     }
-    
+
     // METHODES POUR PURIFIER MOB
 
     getCure(player, cure) {
-        if(!this.player.haveCure && Phaser.Input.Keyboard.JustDown(this.player.keyE)){
+        if (!this.player.haveCure && Phaser.Input.Keyboard.JustDown(this.player.keyE)) {
             cure.destroy();
             player.haveCure = true;
         }
     }
 
     dropCure() {
-        if(this.player.haveCure && this.player.onGround && Phaser.Input.Keyboard.JustDown(this.player.keyE)) {
-            
+        if (this.player.haveCure && this.player.onGround && Phaser.Input.Keyboard.JustDown(this.player.keyE)) {
+
             this.player.haveCure = false;
-            
+
             const newCure = this.physics.add.staticSprite(this.player.x, this.player.y, 'cure');
 
             this.layers.cures.add(newCure);
@@ -357,7 +369,7 @@ class SceneClass extends Phaser.Scene {
 
     isCured(mob, cure) {
 
-        if(mob.isCorrupted) {
+        if (mob.isCorrupted) {
             mob.disableIA();
             cure.destroy();
             mob.destroy();
@@ -468,9 +480,9 @@ class SceneClass extends Phaser.Scene {
             this.player.stopCharge()
         }
     }
-    
+
     checkCharge(hog, target) {
-        if(hog.isCharging){
+        if (hog.isCharging) {
             this.kill(target);
         }
     }
