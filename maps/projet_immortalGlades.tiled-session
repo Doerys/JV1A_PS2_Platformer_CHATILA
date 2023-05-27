@@ -39,10 +39,10 @@
                 6
             ],
             "scale": 0.33,
-            "selectedLayer": 12,
+            "selectedLayer": 15,
             "viewCenter": {
-                "x": 877.2727272727273,
-                "y": 1160.6060606060607
+                "x": 872.7272727272727,
+                "y": 1024.242424242424
             }
         },
         "level_01.tmx#tileset": {
@@ -51,26 +51,35 @@
         "level_02.tmx": {
             "expandedObjectLayers": [
                 7,
+                10,
+                11,
                 9,
                 12,
+                13,
+                18,
+                16,
                 6
             ],
-            "scale": 0.25,
-            "selectedLayer": 13,
+            "scale": 0.5,
+            "selectedLayer": 15,
             "viewCenter": {
-                "x": 1922,
-                "y": 864
+                "x": 2808,
+                "y": 1078
             }
         },
         "level_02.tmx#tileset": {
             "scaleInDock": 0.5
         },
         "level_03.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 12,
+            "expandedObjectLayers": [
+                16,
+                17
+            ],
+            "scale": 0.125,
+            "selectedLayer": 15,
             "viewCenter": {
-                "x": 1974.2424242424242,
-                "y": 1015.1515151515152
+                "x": 2168,
+                "y": 448
             }
         },
         "level_03.tmx#tileset": {

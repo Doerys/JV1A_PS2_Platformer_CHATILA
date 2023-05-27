@@ -49,8 +49,6 @@ class PlayerFrog extends Player {
 
         if (this.isPossessed) {
 
-            console.log(this.haveCure)
-
             //console.log(this.inputsMoveLocked);
 
             this.basicMovements();

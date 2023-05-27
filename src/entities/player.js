@@ -101,25 +101,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.blockedLeft = this.body.blocked.left; // verifie si le joueur est contre une paroi gauche
         this.blockedRight = this.body.blocked.right; // verifie si le joueur est contre une paroi droite
 
-        /*if (this.onGround && !this.isCharging) {
-            this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
-            this.inputsMoveLocked = false;
-
-            this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
-            this.isJumping = false;
-            this.canPlane = false;
-        }*/
-
-        /*// Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
-        if (keyUp.isUp && this.keyZ.isUp && !this.onGround){
-            this.canPlane = true;
-        }*/
-
-        // ANIMATIONS - DEPLACEMENT 2 DIRECTIONS
-        /*if (this.blockedRight || this.blockedLeft) { // STOP la vitesse du joueur d'un coup s'il entre en contact avec un mur
-            this.speedMoveX = 0;
-        }*/
-
+        // ANIMATIONS
         if (this.speedMoveX == 0) { // condition pour idle
             if(this.currentMob == "frog") {
                 if (this.facing == 'right') {

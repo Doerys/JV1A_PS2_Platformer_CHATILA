@@ -61,6 +61,34 @@ class Level_02 extends SceneClass {
             ]
         });
 
+        this.movingPlat3 = this.physics.add.image(1984, 384, 'movingPlat')
+        .setImmovable(true)
+        //.setVelocity(100, 0)
+        .setOrigin(0, 0);
+
+        this.movingPlat3.body.setAllowGravity(false);
+            
+        this.physics.add.collider(layers.boxes, this.movingPlat1, this.slowBox, null, this);
+        this.physics.add.collider(layers.boxes, this.movingPlat2, this.slowBox, null, this);
+        this.physics.add.collider(layers.boxes, this.movingPlat3, this.slowBox, null, this);
+
+        this.physics.add.collider(layers.bigBoxes, this.movingPlat1, this.slowBox, null, this);
+        this.physics.add.collider(layers.bigBoxes, this.movingPlat2, this.slowBox, null, this);
+        this.physics.add.collider(layers.bigBoxes, this.movingPlat3, this.slowBox, null, this);
+
+        this.physics.add.collider(layers.stakes, this.movingPlat1);
+        this.physics.add.collider(layers.stakes, this.movingPlat2);
+        this.physics.add.collider(layers.stakes, this.movingPlat3);
+
+        /*this.tweens.timeline({
+            targets: this.movingPlat3.body.velocity,
+            loop: -1,
+            tweens: [
+            { x:    -120, y: 0, duration: 1800, ease: 'Stepped' },
+            { x:    +120, y: 0, duration: 1800, ease: 'Stepped' },
+            ]
+        });*/
+
         // création du player
         //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
 
@@ -84,7 +112,7 @@ class Level_02 extends SceneClass {
         //this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
 
         //Création du mob
-        this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog", true, false);
+        this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog", false, false);
 
         //Création du mob
         //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);

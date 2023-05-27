@@ -74,6 +74,7 @@ class SceneClass extends Phaser.Scene {
         const layer_stake = levelMap.getObjectLayer("Stake");
         const layer_cure = levelMap.getObjectLayer("Cure");
         const layer_pics = levelMap.getObjectLayer("Pics");
+        const layer_weakPlat = levelMap.getObjectLayer("WeakPlat");
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
@@ -95,9 +96,11 @@ class SceneClass extends Phaser.Scene {
         const boxes = this.physics.add.group();
         const bigBoxes = this.physics.add.group();
         const ravenPlats = this.physics.add.staticGroup();
-        const stakes = this.physics.add.staticGroup();
+        const stakes = this.physics.add.group();
         const cures = this.physics.add.staticGroup();
         const pics = this.physics.add.staticGroup();
+
+        const weakPlats = this.physics.add.staticGroup();
 
         // GROUP MIS DE COTE POUR L'INSTANT (non fonctionnel)
         const movingPlats = this.physics.add.group({
@@ -112,7 +115,7 @@ class SceneClass extends Phaser.Scene {
 
         // création des box poussables
         layer_box.objects.forEach(box => {
-            boxes.create(box.x, box.y, "box").setDamping(true).setImmovable(true);
+            boxes.create(box.x +32, box.y, "box").setDamping(true).setImmovable(true);
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
@@ -128,7 +131,8 @@ class SceneClass extends Phaser.Scene {
 
         // création des poteaux sur lesquels on peut se grappiner
         layer_stake.objects.forEach(stake => {
-            stakes.create(stake.x + 32, stake.y + 32, "stake");
+            stakes.create(stake.x + 32, stake.y, "stake");
+            this.physics.add.collider(stakes, layer_platforms);
         }, this)
 
         layer_cure.objects.forEach(cure => {
@@ -139,7 +143,11 @@ class SceneClass extends Phaser.Scene {
             pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, bigBoxes, ravenPlats, stakes, cures, movingPlats, pics, tileset }
+        layer_weakPlat.objects.forEach(plat => {
+            weakPlats.create(plat.x + 96, plat.y + 32, "weakPlat").setSize(192, 64);
+        })
+
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, bigBoxes, ravenPlats, stakes, cures, movingPlats, pics, weakPlats, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -225,8 +233,8 @@ class SceneClass extends Phaser.Scene {
         //this.physics.add.collider(this.player, this.movingPlat);
 
         this.physics.add.collider(this.player, this.movingPlat1);
-
         this.physics.add.collider(this.player, this.movingPlat2);
+        this.physics.add.collider(this.player, this.movingPlat3);
 
         // collisions obstacles brisables
         this.physics.add.collider(this.player, layers.breaks, this.destroyIfCharge, null, this);
@@ -255,6 +263,8 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.mobGroup, this.checkCharge, null, this);
 
         this.physics.add.overlap(this.player, layers.pics, this.kill, null, this);
+
+        this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -311,7 +321,20 @@ class SceneClass extends Phaser.Scene {
             }
         }, 500);
     }
+    
+    destroyPlat(player, platform) {
+        if (player.currentMob == "hog" && player.onGround) {
+            platform.disableBody();
+            /*setTimeout(() => { 
+                platform.destroy();
+            }, 50);*/
 
+            setTimeout(() => { 
+                platform.enableBody();
+            }, 2000);
+        }
+    }
+    
     // METHODES POUR PURIFIER MOB
 
     getCure(player, cure) {
@@ -405,7 +428,7 @@ class SceneClass extends Phaser.Scene {
 
         if (this.attrack) {
             if (this.player.facing == 'right') {
-                if (this.player.x + 32 < box.x) {
+                if (this.player.x + 64 < box.x) {
                     box.body.setAllowGravity(false);
                     box.x -= 6
                     this.time.delayedCall(15, () => {
