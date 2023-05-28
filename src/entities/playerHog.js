@@ -1,13 +1,12 @@
 import Player from "./player.js";
 
 class PlayerHog extends Player {
-    constructor(scene, x, y, facing, currentMob, haveCure, isPressingButton) {
+    constructor(scene, x, y, facing, currentMob, haveCure) {
         super(scene, x, y, 'hogImage');
 
         this.facing = facing;
         this.currentMob = currentMob;
         this.haveCure = haveCure;
-        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -29,6 +28,8 @@ class PlayerHog extends Player {
     update(time, delta) {
 
         if (this.isPossessed) {
+
+            console.log("JOUEUR PRESSE BOUTON : " + this.isPressingButton);
 
             //console.log(this.body.velocity.y, " // ", this.body.velocity.x);
 

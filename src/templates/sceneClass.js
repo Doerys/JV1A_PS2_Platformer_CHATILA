@@ -44,6 +44,7 @@ class SceneClass extends Phaser.Scene {
         this.hasSaveMob = false;
 
         this.buttonOn = false;
+        this.firstDisableDoor = false;
 
         this.projectilesMob = new Phaser.GameObjects.Group;
 
@@ -52,7 +53,7 @@ class SceneClass extends Phaser.Scene {
         this.playerGroup = this.physics.add.group();
         this.mobGroup = this.physics.add.group();
 
-        this.door = this.physics.add.staticSprite(layers.spawnDoor.x + 32, layers.spawnDoor.y + 92, "door");
+        this.door = this.physics.add.staticSprite(layers.spawnDoor.x + 32, layers.spawnDoor.y + 96, "door");
 
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
@@ -297,7 +298,7 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.overlap(nameMob, this.playerGroup, this.checkCharge, null, this);
 
-        this.physics.add.collider(nameMob, layers.layer_platforms);
+        this.physics.add.collider(nameMob, layers.layer_platforms, this.removePressButtons, null, this);
         this.physics.add.collider(nameMob, layers.layer_limits);
         this.physics.add.collider(nameMob, layers.layer_deadZone, this.kill, null, this);
 
@@ -345,7 +346,7 @@ class SceneClass extends Phaser.Scene {
 
         //COLLISIONS
 
-        this.physics.add.collider(this.player, layers.layer_platforms); // player > plateformes
+        this.physics.add.collider(this.player, layers.layer_platforms, this.removePressButtons, null, this); // player > plateformes
 
         this.physics.add.collider(this.player, layers.layer_deadZone, this.kill, null, this);
 
@@ -393,6 +394,8 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player, layers.buttonBases);
 
         this.physics.add.collider(this.player, layers.buttons, this.pressButtons, null, this);
+
+        this.physics.add.collider(this.player, this.door);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -441,82 +444,48 @@ class SceneClass extends Phaser.Scene {
                     //console.log("check Hog player")
 
                     mob.isPressingButton = true;
-                    //this.buttonOn = true;
+                    this.buttonOn = true;
                 }
                 else {
                     // TWEEN
 
-                    console.log("check Hog mob")
+                    //console.log("check Hog mob")
 
                     mob.isPressingButton = true;
-                    //this.buttonOn = true;
+                    this.buttonOn = true;
                 }
             }
 
             // SI RAVEN OU FROG
             else if (mob.isPossessed) {
                 console.log("check Frog player")
+                // Petit mouvement de plaque, mais rien de plus
             }
             else {
                 console.log("check Frog mob")
+                // Petit mouvement de plaque, mais rien de plus
             }
         }
     }
 
-    manageDoor() {
+    removePressButtons(mob) {
+        if (mob.currentMob == "hog") {
+            this.buttonOn = false;
+            mob.isPressingButton = false;
+        } 
+    }
 
-        if (this.physics.collide(this.player, this.layers.buttons)){
-            if (!this.player.body.blocked.left && !this.player.body.blocked.right) {
-
-                // SI HOG
-                if (this.player.currentMob == "hog") {
-                    if (this.player.isPossessed) {
-                        // TWEEN
-                        /*this.tweens.timeline({
-                            targets: button,
-                            tweens: [
-                                { x: 0, y: +1, duration: 100, ease: 'Stepped' }
-                            ]
-                        });*/
-    
-                        //console.log("check Hog player")
-    
-                        this.player.isPressingButton = true;
-                        this.buttonOn = true;
-
-                        console.log("CHECK TRUE")
-                    }
-                    else {
-                        // TWEEN
-    
-                        console.log("check Hog mob")
-    
-                        this.player.isPressingButton = true;
-                        //this.buttonOn = true;
-                    }
-                }
-    
-                // SI RAVEN OU FROG
-                else if (this.player.isPossessed) {
-                    console.log("check Frog player")
-                }
-                else {
-                    console.log("check Frog mob")
-                }
+    manageDoor(layers) {
+        if (this.buttonOn) {
+            this.door.disableBody(true, true);
+            if (!this.firstDisableDoor){
+                this.firstDisableDoor = true;
             }
         }
-        else if (!this.physics.collide(this.player, this.layers.buttons)) {
-            console.log("CHECK FALSE")
-            this.buttonOn = false;
+        else if (this.firstDisableDoor && !this.buttonOn) {
+            this.door.enableBody();
+            this.door.visible = true;
         }
-
-        /*if (this.buttonOn) {
-            
-            this.door.disableBody(true, true);
-        }
-        else if (this.door.disable == true && !this.buttonOn) {
-            this.door.enableBody(true, true);
-        }*/
     }
 
     // METHODES DE MORT ET DE RESPAWN

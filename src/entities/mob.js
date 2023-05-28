@@ -1,5 +1,5 @@
 class Mob extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, facing, sprite){
+    constructor(scene, x, y, facing, sprite) {
         super(scene, x, y, sprite);
 
         this.facing = facing;
@@ -17,6 +17,10 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.mobSpeedMoveX = 0;
         this.mobAccelerationX = 100;
         this.mobSpeedXMax = 100;
+
+        this.isPressingButton = false;
+
+        this.canMove = true;
 
         // VARIABLES MOB HOG
         this.isCharging = false;
@@ -39,8 +43,9 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     update(time, delta) {
     }
 
-    patrolMob(){
-        if (!this.playerSpotted){
+    patrolMob() {
+
+        if (!this.playerSpotted) {
 
             if (this.facing == "left" && !this.body.blocked.right) {
 
@@ -65,13 +70,13 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                     this.mobSpeedMoveX = this.mobSpeedXMax; // sinon, vitesse = vitesse max
                 }
             }
-    
-            if(this.body.blocked.right){
+
+            if (this.body.blocked.right) {
                 this.facing = "left";
             }
-            else if(this.body.blocked.left){
+            else if (this.body.blocked.left) {
                 this.facing = "right";
-            }    
+            }
         }
     }
 
@@ -79,15 +84,15 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         const distanceX = this.scene.checkDistance(x2, x1);
 
         const distanceY = this.scene.checkDistance(y2, y1);
-                
-        if (distanceX < 300 && distanceY < 64 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
+
+        if (distanceX < 300 && distanceY < 128 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
             this.playerSpotted = true;
 
-            if (this.currentMob == "raven" || this.currentMob == "hog"){
+            if (this.currentMob == "raven" || this.currentMob == "hog") {
                 if (x1 < x2) {
                     this.facing = "left";
                 }
-    
+
                 if (x1 > x2) {
                     this.facing = "right";
                 }
@@ -96,7 +101,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                 if (x1 < x2) {
                     this.facing = "right";
                 }
-    
+
                 if (x1 > x2) {
                     this.facing = "left";
                 }

@@ -1,7 +1,7 @@
 import Mob from "./mob.js";
 
 class MobFrog extends Mob {
-    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure, isPressingButton) {
+    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
         super(scene, x, y, facing, "frogImage");
 
         this.spawnX = x;
@@ -11,7 +11,6 @@ class MobFrog extends Mob {
         this.currentMob = currentMob;
         this.isCorrupted = isCorrupted;
         this.haveCure = haveCure;
-        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -33,6 +32,7 @@ class MobFrog extends Mob {
     update(time, delta) {
 
         if (!this.isPossessed) {
+            
             this.patrolMob();
 
             if (this.scene.activePossession) {

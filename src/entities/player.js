@@ -25,6 +25,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.inputsMoveLocked = false; // bloque les touches de déplacement latéraux
 
+        this.isPressingButton = false;
+
         this.canJump = true; // autorise le saut 
         this.startJumpTimer = false; // déclencher le timer du saut
         this.canHighJump = false; // autorise le fait de faire des sauts plus haut

@@ -66,9 +66,7 @@ class TestScene extends SceneClass {
             this.ravenPlatOn.enableBody();
         }
 
-        console.log(this.buttonOn);
-
-        //this.manageDoor();
+        this.manageDoor(this.layers);
     }
 }
 

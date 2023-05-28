@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_01.tmx",
+    "activeFile": "test/testScene.tmx",
     "expandedProjectPaths": [
-        ".",
-        "test"
+        "test",
+        "."
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -111,17 +111,22 @@
         },
         "test/testScene.tmx": {
             "expandedObjectLayers": [
-                2
+                14,
+                16,
+                2,
+                5,
+                4,
+                8
             ],
-            "scale": 0.75,
-            "selectedLayer": 13,
+            "scale": 0.5,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 495.99999999999994,
-                "y": 1244
+                "x": 296,
+                "y": 1172
             }
         },
         "test/testScene.tmx#placeholder_test": {
-            "scaleInDock": 0.5
+            "scaleInDock": 0.75
         }
     },
     "last.exportedFilePath": "C:/Users/Yann/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/maps",
@@ -135,14 +140,17 @@
     "openFiles": [
         "level_01.tmx",
         "level_02.tmx",
-        "level_03.tmx"
+        "level_03.tmx",
+        "level_04.tmx",
+        "test/testScene.tmx"
     ],
     "project": "projet_immortalGlades.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "level_03.tmx",
-        "level_02.tmx",
         "level_01.tmx",
+        "level_02.tmx",
+        "level_03.tmx",
+        "level_04.tmx",
         "test/testScene.tmx",
         "level_01 - Copie.tmx"
     ],

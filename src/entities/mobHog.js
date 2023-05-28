@@ -1,7 +1,7 @@
 import Mob from "./mob.js";
 
 class MobHog extends Mob {
-    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure, isPressingButton) {
+    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
         super(scene, x, y, facing, 'hogImage');
 
         this.spawnX = x;
@@ -10,7 +10,6 @@ class MobHog extends Mob {
         this.currentMob = currentMob;
         this.isCorrupted = isCorrupted;
         this.haveCure = haveCure;
-        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -34,8 +33,14 @@ class MobHog extends Mob {
         // check que le mob n'est pas possédé
         if (!this.isPossessed) {
 
-            // aller retour si joueur n'est pas spotted
-            this.patrolMob();
+            //console.log("MOB HOG PRESSING BUTTON :" + this.isPressingButton);
+
+            if (!this.isPressingButton){
+                this.patrolMob();
+            }
+            else if (!this.playerSpotted) {
+                this.setVelocityX(0,0);
+            }
 
             if (this.scene.activePossession) {
 

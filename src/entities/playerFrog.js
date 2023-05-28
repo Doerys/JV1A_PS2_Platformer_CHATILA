@@ -2,13 +2,12 @@ import Player from "./player.js";
 import Hook from "./hook.js";
 
 class PlayerFrog extends Player {
-    constructor(scene, x, y, facing, currentMob, haveCure, isPressingButton) {
+    constructor(scene, x, y, facing, currentMob, haveCure) {
         super(scene, x, y, 'frogImage');
 
         this.facing = facing;
         this.currentMob = currentMob;
         this.haveCure = haveCure;
-        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
