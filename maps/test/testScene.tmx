@@ -690,13 +690,13 @@
  </objectgroup>
  <objectgroup id="14" name="BigBox"/>
  <objectgroup id="9" name="SpawnRaven">
-  <object id="33" x="1792" y="320" width="64" height="64"/>
+  <object id="33" x="1664" y="1600" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="8" name="SpawnHog">
   <object id="30" x="2176" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="2" name="SpawnFrog">
-  <object id="30" x="192" y="1536" width="64" height="64"/>
+  <object id="30" x="1408" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="6" name="RavenPlatform">
   <object id="11" x="1408" y="1024" width="64" height="64"/>

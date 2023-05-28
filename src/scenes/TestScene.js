@@ -46,7 +46,7 @@ class TestScene extends SceneClass {
 
         this.movingPlat2;
 
-        this.player = new Player(this, 0, 0, "right", "frog").disableBody(true, true);
+        this.player = new Player(this, 0, 0, "right", "frog", false).disableBody(true, true);
 
         this.playerGroup.add(this.player);
 

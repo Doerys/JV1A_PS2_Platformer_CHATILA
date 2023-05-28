@@ -32,6 +32,8 @@ class PlayerRaven extends Player {
 
         if (this.isPossessed) {
 
+            console.log(this.haveCure);
+
             this.basicMovements();
 
             this.scene.dropCure();

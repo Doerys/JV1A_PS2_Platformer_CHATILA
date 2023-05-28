@@ -59,11 +59,13 @@ class SceneClass extends Phaser.Scene {
     // load des CALQUES / OBJETS / SPAWNS MOBS dans une constante liée à chaque niveau 
     loadMap(levelMap) {
 
+        this.physics.world.setBounds(0, 0, 3072, 1920);
+
         // caméra
         this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728).setOrigin(0, 0); //format 16/9 
 
         // ARRIERE PLAN - BACKGROUND
-        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background").setOrigin(0, 0).setDepth(-1);
+        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background").setOrigin(0, 0).setDepth(-3);
 
         //Enlever commentaire pour voir la deadZone
         //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
@@ -113,6 +115,9 @@ class SceneClass extends Phaser.Scene {
 
         const spawnRaven = layer_spawnRaven.objects[0];
         this.spawnRaven = layer_spawnRaven.objects[0];
+
+        const spawnCure = layer_cure.objects[0];
+        this.spawnCure = layer_cure.objects[0];
 
         // éléments de décors
         const boxes = this.physics.add.group({
@@ -207,7 +212,7 @@ class SceneClass extends Phaser.Scene {
         })
 
         layer_cure.objects.forEach(cure => {
-            cures.create(cure.x + 32, cure.y, "cure");
+            cures.create(cure.x + 32, cure.y, "cure").setDepth(-1);
         })
 
         // création des plateformes qu'on peut créer en tirant dessus
@@ -227,7 +232,7 @@ class SceneClass extends Phaser.Scene {
             weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -394,12 +399,19 @@ class SceneClass extends Phaser.Scene {
         else if (victim.isPossessed) {
             victim.disablePlayer();
             this.playerKilled = true;
-            this.player = new Player(this, 0, 0, "right", "frog").disableBody(true, true);
+            this.player = new Player(this, 0, 0, "right", "frog", false).disableBody(true, true);
 
             setTimeout(() => {
                 this.activePossession = false;
                 this.playerKilled = false;
             }, 100);
+
+            if (victim.haveCure == true) {
+                setTimeout(() => {
+                    const newCure = this.physics.add.staticSprite(this.layers.spawnCure.x + 32, this.layers.spawnCure.y, "cure").setDepth(-1);
+                    this.layers.cures.add(newCure);
+                }, 500);
+            }
         }
 
         this.respawnMob(victim);
@@ -409,13 +421,13 @@ class SceneClass extends Phaser.Scene {
 
         setTimeout(() => {
             if (target.currentMob == "frog") {
-                this.createMob(target, this.layers.spawnFrog.x, this.layers.spawnFrog.y, this.layers, target.facing, target.currentMob)
+                this.createMob(target, this.layers.spawnFrog.x, this.layers.spawnFrog.y, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
             else if (target.currentMob == "hog") {
-                this.createMob(target, this.layers.spawnHog.x, this.layers.spawnHog.y, this.layers, target.facing, target.currentMob)
+                this.createMob(target, this.layers.spawnHog.x, this.layers.spawnHog.y, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
             else if (target.currentMob == "raven") {
-                this.createMob(target, this.layers.spawnRaven.x, this.layers.spawnRaven.y, this.layers, target.facing, target.currentMob)
+                this.createMob(target, this.layers.spawnRaven.x, this.layers.spawnRaven.y, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
         }, 500);
     }
@@ -435,7 +447,7 @@ class SceneClass extends Phaser.Scene {
 
     destroyVerticalPlat(player, platform) {
         if (player.currentMob == "frog" && (player.grabLeft || player.grabRight)) {
-            setTimeout(() => { 
+            setTimeout(() => {
                 platform.disableBody();
                 platform.visible = false;
             }, 500);
@@ -462,7 +474,7 @@ class SceneClass extends Phaser.Scene {
 
             this.player.haveCure = false;
 
-            const newCure = this.physics.add.staticSprite(this.player.x, this.player.y, 'cure');
+            const newCure = this.physics.add.staticSprite(this.player.x, this.player.y, 'cure').setDepth(-1);
 
             this.layers.cures.add(newCure);
         }
