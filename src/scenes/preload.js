@@ -65,15 +65,15 @@ class Preload extends Phaser.Scene {
             frames: [{ key: 'frogImage', frame: 1 }],
         });
 
-        this.scene.start("Level_02", {
+        this.scene.start("TestScene", {
             // POUR LA TESTROOM :
-            /*mapName: "map_test", // nom de la map
+            mapName: "map_test", // nom de la map
             mapTileset: "placeholder_test", // nom du tileset sur TILED
-            mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset*/
+            mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
             
-            mapName: "map_02", // nom de la map
+            /*mapName: "map_02", // nom de la map
             mapTileset: "tileset", // nom du tileset sur TILED
-            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+            mapTilesetImage: "tileset_image", // nom du fichier image du tileset*/
         });
     }
 

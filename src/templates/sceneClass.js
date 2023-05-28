@@ -66,8 +66,7 @@ class SceneClass extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728).setOrigin(0, 0); //format 16/9 
 
         // ARRIERE PLAN - BACKGROUND
-        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background").setOrigin(0, 0);
-
+        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background").setOrigin(0, 0).setDepth(-1);
 
         //Enlever commentaire pour voir la deadZone
         //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
@@ -94,6 +93,7 @@ class SceneClass extends Phaser.Scene {
         const layer_cure = levelMap.getObjectLayer("Cure");
         const layer_pics = levelMap.getObjectLayer("Pics");
         const layer_weakPlat = levelMap.getObjectLayer("WeakPlat");
+        const layer_movingPlats = levelMap.getObjectLayer("MovingPlats");
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
@@ -118,14 +118,17 @@ class SceneClass extends Phaser.Scene {
         const stakes = this.physics.add.group();
         const cures = this.physics.add.staticGroup();
         const pics = this.physics.add.staticGroup();
-
         const weakPlats = this.physics.add.staticGroup();
 
+        /*
         // GROUP MIS DE COTE POUR L'INSTANT (non fonctionnel)
         const movingPlats = this.physics.add.group({
             immovable: true,
-            allowGravity: false
+            allowGravity: false,
+            velocityX : 100
         });
+        
+        */
 
         // création des éléments destructibles (charge)
         layer_break.objects.forEach(break_create => {
@@ -134,12 +137,29 @@ class SceneClass extends Phaser.Scene {
 
         // création des box poussables
         layer_box.objects.forEach(box => {
-            boxes.create(box.x + 32, box.y, "box").setDamping(true).setImmovable(true);
+            //boxes.create(box.x + 32, box.y, "box").setDamping(true).setImmovable(true);
+            const box_create = this.physics.add.sprite(box.x + 32, box.y, "box").setDamping(true).setImmovable(true);
+
+            this.physics.add.collider(box_create, this.movingPlat1);
+            this.physics.add.collider(box_create, this.movingPlat2);
+            this.physics.add.collider(box_create, this.movingPlat3);
+            this.physics.add.collider(box_create, this.movingPlat4);
+
+            boxes.add(box_create);
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
         layer_bigBox.objects.forEach(bigBox => {
-            boxes.create(bigBox.x + 32, bigBox.y + 32, "bigBox").setDamping(true).setImmovable(true);
+            
+            const box_create = this.physics.add.sprite(bigBox.x + 32, bigBox.y, "bigBox").setDamping(true).setImmovable(true);
+
+            this.physics.add.collider(box_create, this.movingPlat1);
+            this.physics.add.collider(box_create, this.movingPlat2);
+            this.physics.add.collider(box_create, this.movingPlat3);
+            this.physics.add.collider(box_create, this.movingPlat4);
+
+            bigBoxes.add(box_create);
+
             this.physics.add.collider(bigBoxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
@@ -150,7 +170,16 @@ class SceneClass extends Phaser.Scene {
 
         // création des poteaux sur lesquels on peut se grappiner
         layer_stake.objects.forEach(stake => {
-            stakes.create(stake.x + 32, stake.y, "stake");
+            //stakes.create(stake.x + 32, stake.y, "stake");
+            const stake_create = this.physics.add.sprite(stake.x + 32, stake.y, "stake").setDamping(true).setImmovable(true);
+
+            this.physics.add.collider(stake_create, this.movingPlat1);
+            this.physics.add.collider(stake_create, this.movingPlat2);
+            this.physics.add.collider(stake_create, this.movingPlat3);
+            this.physics.add.collider(stake_create, this.movingPlat4);
+
+            stakes.add(stake_create);
+
             this.physics.add.collider(stakes, layer_platforms);
         }, this)
 
@@ -166,7 +195,7 @@ class SceneClass extends Phaser.Scene {
             weakPlats.create(plat.x + 96, plat.y + 32, "weakPlat").setSize(192, 64);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, bigBoxes, ravenPlats, stakes, cures, movingPlats, pics, weakPlats, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, bigBoxes, ravenPlats, stakes, cures, /*movingPlats,*/ pics, weakPlats, layer_movingPlats, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -542,6 +571,13 @@ class SceneClass extends Phaser.Scene {
     hitProjectile(projectile, target) {
         projectile.destroy();
         this.kill(target);
+    }
+
+    onProjectileCollision(enemy, projectile) {
+        //enemy.getHit(projectile); 
+        //projectile.hit(enemy);
+        enemy.destroy();
+        projectile.destroy();
     }
 }
 export default SceneClass;

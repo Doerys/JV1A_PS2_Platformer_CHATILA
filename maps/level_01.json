@@ -366,6 +366,17 @@
         }, 
         {
          "draworder":"topdown",
+         "id":19,
+         "name":"MovingPlats",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":15,
          "name":"NextLevel",
          "objects":[
@@ -386,7 +397,7 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":19,
+ "nextlayerid":20,
  "nextobjectid":16,
  "orientation":"orthogonal",
  "renderorder":"right-down",

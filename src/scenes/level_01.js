@@ -15,7 +15,7 @@ class Level_01 extends SceneClass {
     };
 
     create() {
-        this.activePossession = true;
+        this.activePossession = false;
 
         this.loadVar();
         
@@ -44,19 +44,6 @@ class Level_01 extends SceneClass {
             ]
         });
 
-        // création du player
-        //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
-
-        // création de plateforme
-        //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
-
-        this.projectilesMob = new Phaser.GameObjects.Group;
-
-        this.projectilesPlayer = new Phaser.GameObjects.Group;
-
-        this.playerGroup = this.physics.add.group();
-        this.mobGroup = this.physics.add.group();
-
         this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
 
         this.playerGroup.add(this.player);
@@ -76,13 +63,6 @@ class Level_01 extends SceneClass {
         if(this.switchRavenPlatOn){
             this.ravenPlatOn.enableBody();
         }
-    }
-
-    onProjectileCollision(enemy, projectile){
-        //enemy.getHit(projectile); 
-        //projectile.hit(enemy);
-        enemy.destroy();
-        projectile.destroy(); 
     }
 }
 

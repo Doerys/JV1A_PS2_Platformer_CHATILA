@@ -221,8 +221,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2368,
-                 "y":384
+                 "x":1152,
+                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -335,8 +335,32 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2048,
+                 "x":1984,
                  "y":384
+                }, 
+                {
+                 "class":"",
+                 "gid":86,
+                 "height":64,
+                 "id":54,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":576,
+                 "y":192
+                }, 
+                {
+                 "class":"",
+                 "gid":86,
+                 "height":64,
+                 "id":55,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":896,
+                 "y":704
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -412,6 +436,50 @@
         }, 
         {
          "draworder":"topdown",
+         "id":19,
+         "name":"MovingPlats",
+         "objects":[
+                {
+                 "class":"1",
+                 "height":64,
+                 "id":48,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":128,
+                 "x":896,
+                 "y":384
+                }, 
+                {
+                 "class":"2",
+                 "height":64,
+                 "id":49,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":128,
+                 "x":512,
+                 "y":192
+                }, 
+                {
+                 "class":"3",
+                 "height":64,
+                 "id":50,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":128,
+                 "x":1920,
+                 "y":384
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":15,
          "name":"NextLevel",
          "objects":[],
@@ -421,8 +489,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":19,
- "nextobjectid":47,
+ "nextlayerid":23,
+ "nextobjectid":56,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

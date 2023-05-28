@@ -18,7 +18,7 @@ class Level_02 extends SceneClass {
         this.activePossession = true;
 
         this.loadVar();
-        
+
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
 
@@ -29,40 +29,70 @@ class Level_02 extends SceneClass {
 
         // plateforme qui bouge
 
-        this.movingPlat1 = this.physics.add.image(1024, 513, 'movingPlat')
-            .setImmovable(true)
-            .setVelocity(100, 0);
+        /*layers.layer_movingPlats.objects.forEach(movingPlat => {
+            let movingPlat1 = null;
+            let movingPlat2 = null;
+            let movingPlat3 = null;
+            let movingPlat4 = null;
 
-        this.movingPlat1.body.setAllowGravity(false);
-            
+            if (movingPlat.type == "1") {
+                movingPlat1 = this.physics.add.image(movingPlat.x, movingPlat.y, 'movingPlat')
+                    .setImmovable(true)
+                    .setVelocity(100, 0);
+
+                movingPlat1.body.setAllowGravity(false);
+
+                tweens.timeline({
+                    targets: movingPlat1.body.velocity,
+                    loop: -1,
+                    tweens: [
+                        { x: -150, y: 0, duration: 3400, ease: 'Stepped' },
+                        { x: +150, y: 0, duration: 3400, ease: 'Stepped' },
+                    ]
+                });
+            }
+        }, this)*/
+
+        this.movingPlat1 = this.physics.add.image(1024, 513, 'movingPlat')
+        //.setImmovable(true)
+        //.setVelocity(100, 0);
+
+        //this.movingPlat1.body.setAllowGravity(false);
+
         this.tweens.timeline({
             targets: this.movingPlat1.body.velocity,
             loop: -1,
             tweens: [
-            { x:    -150, y: 0, duration: 3400, ease: 'Stepped' },
-            { x:    +150, y: 0, duration: 3400, ease: 'Stepped' },
+                { x: -150, y: 0, duration: 3400, ease: 'Stepped' },
+                { x: +150, y: 0, duration: 3400, ease: 'Stepped' },
             ]
         });
 
+        //layers.movingPlats.add(this.movingPlat1);
+
         this.movingPlat2 = this.physics.add.image(512, 320, 'movingPlat')
-        .setImmovable(true)
-        .setVelocity(100, 0);
+            .setImmovable(true)
+            .setVelocity(100, 0);
 
         this.movingPlat2.body.setAllowGravity(false);
-            
+
         this.tweens.timeline({
             targets: this.movingPlat2.body.velocity,
             loop: -1,
             tweens: [
-            { x:    +150, y: 0, duration: 3400, ease: 'Stepped' },
-            { x:    -150, y: 0, duration: 3400, ease: 'Stepped' },
+                { x: +150, y: 0, duration: 3400, ease: 'Stepped' },
+                { x: -150, y: 0, duration: 3400, ease: 'Stepped' },
             ]
         });
 
+        this.movingPlats.add(this.movingPlat2);
+
+
+
         this.movingPlat3 = this.physics.add.image(1984, 384, 'movingPlat')
-        .setImmovable(true)
-        //.setVelocity(100, 0)
-        .setOrigin(0, 0);
+            .setImmovable(true)
+            //.setVelocity(100, 0)
+            .setOrigin(0, 0);
 
         this.movingPlat3.body.setAllowGravity(false);
 
@@ -75,7 +105,7 @@ class Level_02 extends SceneClass {
             ]
         });*/
 
-        this.physics.add.collider(layers.boxes, this.movingPlat1, this.slowBox, null, this);
+        /*this.physics.add.collider(layers.boxes, this.movingPlat1, this.slowBox, null, this);
         this.physics.add.collider(layers.boxes, this.movingPlat2, this.slowBox, null, this);
         this.physics.add.collider(layers.boxes, this.movingPlat3, this.slowBox, null, this);
 
@@ -85,19 +115,12 @@ class Level_02 extends SceneClass {
 
         this.physics.add.collider(layers.stakes, this.movingPlat1);
         this.physics.add.collider(layers.stakes, this.movingPlat2);
-        this.physics.add.collider(layers.stakes, this.movingPlat3);
-
-        // création du player
-        //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
-
-        // création de plateforme
-        //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
+        this.physics.add.collider(layers.stakes, this.movingPlat3);*/
 
         this.createPlayer(layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", 'frog', false);
 
-        //this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
 
-        //this.playerGroup.add(this.player);
+        // CREATION DE MOBS
 
         //Création du mob
         //this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
@@ -109,17 +132,10 @@ class Level_02 extends SceneClass {
         //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
     }
 
-    update() { 
-        if(this.switchRavenPlatOn){
+    update() {
+        if (this.switchRavenPlatOn) {
             this.ravenPlatOn.enableBody();
         }
-    }
-
-    onProjectileCollision(enemy, projectile){
-        //enemy.getHit(projectile); 
-        //projectile.hit(enemy);
-        enemy.destroy();
-        projectile.destroy(); 
     }
 }
 

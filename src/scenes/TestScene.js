@@ -15,10 +15,27 @@ class TestScene extends SceneClass {
     };
 
     create() {
-        this.activePossession = true;
+        this.activePossession = false;
 
         this.loadVar();
-        
+
+        // plateforme qui bouge
+
+        this.movingPlat1 = this.physics.add.image(1408, 1536, 'movingPlat')
+            .setImmovable(true)
+            .setVelocity(100, 0);
+
+        this.movingPlat1.body.setAllowGravity(false);
+
+        this.tweens.timeline({
+            targets: this.movingPlat1.body.velocity,
+            loop: -1,
+            tweens: [
+                { x: -200, y: 0, duration: 1000, ease: 'Stepped' },
+                { x: +200, y: 0, duration: 1000, ease: 'Stepped' },
+            ]
+        });
+
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
 
@@ -27,39 +44,9 @@ class TestScene extends SceneClass {
 
         this.layers = layers;
 
-        // plateforme qui bouge
-
-        this.movingPlat1 = this.physics.add.image(1408, 1536, 'movingPlat')
-        .setImmovable(true)
-        .setVelocity(100, 0);
-
-        this.movingPlat1.body.setAllowGravity(false);
-            
-        this.tweens.timeline({
-            targets: this.movingPlat1.body.velocity,
-            loop: -1,
-            tweens: [
-            { x:    -200, y: 0, duration: 1000, ease: 'Stepped' },
-            { x:    +200, y: 0, duration: 1000, ease: 'Stepped' },
-            ]
-        });
-
         this.movingPlat2;
 
-        // création du player
-        //this.createPlayer(layers.spawnPoint.x, layers.spawnPoint.y, layers);
-
-        // création de plateforme
-        //this.physics.add.collider(this.ravenPlats, this.player.projectiles, this.createPlat);
-
-        this.projectilesMob = new Phaser.GameObjects.Group;
-
-        this.projectilesPlayer = new Phaser.GameObjects.Group;
-
-        this.playerGroup = this.physics.add.group();
-        this.mobGroup = this.physics.add.group();
-
-        this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
+        this.player = new Player(this, 0, 0, "right", "frog").disableBody(true, true);
 
         this.playerGroup.add(this.player);
 
@@ -74,17 +61,10 @@ class TestScene extends SceneClass {
         this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
     }
 
-    update() { 
-        if(this.switchRavenPlatOn){
+    update() {
+        if (this.switchRavenPlatOn) {
             this.ravenPlatOn.enableBody();
         }
-    }
-
-    onProjectileCollision(enemy, projectile){
-        //enemy.getHit(projectile); 
-        //projectile.hit(enemy);
-        enemy.destroy();
-        projectile.destroy(); 
     }
 }
 

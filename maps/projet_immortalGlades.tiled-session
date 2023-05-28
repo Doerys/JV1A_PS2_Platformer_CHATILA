@@ -3,9 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_03.tmx",
+    "activeFile": "level_01.tmx",
     "expandedProjectPaths": [
-        "."
+        ".",
+        "test"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -33,16 +34,16 @@
                 5
             ],
             "expandedObjectLayers": [
-                10,
                 15,
-                12,
-                6
+                6,
+                10,
+                12
             ],
             "scale": 0.33,
-            "selectedLayer": 15,
+            "selectedLayer": 16,
             "viewCenter": {
-                "x": 872.7272727272727,
-                "y": 1024.242424242424
+                "x": 1300,
+                "y": 1096.969696969697
             }
         },
         "level_01.tmx#tileset": {
@@ -50,21 +51,21 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                7,
-                10,
-                11,
-                9,
-                12,
-                13,
-                18,
                 16,
-                6
+                18,
+                7,
+                6,
+                9,
+                11,
+                10,
+                13,
+                12
             ],
-            "scale": 0.33,
-            "selectedLayer": 1,
+            "scale": 0.5,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 1827.2727272727273,
-                "y": 824.2424242424242
+                "x": 1044,
+                "y": 550
             }
         },
         "level_02.tmx#tileset": {
@@ -72,17 +73,36 @@
         },
         "level_03.tmx": {
             "expandedObjectLayers": [
+                17,
                 16,
-                17
+                18
             ],
-            "scale": 0.125,
-            "selectedLayer": 15,
+            "scale": 0.25,
+            "selectedLayer": 16,
             "viewCenter": {
-                "x": 2168,
-                "y": 448
+                "x": 1352,
+                "y": 1072
             }
         },
         "level_03.tmx#tileset": {
+            "scaleInDock": 0.5
+        },
+        "level_04.tmx": {
+            "expandedObjectLayers": [
+                16,
+                9,
+                8,
+                11,
+                10
+            ],
+            "scale": 0.25,
+            "selectedLayer": 16,
+            "viewCenter": {
+                "x": 728,
+                "y": 1372
+            }
+        },
+        "level_04.tmx#tileset": {
             "scaleInDock": 0.5
         },
         "test/testScene.tmx": {
@@ -116,10 +136,10 @@
     "project": "projet_immortalGlades.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "test/testScene.tmx",
-        "level_01.tmx",
-        "level_02.tmx",
         "level_03.tmx",
+        "level_02.tmx",
+        "level_01.tmx",
+        "test/testScene.tmx",
         "level_01 - Copie.tmx"
     ],
     "tileset.embedInMap": true,
