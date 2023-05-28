@@ -37,11 +37,13 @@ class SceneClass extends Phaser.Scene {
         this.mapTilesetImage = data.mapTilesetImage
     }
 
-    loadVar() {
+    loadVar(layers) {
         this.controller = false;
 
         this.playerKilled = false;
         this.hasSaveMob = false;
+
+        this.buttonOn = false;
 
         this.projectilesMob = new Phaser.GameObjects.Group;
 
@@ -49,6 +51,8 @@ class SceneClass extends Phaser.Scene {
 
         this.playerGroup = this.physics.add.group();
         this.mobGroup = this.physics.add.group();
+
+        this.door = this.physics.add.staticSprite(layers.spawnDoor.x + 32, layers.spawnDoor.y + 92, "door");
 
         // implémentation pour contrôle à la manette
         this.input.gamepad.once('connected', function (pad) {
@@ -92,6 +96,9 @@ class SceneClass extends Phaser.Scene {
         const layer_break = levelMap.getObjectLayer("Break");
         const layer_pics = levelMap.getObjectLayer("Pics");
 
+        const layer_buttonBase = levelMap.getObjectLayer("ButtonBase");
+        const layer_button = levelMap.getObjectLayer("Button");
+        const layer_door = levelMap.getObjectLayer("Door");
 
         const layer_cure = levelMap.getObjectLayer("Cure");
 
@@ -118,6 +125,13 @@ class SceneClass extends Phaser.Scene {
 
         const spawnCure = layer_cure.objects[0];
         this.spawnCure = layer_cure.objects[0];
+
+        const spawnDoor = layer_door.objects[0];
+        //this.spawnDoor = layer_door.objects[0];
+
+        const buttons = this.physics.add.staticGroup();
+        const buttonBases = this.physics.add.staticGroup();
+        //const doors = this.physics.add.staticGroup();
 
         // éléments de décors
         const boxes = this.physics.add.group({
@@ -215,6 +229,18 @@ class SceneClass extends Phaser.Scene {
             cures.create(cure.x + 32, cure.y, "cure").setDepth(-1);
         })
 
+        layer_buttonBase.objects.forEach(buttonBase => {
+            buttonBases.create(buttonBase.x + 64, buttonBase.y - 8, "buttonBase");
+        })
+
+        layer_button.objects.forEach(button => {
+            buttons.create(button.x + 64, button.y - 24, "button");
+        })
+
+        /*layer_door.objects.forEach(door => {
+            doors.create(door.x + 32, door.y + 92, "door");
+        })*/
+
         // création des plateformes qu'on peut créer en tirant dessus
         layer_ravenPlat.objects.forEach(ravenPlat => {
             ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
@@ -224,15 +250,11 @@ class SceneClass extends Phaser.Scene {
             weakPlats.create(plat.x + 96, plat.y + 32, "weakPlat").setSize(192, 64);
         })
 
-        layer_weakPlat.objects.forEach(plat => {
-            weakPlats.create(plat.x + 96, plat.y + 32, "weakPlat").setSize(192, 64);
-        })
-
         layer_weakPlatVertical.objects.forEach(plat => {
             weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -292,7 +314,11 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(this.projectilesPlayer, nameMob, this.hitProjectile, null, this);
 
-        //groupMobs.add(nameMob);
+        this.physics.add.collider(nameMob, layers.buttonBases);
+
+        this.physics.add.collider(nameMob, layers.buttons, this.pressButtons, null, this);
+
+        this.physics.add.collider(nameMob, this.door);
     }
 
 
@@ -361,6 +387,12 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.overlap(this.player, layers.pics, this.kill, null, this);
 
         this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
+
+        this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
+
+        this.physics.add.collider(this.player, layers.buttonBases);
+
+        this.physics.add.collider(this.player, layers.buttons, this.pressButtons, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -386,6 +418,105 @@ class SceneClass extends Phaser.Scene {
         player.destroy();
         this.createMob(this.mob1, player.x, player.y, layers, player.facing, player.currentMob, player.isCorrupted, player.haveCure);
         this.hasSaveMob = true;
+    }
+
+    // METHODES POUR BOUTONS ET PORTES
+
+    pressButtons(mob, button) {
+
+        // Verification qu'on est bien SUR le bouton, et pas collé à gauche ou à droite
+        if (!mob.body.blocked.left && !mob.body.blocked.right) {
+
+            // SI HOG
+            if (mob.currentMob == "hog") {
+                if (mob.isPossessed) {
+                    // TWEEN
+                    /*this.tweens.timeline({
+                        targets: button,
+                        tweens: [
+                            { x: 0, y: +1, duration: 100, ease: 'Stepped' }
+                        ]
+                    });*/
+
+                    //console.log("check Hog player")
+
+                    mob.isPressingButton = true;
+                    //this.buttonOn = true;
+                }
+                else {
+                    // TWEEN
+
+                    console.log("check Hog mob")
+
+                    mob.isPressingButton = true;
+                    //this.buttonOn = true;
+                }
+            }
+
+            // SI RAVEN OU FROG
+            else if (mob.isPossessed) {
+                console.log("check Frog player")
+            }
+            else {
+                console.log("check Frog mob")
+            }
+        }
+    }
+
+    manageDoor() {
+
+        if (this.physics.collide(this.player, this.layers.buttons)){
+            if (!this.player.body.blocked.left && !this.player.body.blocked.right) {
+
+                // SI HOG
+                if (this.player.currentMob == "hog") {
+                    if (this.player.isPossessed) {
+                        // TWEEN
+                        /*this.tweens.timeline({
+                            targets: button,
+                            tweens: [
+                                { x: 0, y: +1, duration: 100, ease: 'Stepped' }
+                            ]
+                        });*/
+    
+                        //console.log("check Hog player")
+    
+                        this.player.isPressingButton = true;
+                        this.buttonOn = true;
+
+                        console.log("CHECK TRUE")
+                    }
+                    else {
+                        // TWEEN
+    
+                        console.log("check Hog mob")
+    
+                        this.player.isPressingButton = true;
+                        //this.buttonOn = true;
+                    }
+                }
+    
+                // SI RAVEN OU FROG
+                else if (this.player.isPossessed) {
+                    console.log("check Frog player")
+                }
+                else {
+                    console.log("check Frog mob")
+                }
+            }
+        }
+        else if (!this.physics.collide(this.player, this.layers.buttons)) {
+            console.log("CHECK FALSE")
+            this.buttonOn = false;
+        }
+
+        /*if (this.buttonOn) {
+            
+            this.door.disableBody(true, true);
+        }
+        else if (this.door.disable == true && !this.buttonOn) {
+            this.door.enableBody(true, true);
+        }*/
     }
 
     // METHODES DE MORT ET DE RESPAWN
@@ -432,6 +563,8 @@ class SceneClass extends Phaser.Scene {
         }, 500);
     }
 
+    // METHODES POUR LES PLATEFORMES FRAGILES
+
     destroyPlat(player, platform) {
         if (player.currentMob == "hog" && player.onGround) {
             platform.disableBody();
@@ -458,7 +591,6 @@ class SceneClass extends Phaser.Scene {
             }, 2000);
         }
     }
-
 
     // METHODES POUR PURIFIER MOB
 

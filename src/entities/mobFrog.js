@@ -1,16 +1,17 @@
 import Mob from "./mob.js";
 
 class MobFrog extends Mob {
-    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
+    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure, isPressingButton) {
         super(scene, x, y, facing, "frogImage");
 
         this.spawnX = x;
         this.spawnY = y;
+
         this.facing = facing;
         this.currentMob = currentMob;
         this.isCorrupted = isCorrupted;
-
         this.haveCure = haveCure;
+        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);

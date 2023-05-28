@@ -2,7 +2,7 @@ import Mob from "./mob.js";
 import Projectile from "./projectile.js";
 
 class MobRaven extends Mob {
-    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
+    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure, isPressingButton) {
         super(scene, x, y, facing, "ravenImage");
 
         this.spawnX = x;
@@ -10,8 +10,8 @@ class MobRaven extends Mob {
         this.facing = facing;
         this.currentMob = currentMob;
         this.isCorrupted = isCorrupted;
-
         this.haveCure = haveCure;
+        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);

@@ -9,8 +9,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     init() {
-        this.hp = 1;
-
         this.speedMoveX = 0;
         this.speedXMax = 145;
         this.speedMoveY = 500;
@@ -22,8 +20,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.rope = new Phaser.GameObjects.Group;*/
 
         // VARIABLES UNIVERSELLES A TOUS LES MOBS
-
-        this.facing = 'right';
 
         this.isPossessed = true; // actuellement en train de posséder qq   
 
@@ -201,7 +197,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
             this.inputsMoveLocked = false;
         
-            this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
+            if (this.currentMob == "raven") {
+                this.jumpCounter = 2; // si le joueur est au sol, réinitialise son compteur de jump
+            }
+            else {
+                this.jumpCounter = 1; // si le joueur est au sol, réinitialise son compteur de jump
+            }
+
             this.isJumping = false;
             
             // REINITIALISATION RAVEN

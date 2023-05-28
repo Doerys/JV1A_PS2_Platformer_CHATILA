@@ -17,8 +17,6 @@ class TestScene extends SceneClass {
     create() {
         this.activePossession = false;
 
-        this.loadVar();
-
         // plateforme qui bouge
 
         this.movingPlat1 = this.physics.add.image(1408, 1536, 'movingPlat')
@@ -44,6 +42,8 @@ class TestScene extends SceneClass {
 
         this.layers = layers;
 
+        this.loadVar(layers);
+
         this.movingPlat2;
 
         this.player = new Player(this, 0, 0, "right", "frog", false).disableBody(true, true);
@@ -65,6 +65,10 @@ class TestScene extends SceneClass {
         if (this.switchRavenPlatOn) {
             this.ravenPlatOn.enableBody();
         }
+
+        console.log(this.buttonOn);
+
+        //this.manageDoor();
     }
 }
 

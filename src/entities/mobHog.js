@@ -1,7 +1,7 @@
 import Mob from "./mob.js";
 
 class MobHog extends Mob {
-    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure) {
+    constructor(scene, x, y, facing, currentMob, isCorrupted, haveCure, isPressingButton) {
         super(scene, x, y, facing, 'hogImage');
 
         this.spawnX = x;
@@ -9,8 +9,8 @@ class MobHog extends Mob {
         this.facing = facing;
         this.currentMob = currentMob;
         this.isCorrupted = isCorrupted;
-
         this.haveCure = haveCure;
+        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);

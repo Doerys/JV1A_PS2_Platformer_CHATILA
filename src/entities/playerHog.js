@@ -1,12 +1,13 @@
 import Player from "./player.js";
 
 class PlayerHog extends Player {
-    constructor(scene, x, y, facing, currentMob, haveCure) {
+    constructor(scene, x, y, facing, currentMob, haveCure, isPressingButton) {
         super(scene, x, y, 'hogImage');
 
         this.facing = facing;
         this.currentMob = currentMob;
         this.haveCure = haveCure;
+        this.isPressingButton = isPressingButton;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
