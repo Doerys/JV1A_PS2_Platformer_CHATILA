@@ -42,8 +42,8 @@
             "scale": 0.33,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1300,
-                "y": 1096.969696969697
+                "x": 1057.5757575757575,
+                "y": 1069.6969696969697
             }
         },
         "level_01.tmx#tileset": {
@@ -52,6 +52,7 @@
         "level_02.tmx": {
             "expandedObjectLayers": [
                 16,
+                19,
                 18,
                 7,
                 6,
@@ -62,7 +63,7 @@
                 12
             ],
             "scale": 0.5,
-            "selectedLayer": 11,
+            "selectedLayer": 16,
             "viewCenter": {
                 "x": 1044,
                 "y": 550
@@ -75,13 +76,15 @@
             "expandedObjectLayers": [
                 17,
                 16,
-                18
+                18,
+                20,
+                10
             ],
             "scale": 0.25,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1352,
-                "y": 1072
+                "x": 1348,
+                "y": 1068
             }
         },
         "level_03.tmx#tileset": {
@@ -90,16 +93,17 @@
         "level_04.tmx": {
             "expandedObjectLayers": [
                 16,
+                19,
                 9,
                 8,
                 11,
                 10
             ],
             "scale": 0.25,
-            "selectedLayer": 16,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 728,
-                "y": 1372
+                "x": 724,
+                "y": 1368
             }
         },
         "level_04.tmx#tileset": {
@@ -109,15 +113,15 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.33,
-            "selectedLayer": 3,
+            "scale": 0.75,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 1534.848484848485,
-                "y": 960.6060606060606
+                "x": 495.99999999999994,
+                "y": 1244
             }
         },
         "test/testScene.tmx#placeholder_test": {
-            "scaleInDock": 1
+            "scaleInDock": 0.5
         }
     },
     "last.exportedFilePath": "C:/Users/Yann/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/maps",

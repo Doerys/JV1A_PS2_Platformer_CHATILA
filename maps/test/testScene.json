@@ -293,17 +293,6 @@
                 {
                  "class":"",
                  "height":64,
-                 "id":8,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":512,
-                 "y":1536
-                }, 
-                {
-                 "class":"",
-                 "height":64,
                  "id":28,
                  "name":"",
                  "rotation":0,
@@ -322,18 +311,7 @@
          "draworder":"topdown",
          "id":14,
          "name":"BigBox",
-         "objects":[
-                {
-                 "class":"",
-                 "height":64,
-                 "id":40,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":192,
-                 "y":1536
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -375,8 +353,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":640,
-                 "y":1536
+                 "x":2176,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -397,8 +375,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1408,
-                 "y":320
+                 "x":192,
+                 "y":1536
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -485,6 +463,28 @@
         }, 
         {
          "draworder":"topdown",
+         "id":17,
+         "name":"WeakPlatVertical",
+         "objects":[
+                {
+                 "class":"",
+                 "height":192,
+                 "id":41,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":0,
+                 "y":1280
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":9,
          "name":"Cure",
          "objects":[
@@ -505,8 +505,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":17,
- "nextobjectid":41,
+ "nextlayerid":18,
+ "nextobjectid":42,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

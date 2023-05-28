@@ -41,6 +41,8 @@ class Preload extends Phaser.Scene {
 
         this.load.image('bigWeakPlat', 'assets/weakPlat_5x1.png')
 
+        this.load.image('weakPlatVertical', 'assets/weakPlatVertical.png')
+
         // fichier image du tileset
         this.load.image('tilesetTest_image', 'assets/placeholder_test.png'); //Tileset test
         

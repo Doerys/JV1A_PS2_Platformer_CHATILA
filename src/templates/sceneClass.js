@@ -82,14 +82,21 @@ class SceneClass extends Phaser.Scene {
         const layer_spawnFrog = levelMap.getObjectLayer("SpawnFrog");
         const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
         const layer_spawnRaven = levelMap.getObjectLayer("SpawnRaven");
-        const layer_break = levelMap.getObjectLayer("Break");
+
         const layer_box = levelMap.getObjectLayer("Box");
         const layer_bigBox = levelMap.getObjectLayer("BigBox");
-        const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
         const layer_stake = levelMap.getObjectLayer("Stake");
-        const layer_cure = levelMap.getObjectLayer("Cure");
+
+        const layer_break = levelMap.getObjectLayer("Break");
         const layer_pics = levelMap.getObjectLayer("Pics");
+
+
+        const layer_cure = levelMap.getObjectLayer("Cure");
+
+        const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
         const layer_weakPlat = levelMap.getObjectLayer("WeakPlat");
+        const layer_weakPlatVertical = levelMap.getObjectLayer("WeakPlatVertical");
+
         const layer_movingPlats = levelMap.getObjectLayer("MovingPlats");
 
         // ajout de collision sur plateformes
@@ -108,10 +115,16 @@ class SceneClass extends Phaser.Scene {
         this.spawnRaven = layer_spawnRaven.objects[0];
 
         // éléments de décors
-        const boxes = this.physics.add.group();
+        const boxes = this.physics.add.group({
+            immovable: true,
+            damping: true
+        });
 
-        const bigBoxes = this.physics.add.group();
-        
+        const bigBoxes = this.physics.add.group({
+            immovable: true,
+            damping: true
+        });
+
         const stakes = this.physics.add.group();
 
         const breaks = this.physics.add.staticGroup();
@@ -121,6 +134,7 @@ class SceneClass extends Phaser.Scene {
 
         const ravenPlats = this.physics.add.staticGroup();
         const weakPlats = this.physics.add.staticGroup();
+        const weakPlatsVertical = this.physics.add.staticGroup();
 
         /*
         // GROUP MIS DE COTE POUR L'INSTANT (non fonctionnel)
@@ -131,11 +145,6 @@ class SceneClass extends Phaser.Scene {
         });
         
         */
-
-        // création des éléments destructibles (charge)
-        layer_break.objects.forEach(break_create => {
-            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128, 256);
-        }, this)
 
         // création des box poussables
         layer_box.objects.forEach(box => {
@@ -150,13 +159,13 @@ class SceneClass extends Phaser.Scene {
             boxes.add(box_create);
 
             box_create.setCollideWorldBounds(true);
-            
+
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
 
         }, this)
 
         layer_bigBox.objects.forEach(bigBox => {
-            
+
             const box_create = this.physics.add.sprite(bigBox.x + 32, bigBox.y, "bigBox").setDamping(true).setImmovable(true);
 
             this.physics.add.collider(box_create, this.movingPlat1);
@@ -169,11 +178,6 @@ class SceneClass extends Phaser.Scene {
             box_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(bigBoxes, layer_platforms, this.slowBox, null, this);
-        }, this)
-
-        // création des plateformes qu'on peut créer en tirant dessus
-        layer_ravenPlat.objects.forEach(ravenPlat => {
-            ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
         }, this)
 
         // création des poteaux sur lesquels on peut se grappiner
@@ -193,19 +197,37 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(stakes, layer_platforms);
         }, this)
 
+        // création des éléments destructibles (charge)
+        layer_break.objects.forEach(break_create => {
+            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128, 256);
+        }, this)
+
+        layer_pics.objects.forEach(pic => {
+            pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
+        })
+
         layer_cure.objects.forEach(cure => {
             cures.create(cure.x + 32, cure.y, "cure");
         })
 
-        layer_pics.objects.forEach(pic => {
-            pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
+        // création des plateformes qu'on peut créer en tirant dessus
+        layer_ravenPlat.objects.forEach(ravenPlat => {
+            ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
+        }, this)
+
+        layer_weakPlat.objects.forEach(plat => {
+            weakPlats.create(plat.x + 96, plat.y + 32, "weakPlat").setSize(192, 64);
         })
 
         layer_weakPlat.objects.forEach(plat => {
             weakPlats.create(plat.x + 96, plat.y + 32, "weakPlat").setSize(192, 64);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, breaks, boxes, bigBoxes, ravenPlats, stakes, cures, /*movingPlats,*/ pics, weakPlats, layer_movingPlats, tileset }
+        layer_weakPlatVertical.objects.forEach(plat => {
+            weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192);
+        })
+
+        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, tileset }
     }
 
     // création du mob -> Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -327,6 +349,8 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(this.player.hook, layers.layer_platforms);
         }
 
+        this.physics.add.collider(this.player, layers.weakPlatsVertical, this.destroyVerticalPlat, null, this);
+
         this.physics.add.overlap(this.player, this.mobGroup, this.checkCharge, null, this);
 
         this.physics.add.overlap(this.player, layers.pics, this.kill, null, this);
@@ -408,6 +432,21 @@ class SceneClass extends Phaser.Scene {
             }, 2000);
         }
     }
+
+    destroyVerticalPlat(player, platform) {
+        if (player.currentMob == "frog" && (player.grabLeft || player.grabRight)) {
+            setTimeout(() => { 
+                platform.disableBody();
+                platform.visible = false;
+            }, 500);
+
+            setTimeout(() => {
+                platform.enableBody();
+                platform.visible = true;
+            }, 2000);
+        }
+    }
+
 
     // METHODES POUR PURIFIER MOB
 
@@ -549,7 +588,7 @@ class SceneClass extends Phaser.Scene {
         }
     }
 
-    pushBox(player, box) {    
+    pushBox(player, box) {
         if (player.body.blocked.down && !player.blockedLeft && !player.blockedLeft) {
             player.body.velocity.y = 0;
             box.body.setAllowGravity(false);
