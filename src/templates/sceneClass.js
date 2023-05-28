@@ -59,9 +59,6 @@ class SceneClass extends Phaser.Scene {
     // load des CALQUES / OBJETS / SPAWNS MOBS dans une constante liée à chaque niveau 
     loadMap(levelMap) {
 
-        // résolution de l'écran (+ 3 cases que la caméra, pour créer une dead zone où le joueur disparaît)
-        this.physics.world.setBounds(0, 0, 3072, 1920);
-
         // caméra
         this.cameras.main.setBounds(0, 0, 3072, 1728).setSize(3072, 1728).setOrigin(0, 0); //format 16/9 
 
@@ -111,13 +108,18 @@ class SceneClass extends Phaser.Scene {
         this.spawnRaven = layer_spawnRaven.objects[0];
 
         // éléments de décors
-        const breaks = this.physics.add.staticGroup();
         const boxes = this.physics.add.group();
+
         const bigBoxes = this.physics.add.group();
-        const ravenPlats = this.physics.add.staticGroup();
+        
         const stakes = this.physics.add.group();
-        const cures = this.physics.add.staticGroup();
+
+        const breaks = this.physics.add.staticGroup();
         const pics = this.physics.add.staticGroup();
+
+        const cures = this.physics.add.staticGroup();
+
+        const ravenPlats = this.physics.add.staticGroup();
         const weakPlats = this.physics.add.staticGroup();
 
         /*
@@ -146,7 +148,11 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat4);
 
             boxes.add(box_create);
+
+            box_create.setCollideWorldBounds(true);
+            
             this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
+
         }, this)
 
         layer_bigBox.objects.forEach(bigBox => {
@@ -160,6 +166,8 @@ class SceneClass extends Phaser.Scene {
 
             bigBoxes.add(box_create);
 
+            box_create.setCollideWorldBounds(true);
+
             this.physics.add.collider(bigBoxes, layer_platforms, this.slowBox, null, this);
         }, this)
 
@@ -171,7 +179,7 @@ class SceneClass extends Phaser.Scene {
         // création des poteaux sur lesquels on peut se grappiner
         layer_stake.objects.forEach(stake => {
             //stakes.create(stake.x + 32, stake.y, "stake");
-            const stake_create = this.physics.add.sprite(stake.x + 32, stake.y, "stake").setDamping(true).setImmovable(true);
+            const stake_create = this.physics.add.sprite(stake.x + 32, stake.y, "stake");
 
             this.physics.add.collider(stake_create, this.movingPlat1);
             this.physics.add.collider(stake_create, this.movingPlat2);
@@ -179,6 +187,8 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(stake_create, this.movingPlat4);
 
             stakes.add(stake_create);
+
+            stake_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(stakes, layer_platforms);
         }, this)
@@ -202,16 +212,18 @@ class SceneClass extends Phaser.Scene {
     createMob(nameMob, x, y, layers, facing, currentMob, isCorrupted, haveCure) {
 
         if (currentMob == "frog") {
-            nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure).setCollideWorldBounds(true).setSize(52, 64).setOffset(8, 0);
+            nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(52, 64).setOffset(8, 0);
         }
         else if (currentMob == "hog") {
-            nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure).setCollideWorldBounds(true).setSize(128, 96).setOffset(64, 32);
+            nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(128, 96).setOffset(64, 32);
         }
         else if (currentMob == "raven") {
-            nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure).setCollideWorldBounds(true).setSize(64, 96).setOffset(0, 32);
+            nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure).setSize(64, 96).setOffset(0, 32);
         }
 
         this.mobGroup.add(nameMob);
+
+        nameMob.setCollideWorldBounds(true);
 
         if (!isCorrupted) {
 
@@ -265,16 +277,18 @@ class SceneClass extends Phaser.Scene {
         }
 
         if (currentMob == "frog") {
-            this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds().setSize(48, 64);
+            this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure).setSize(48, 64);
         }
         else if (currentMob == "hog") {
-            this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds().setSize(128, 96).setOffset(64, 32);
+            this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure).setSize(128, 96).setOffset(64, 32);
         }
         else if (currentMob == "raven") {
-            this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure).setCollideWorldBounds();
+            this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure).setSize(64, 96).setOffset(0, 32);
         }
 
         this.playerGroup.add(this.player);
+
+        this.player.setCollideWorldBounds(true)
 
         //COLLISIONS
 
@@ -535,7 +549,7 @@ class SceneClass extends Phaser.Scene {
         }
     }
 
-    pushBox(player, box) {
+    pushBox(player, box) {    
         if (player.body.blocked.down && !player.blockedLeft && !player.blockedLeft) {
             player.body.velocity.y = 0;
             box.body.setAllowGravity(false);
