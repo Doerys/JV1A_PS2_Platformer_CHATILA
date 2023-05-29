@@ -5,8 +5,8 @@
     },
     "activeFile": "test/testScene.tmx",
     "expandedProjectPaths": [
-        "test",
-        "."
+        ".",
+        "test"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -116,13 +116,14 @@
                 8,
                 14,
                 2,
-                16
+                16,
+                17
             ],
-            "scale": 0.5,
-            "selectedLayer": 3,
+            "scale": 0.33,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1472,
-                "y": 1380
+                "x": 1030.3030303030303,
+                "y": 1148.4848484848485
             }
         },
         "test/testScene.tmx#placeholder_test": {

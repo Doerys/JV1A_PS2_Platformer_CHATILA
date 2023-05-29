@@ -18,7 +18,7 @@ class SceneClass extends Phaser.Scene {
                 arcade: {
                     //gravity: { y: 1450 },
                     gravity: { y: 1600 },
-                    debug: false,
+                    debug: true,
                     tileBias: 64,
                 }
             },
@@ -245,7 +245,7 @@ class SceneClass extends Phaser.Scene {
 
         // création des plateformes qu'on peut créer en tirant dessus
         layer_ravenPlat.objects.forEach(ravenPlat => {
-            ravenPlats.create(ravenPlat.x + 32, ravenPlat.y + 32, "ravenPlatOff");
+            ravenPlats.create(ravenPlat.x + 54, ravenPlat.y + 54, "ravenPlatOff").setSize(64, 64).setOffset(10, 8);
         }, this)
 
         layer_weakPlat.objects.forEach(plat => {
@@ -771,7 +771,7 @@ class SceneClass extends Phaser.Scene {
 
     createPlat(proj, ravenPlatOff) {
 
-        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y, "ravenPlatOn");
+        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y - 16, "ravenPlatOn").setSize(128,64).setOffset(8,24);
         this.physics.add.collider(this.player, newRavenPlat);
 
         ravenPlatOff.destroy(ravenPlatOff.x, ravenPlatOff.y);
