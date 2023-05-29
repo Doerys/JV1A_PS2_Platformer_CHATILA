@@ -686,7 +686,7 @@
   <object id="39" gid="82" x="1348" y="1470" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="4" name="Box">
-  <object id="56" gid="86" x="192" y="1600" width="64" height="64"/>
+  <object id="56" gid="86" x="64" y="1600" width="64" height="64"/>
   <object id="59" gid="86" x="1728" y="1664" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="14" name="BigBox"/>
@@ -694,7 +694,7 @@
   <object id="46" gid="58" x="1792" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="8" name="SpawnHog">
-  <object id="58" gid="57" x="64" y="1536" width="64" height="64"/>
+  <object id="58" gid="57" x="192" y="1536" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="2" name="SpawnFrog">
   <object id="50" gid="56" x="1024" y="1600" width="64" height="64"/>

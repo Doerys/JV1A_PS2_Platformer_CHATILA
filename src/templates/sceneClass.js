@@ -132,8 +132,13 @@ class SceneClass extends Phaser.Scene {
         const spawnDoor = layer_door.objects[0];
         //this.spawnDoor = layer_door.objects[0];
 
-        const buttons = this.physics.add.staticGroup();
-        const buttonBases = this.physics.add.staticGroup();
+        const spawnButton = layer_button.objects[0];
+        const spawnButtonBase = layer_buttonBase.objects[0];
+
+        const buttons = this.physics.add.sprite(spawnButton.x + 64, spawnButton.y - 24, "button").setImmovable(true);
+        buttons.body.setAllowGravity(false);
+        
+        const buttonBases = this.physics.add.staticSprite(spawnButtonBase.x + 64, spawnButtonBase.y - 8, "buttonBase");
         //const doors = this.physics.add.staticGroup();
 
         // éléments de décors
@@ -237,18 +242,6 @@ class SceneClass extends Phaser.Scene {
         layer_cure.objects.forEach(cure => {
             cures.create(cure.x + 32, cure.y, "cure").setDepth(-1);
         })
-
-        layer_buttonBase.objects.forEach(buttonBase => {
-            buttonBases.create(buttonBase.x + 64, buttonBase.y - 8, "buttonBase");
-        })
-
-        layer_button.objects.forEach(button => {
-            buttons.create(button.x + 64, button.y - 24, "button");
-        })
-
-        /*layer_door.objects.forEach(door => {
-            doors.create(door.x + 32, door.y + 92, "door");
-        })*/
 
         // création des plateformes qu'on peut créer en tirant dessus
         layer_ravenPlat.objects.forEach(ravenPlat => {
@@ -461,13 +454,16 @@ class SceneClass extends Phaser.Scene {
             // SI HOG
             if (mob.currentMob == "hog") {
                 if (mob.isPossessed) {
+
+                    console.log("CHECK");
                     // TWEEN
-                    /*this.tweens.timeline({
-                        targets: button,
+                    this.tweens.timeline({
+                        targets: button.body.velocity,
                         tweens: [
-                            { x: 0, y: +1, duration: 100, ease: 'Stepped' }
+                            { x: 0, y: +8, duration: 10, ease: 'Stepped'  },
+                            { x: 0, y: 0, duration: 10, ease: 'Stepped' }
                         ]
-                    });*/
+                    });
 
                     //console.log("check Hog player")
 
