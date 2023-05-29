@@ -18,7 +18,7 @@ class SceneClass extends Phaser.Scene {
                 arcade: {
                     //gravity: { y: 1450 },
                     gravity: { y: 1600 },
-                    debug: true,
+                    debug: false,
                     tileBias: 64,
                 }
             },
@@ -137,7 +137,7 @@ class SceneClass extends Phaser.Scene {
 
         const buttons = this.physics.add.sprite(spawnButton.x + 64, spawnButton.y - 24, "button").setImmovable(true);
         buttons.body.setAllowGravity(false);
-        
+
         const buttonBases = this.physics.add.staticSprite(spawnButtonBase.x + 64, spawnButtonBase.y - 8, "buttonBase");
         //const doors = this.physics.add.staticGroup();
 
@@ -216,7 +216,7 @@ class SceneClass extends Phaser.Scene {
         // création des poteaux sur lesquels on peut se grappiner
         layer_stake.objects.forEach(stake => {
             //stakes.create(stake.x + 32, stake.y, "stake");
-            const stake_create = this.physics.add.sprite(stake.x + 32, stake.y, "stake");
+            const stake_create = this.physics.add.sprite(stake.x + 32, stake.y, "stake").setSize(32, 128);
 
             this.physics.add.collider(stake_create, this.movingPlat1);
             this.physics.add.collider(stake_create, this.movingPlat2);
@@ -249,7 +249,7 @@ class SceneClass extends Phaser.Scene {
         }, this)
 
         layer_weakPlat.objects.forEach(plat => {
-            weakPlats.create(plat.x + 96, plat.y + 32, "weakPlat").setSize(192, 64);
+            weakPlats.create(plat.x + 96, plat.y + 16, "weakPlat").setSize(192, 32);
         })
 
         layer_weakPlatVertical.objects.forEach(plat => {
@@ -455,15 +455,14 @@ class SceneClass extends Phaser.Scene {
             if (mob.currentMob == "hog") {
                 if (mob.isPossessed) {
 
-                    console.log("CHECK");
                     // TWEEN
-                    this.tweens.timeline({
+                    /*this.tweens.timeline({
                         targets: button.body.velocity,
                         tweens: [
                             { x: 0, y: +8, duration: 10, ease: 'Stepped'  },
                             { x: 0, y: 0, duration: 10, ease: 'Stepped' }
                         ]
-                    });
+                    });*/
 
                     //console.log("check Hog player")
 
@@ -586,18 +585,21 @@ class SceneClass extends Phaser.Scene {
     destroyPlat(player, platform) {
         if (player.currentMob == "hog" && player.onGround) {
             platform.disableBody();
+            platform.visible = false;
             /*setTimeout(() => { 
                 platform.destroy();
             }, 50);*/
 
             setTimeout(() => {
                 platform.enableBody();
+                platform.visible = true;
             }, 2000);
         }
     }
 
     destroyVerticalPlat(player, platform) {
         if (player.currentMob == "frog" && (player.grabLeft || player.grabRight)) {
+
             setTimeout(() => {
                 platform.disableBody();
                 platform.visible = false;

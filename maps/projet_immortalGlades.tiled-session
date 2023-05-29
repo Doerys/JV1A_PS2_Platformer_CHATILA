@@ -34,9 +34,9 @@
                 5
             ],
             "expandedObjectLayers": [
-                15,
-                10,
                 6,
+                10,
+                15,
                 12
             ],
             "scale": 0.33,
@@ -51,22 +51,22 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                9,
-                10,
-                11,
                 6,
                 7,
-                16,
+                10,
+                11,
+                9,
+                12,
+                13,
                 18,
                 19,
-                12,
-                13
+                16
             ],
             "scale": 0.5,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1535,
-                "y": 959
+                "x": 2526,
+                "y": 1106
             }
         },
         "level_02.tmx#tileset": {
@@ -74,11 +74,11 @@
         },
         "level_03.tmx": {
             "expandedObjectLayers": [
-                10,
                 20,
+                10,
+                18,
                 16,
-                17,
-                18
+                17
             ],
             "scale": 0.25,
             "selectedLayer": 16,
@@ -92,12 +92,12 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
-                8,
-                9,
                 10,
                 11,
-                16,
-                19
+                8,
+                9,
+                19,
+                16
             ],
             "scale": 0.25,
             "selectedLayer": 14,
@@ -111,18 +111,18 @@
         },
         "test/testScene.tmx": {
             "expandedObjectLayers": [
-                14,
-                16,
-                2,
-                5,
                 4,
-                8
+                5,
+                8,
+                14,
+                2,
+                16
             ],
             "scale": 0.5,
-            "selectedLayer": 11,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 296,
-                "y": 1172
+                "x": 1472,
+                "y": 1380
             }
         },
         "test/testScene.tmx#placeholder_test": {
