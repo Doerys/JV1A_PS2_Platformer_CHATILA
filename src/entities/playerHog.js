@@ -29,8 +29,6 @@ class PlayerHog extends Player {
 
         if (this.isPossessed) {
 
-            console.log("JOUEUR PRESSE BOUTON : " + this.isPressingButton);
-
             //console.log(this.body.velocity.y, " // ", this.body.velocity.x);
 
             this.basicMovements();

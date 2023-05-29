@@ -44,6 +44,8 @@ class SceneClass extends Phaser.Scene {
         this.hasSaveMob = false;
 
         this.buttonOn = false;
+        this.mobPressingButton = false;
+        this.boxPressingButton = false;
         this.firstDisableDoor = false;
 
         this.projectilesMob = new Phaser.GameObjects.Group;
@@ -180,7 +182,10 @@ class SceneClass extends Phaser.Scene {
 
             box_create.setCollideWorldBounds(true);
 
-            this.physics.add.collider(boxes, layer_platforms, this.slowBox, null, this);
+            this.physics.add.collider(boxes, layer_platforms, this.boxOnFloor, null, this);
+            this.physics.add.collider(boxes, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(boxes, buttons, this.pressButtonsBox, null, this);
+            this.physics.add.collider(boxes, this.door);
 
         }, this)
 
@@ -197,7 +202,10 @@ class SceneClass extends Phaser.Scene {
 
             box_create.setCollideWorldBounds(true);
 
-            this.physics.add.collider(bigBoxes, layer_platforms, this.slowBox, null, this);
+            this.physics.add.collider(bigBoxes, layer_platforms, this.boxOnFloor, null, this);
+            this.physics.add.collider(bigBoxes, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(bigBoxes, buttons, this.pressButtonsBox, null, this);
+            this.physics.add.collider(bigBoxes, this.door);
         }, this)
 
         // création des poteaux sur lesquels on peut se grappiner
@@ -317,7 +325,7 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(nameMob, layers.buttonBases);
 
-        this.physics.add.collider(nameMob, layers.buttons, this.pressButtons, null, this);
+        this.physics.add.collider(nameMob, layers.buttons, this.pressButtonsMob, null, this);
 
         this.physics.add.collider(nameMob, this.door);
     }
@@ -391,9 +399,9 @@ class SceneClass extends Phaser.Scene {
 
         this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
 
-        this.physics.add.collider(this.player, layers.buttonBases);
+        this.physics.add.collider(this.player, layers.buttonBases, this.climbButtonBase, null, this);
 
-        this.physics.add.collider(this.player, layers.buttons, this.pressButtons, null, this);
+        this.physics.add.collider(this.player, layers.buttons, this.pressButtonsMob, null, this);
 
         this.physics.add.collider(this.player, this.door);
     }
@@ -425,10 +433,30 @@ class SceneClass extends Phaser.Scene {
 
     // METHODES POUR BOUTONS ET PORTES
 
-    pressButtons(mob, button) {
+    climbButtonBase(box, baseButton) {
+        if (box.body.blocked.left || box.body.blocked.right) {
+            box.y -= 8;
+        }
+    }
+
+    pressButtonsBox(box, button) {
+        if (box.body.blocked.left || box.body.blocked.right) {
+            box.y -= 8;
+        }
+        if (!box.body.blocked.left && !box.body.blocked.right && !this.mobPressingButton) {
+            this.buttonOn = true;
+            this.boxPressingButton = true;
+        }
+    }
+
+    pressButtonsMob(mob, button) {
+
+        if (mob.body.blocked.left || mob.body.blocked.right) {
+            mob.y -= 8;
+        }
 
         // Verification qu'on est bien SUR le bouton, et pas collé à gauche ou à droite
-        if (!mob.body.blocked.left && !mob.body.blocked.right) {
+        if (!mob.body.blocked.left && !mob.body.blocked.right && !this.boxPressingButton) {
 
             // SI HOG
             if (mob.currentMob == "hog") {
@@ -444,6 +472,7 @@ class SceneClass extends Phaser.Scene {
                     //console.log("check Hog player")
 
                     mob.isPressingButton = true;
+                    this.mobPressingButton = true;
                     this.buttonOn = true;
                 }
                 else {
@@ -452,6 +481,7 @@ class SceneClass extends Phaser.Scene {
                     //console.log("check Hog mob")
 
                     mob.isPressingButton = true;
+                    this.mobPressingButton = true;
                     this.buttonOn = true;
                 }
             }
@@ -470,15 +500,38 @@ class SceneClass extends Phaser.Scene {
 
     removePressButtons(mob) {
         if (mob.currentMob == "hog") {
-            this.buttonOn = false;
             mob.isPressingButton = false;
-        } 
+            this.mobPressingButton = false;
+
+            if (!this.boxPressingButton) {
+                this.buttonOn = false;
+            }
+        }
+    }
+
+    boxOnFloor(box) {
+        // immobilise la box quand on ne la pousse pas
+        if (box.body.blocked.down) {
+            if (box.body.blocked.right || box.body.blocked.left) {
+                //box.body.setImmovable(true);
+                box.setVelocity(0, 0);
+            }
+            box.setDragX(0.0001);
+
+            // désactive le press bouton
+            this.boxPressingButton = false;
+
+            if (!this.mobPressingButton) {
+                console.log("CHECK BOX ON FLOOR")
+                this.buttonOn = false;
+            }
+        }
     }
 
     manageDoor(layers) {
         if (this.buttonOn) {
             this.door.disableBody(true, true);
-            if (!this.firstDisableDoor){
+            if (!this.firstDisableDoor) {
                 this.firstDisableDoor = true;
             }
         }
@@ -702,24 +755,17 @@ class SceneClass extends Phaser.Scene {
     }
 
     pushBox(player, box) {
-        if (player.body.blocked.down && !player.blockedLeft && !player.blockedLeft) {
+
+        // empêche le joueur de tressauter quand il est sur la caisse
+
+        if (player.body.blocked.down && box.body.touching.up && !player.blockedLeft && !player.blockedLeft) {
             player.body.velocity.y = 0;
             box.body.setAllowGravity(false);
             box.setImmovable(true);
         }
         if ((player.body.blocked.right || player.body.blocked.left) && player.currentMob == "hog" && !player.isCharging) {
             box.setImmovable(false);
-        }
-    }
-
-    // immobilise la box quand on ne la pousse pas
-    slowBox(box) {
-        if (box.body.blocked.down) {
-            if (box.body.blocked.right || box.body.blocked.left) {
-                //box.body.setImmovable(true);
-                box.setVelocity(0, 0);
-            }
-            box.setDragX(0.0001);
+            box.body.setAllowGravity(true);
         }
     }
 

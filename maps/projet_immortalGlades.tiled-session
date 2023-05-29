@@ -35,15 +35,15 @@
             ],
             "expandedObjectLayers": [
                 15,
-                6,
                 10,
+                6,
                 12
             ],
             "scale": 0.33,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1057.5757575757575,
-                "y": 1069.6969696969697
+                "x": 1534.848484848485,
+                "y": 959.0909090909092
             }
         },
         "level_01.tmx#tileset": {
@@ -51,22 +51,22 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                16,
-                19,
-                18,
-                7,
-                6,
                 9,
-                11,
                 10,
-                13,
-                12
+                11,
+                6,
+                7,
+                16,
+                18,
+                19,
+                12,
+                13
             ],
             "scale": 0.5,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1044,
-                "y": 550
+                "x": 1535,
+                "y": 959
             }
         },
         "level_02.tmx#tileset": {
@@ -74,17 +74,17 @@
         },
         "level_03.tmx": {
             "expandedObjectLayers": [
-                17,
-                16,
-                18,
+                10,
                 20,
-                10
+                16,
+                17,
+                18
             ],
             "scale": 0.25,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1348,
-                "y": 1068
+                "x": 1534,
+                "y": 962
             }
         },
         "level_03.tmx#tileset": {
@@ -92,18 +92,18 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
-                16,
-                19,
-                9,
                 8,
+                9,
+                10,
                 11,
-                10
+                16,
+                19
             ],
             "scale": 0.25,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 724,
-                "y": 1368
+                "x": 1534,
+                "y": 962
             }
         },
         "level_04.tmx#tileset": {
