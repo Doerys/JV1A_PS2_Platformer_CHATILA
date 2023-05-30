@@ -29,15 +29,11 @@ class PlayerHog extends Player {
 
         if (this.isPossessed) {
 
-            //console.log(this.body.velocity.y, " // ", this.body.velocity.x);
+            // gestion des animations
+            this.animManager();
 
-            this.basicMovements();
-
-            // SAUT (plus on appuie, plus on saut haut)
-
-            this.jumpMovements();
-
-            this.scene.dropCure();
+            // METHODE POUR MECANIQUES COMMUNES
+            this.handlePlayer();
 
             // trigger de la charge
             if (!this.isCharging && Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isJumping && this.canCharge) {

@@ -29,7 +29,7 @@ class MobRaven extends Mob {
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
 
-    update(time, delta) {      
+    update(time, delta) {
 
         // check que le mob n'est pas possédé
         if (!this.isPossessed) {
@@ -39,10 +39,10 @@ class MobRaven extends Mob {
 
             if (this.scene.activePossession) {
 
-            // si le joueur possède un mob, détection du joueur
-            this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
+                // si le joueur possède un mob, détection du joueur
+                this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
 
-                if(this.playerSpotted && !this.disableShoot){
+                if (this.playerSpotted && !this.disableShoot) {
 
                     this.setVelocity(0, 0);
 

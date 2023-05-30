@@ -265,7 +265,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1472,
+                 "x":832,
                  "y":704
                 }],
          "opacity":1,
@@ -278,7 +278,19 @@
          "draworder":"topdown",
          "id":14,
          "name":"BigBox",
-         "objects":[],
+         "objects":[
+                {
+                 "class":"",
+                 "gid":86,
+                 "height":64,
+                 "id":64,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":704,
+                 "y":640
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -299,8 +311,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1728,
-                 "y":1024
+                 "x":512,
+                 "y":384
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -345,8 +357,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2688,
-                 "y":576
+                 "x":1984,
+                 "y":704
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -488,8 +500,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2560,
-                 "y":960
+                 "x":2368,
+                 "y":1216
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -566,7 +578,7 @@
          "y":0
         }],
  "nextlayerid":21,
- "nextobjectid":64,
+ "nextobjectid":65,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

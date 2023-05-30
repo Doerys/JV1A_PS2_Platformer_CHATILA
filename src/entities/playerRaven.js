@@ -31,20 +31,11 @@ class PlayerRaven extends Player {
 
         if (this.isPossessed) {
 
-            console.log(this.haveCure);
+            // gestion des animations
+            this.animManager();
 
-            this.basicMovements();
-
-            this.scene.dropCure();
-
-            // Si on ne presse pas up et qu'on n'est pas au sol, on peut planer
-            if (this.cursors.up.isUp && this.keyZ.isUp && !this.onGround) {
-                this.canPlane = true;
-            }
-
-            // SAUT (plus on appuie, plus on saut haut)
-
-            this.jumpMovements();
+            // METHODE POUR MECANIQUES COMMUNES
+            this.handlePlayer();
 
             // TIR PLUME
             if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.disableShoot) {

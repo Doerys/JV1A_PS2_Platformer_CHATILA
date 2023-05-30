@@ -61,7 +61,9 @@ class Preload extends Phaser.Scene {
 
     create() {
 
-        // animation joueur
+        // ANIMATIONS FROG
+
+        // PLAYER
         this.anims.create({
             key: 'player_frog_left',
             frames: [{ key: 'frogImage', frame: 0 }],
@@ -112,12 +114,18 @@ class Preload extends Phaser.Scene {
             repeat : 0
         });
 
+
+        // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
+        
         this.scene.start("TestScene", {
             // POUR LA TESTROOM :
+            
             mapName: "map_test", // nom de la map
             mapTileset: "placeholder_test", // nom du tileset sur TILED
             mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
             
+            // POUR LE JEU :
+
             /*mapName: "map_02", // nom de la map
             mapTileset: "tileset", // nom du tileset sur TILED
             mapTilesetImage: "tileset_image", // nom du fichier image du tileset*/

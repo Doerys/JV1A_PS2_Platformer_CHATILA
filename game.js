@@ -5,12 +5,14 @@ import Level_02 from "./src/scenes/level_02.js";
 
 const WIDTH = 3072;
 const HEIGHT = 1728;
-const ZOOM_FACTOR = -3; 
+const ZOOM_FACTOR = -3;
 
+// FINALEMENT INUTILE
 const SHARED_CONFIG = {
-width: WIDTH,
-height: HEIGHT,
-zoomFactor: ZOOM_FACTOR,
+    mode: Phaser.Scale.FIT,
+    width: WIDTH,
+    height: HEIGHT,
+    zoomFactor: ZOOM_FACTOR,
 }
 
 const Scenes = [PreloadScene, TestScene, Level_01, Level_02] // on liste les scènes
@@ -19,19 +21,10 @@ const initScenes = () => Scenes.map(createScene) // crée une scène pour chaque
 
 const config = {
     type: Phaser.AUTO,
-    ...SHARED_CONFIG,
-    physics: {
-    default: 'arcade',
-    arcade: {
-        //gravity: { y: 1450 },
-        gravity: { y : 1600 },
-        debug: true,
-        tileBias: 64,
-    }
-    },
-    input:{gamepad:true},
-    fps: {
-        target: 60,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        width: 3072,
+        height: 1728
     },
     scene: initScenes()
 }

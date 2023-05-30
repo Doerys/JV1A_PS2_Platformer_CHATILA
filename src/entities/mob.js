@@ -11,16 +11,20 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     }
 
     init() {
-        this.isPossessed = false;
-        this.playerSpotted = false;
-
+        // VARIABLES DE VITESSES
+        
         this.mobSpeedMoveX = 0;
         this.mobAccelerationX = 100;
         this.mobSpeedXMax = 100;
 
+        // VARIABLES UNIVERSELLES AUX MOBS
+
+        this.isPossessed = false; // vérifie que le mob est possédé ou non (utile pour la méthode disableIA)
+        this.playerSpotted = false; // changement de comportement si le joueur est détecté
+
         this.isPressingButton = false;
 
-        this.canMove = true;
+        this.canMove = true; // pas sûr que cette variable sert encore à quelque chose
 
         // VARIABLES MOB HOG
         this.isCharging = false;
@@ -28,8 +32,6 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         // VARIABLES RAVEN
         this.disableShoot = false;
-
-        //this.projectiles = new Phaser.GameObjects.Group;
     }
 
     create() {
@@ -43,10 +45,12 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     update(time, delta) {
     }
 
+    // allers retours classiques
     patrolMob() {
 
         if (!this.playerSpotted) {
 
+            // DEPLACEMENT A GAUCHE <=
             if (this.facing == "left" && !this.body.blocked.right) {
 
                 this.setVelocityX(this.mobSpeedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
@@ -80,7 +84,11 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    // méthode pour détecter le player à proximité
     detectionPlayer(x1, y1, x2, y2) {
+        
+        // constantes pour repérer distance entre mob et player
+
         const distanceX = this.scene.checkDistance(x2, x1);
 
         const distanceY = this.scene.checkDistance(y2, y1);
@@ -88,6 +96,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         if (distanceX < 300 && distanceY < 128 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
             this.playerSpotted = true;
 
+        // on pivote le mob vers le joueur
             if (this.currentMob == "raven" || this.currentMob == "hog") {
                 if (x1 < x2) {
                     this.facing = "left";
@@ -108,6 +117,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
+        // on réinitialise si le player est trop loin OU mort
         else if (distanceX > 300 || distanceY > 64 || this.scene.playerKilled) {
             this.playerSpotted = false;
             this.isCharging = false;

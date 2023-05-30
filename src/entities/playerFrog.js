@@ -18,9 +18,11 @@ class PlayerFrog extends Player {
     init() {
         super.init();
 
-        //this.physics.add.collider(this.hook, layersmurs);
+        this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
         console.log("PLAYER = FROG");
+
+        //this.physics.add.collider(this.hook, layersmurs);
 
         //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
@@ -49,14 +51,12 @@ class PlayerFrog extends Player {
     update(time, delta) {
 
         if (this.isPossessed) {
-            
-            this.basicMovements();
 
-            // SAUT (plus on appuie, plus on saut haut)
+            // gestion des animations
+            this.animManager();
 
-            this.jumpMovements();
-
-            this.scene.dropCure();
+            // METHODE POUR MECANIQUES COMMUNES
+            this.handlePlayer();
 
             // WALL GRAB - on se fixe au mur une fois en contact avec lui
 
@@ -113,7 +113,7 @@ class PlayerFrog extends Player {
 
                 this.isHooking = true;
                 this.canHook = false;
-                
+
                 this.hook.enableBody();
 
                 // place le hook à l'emplacement du personnage
@@ -132,14 +132,14 @@ class PlayerFrog extends Player {
                 }
 
                 else if (this.facing == "left") {
-                    this.hook.flipX=true;
+                    this.hook.flipX = true;
                     this.hook.setVelocityX(-this.speedHook);
                 }
 
                 // fixe le joueur sur place
                 this.inputsMoveLocked = true; // commandes bloquées
                 this.body.setAllowGravity(false); //gravité annulée 
-                this.setVelocity(0,0); // vélocité annulée
+                this.setVelocity(0, 0); // vélocité annulée
 
                 // réinitialise les variables et les mouvements du personnage
                 setTimeout(() => {
@@ -151,14 +151,14 @@ class PlayerFrog extends Player {
             }
 
             // débloque les commandes après l'utilisation du grappin
-            if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook && !this.isWallJumping){              
-                
+            if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook && !this.isWallJumping) {
+
                 this.inputsMoveLocked = false; // commandes débloquées
                 this.body.setAllowGravity(true); //gravité rétablie
             }
 
             if (this.hookCreated) {
-                                
+
                 // si la vélocité est à 0, ça fait disparaître les éléments
                 if (this.hook.body.velocity.x == 0) {
                     this.hook.disableBody(true, true);
