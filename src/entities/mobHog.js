@@ -79,6 +79,16 @@ class MobHog extends Mob {
             }
         }
     }
+
+    stopCharge() {
+        this.setVelocityX(0);
+        this.canCharge = false;
+        this.isCharging = false;
+
+        setTimeout(() => {
+            this.canCharge = true;
+        }, 500);
+    }
 }
 
 export default MobHog
