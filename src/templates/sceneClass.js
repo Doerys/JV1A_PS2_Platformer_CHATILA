@@ -332,7 +332,7 @@ class SceneClass extends Phaser.Scene {
         }
 
         if (currentMob == "frog") {
-            this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure).setSize(48, 64);
+            this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure).setSize(48, 64).setOffset(38, 32);
         }
         else if (currentMob == "hog") {
             this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure).setSize(128, 96).setOffset(64, 32);
@@ -517,7 +517,6 @@ class SceneClass extends Phaser.Scene {
             this.boxPressingButton = false;
 
             if (!this.mobPressingButton) {
-                console.log("CHECK BOX ON FLOOR")
                 this.buttonOn = false;
             }
         }

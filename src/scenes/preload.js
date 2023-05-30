@@ -9,6 +9,7 @@ class Preload extends Phaser.Scene {
         this.load.spritesheet('player', 'assets/player_test.png', { frameWidth: 64, frameHeight: 128});
 
         this.load.spritesheet('frogImage', 'assets/player_frog.png', { frameWidth: 64, frameHeight: 64});
+        this.load.spritesheet('frogAnim', 'assets/spritesheet_frog.png', { frameWidth: 128, frameHeight: 128});
         this.load.spritesheet('hogImage', 'assets/player_hog.png', { frameWidth: 256, frameHeight: 128});
         this.load.spritesheet('ravenImage', 'assets/player_raven.png', { frameWidth: 128, frameHeight: 128});
 
@@ -68,7 +69,47 @@ class Preload extends Phaser.Scene {
 
         this.anims.create({
             key: 'player_frog_right',
-            frames: [{ key: 'frogImage', frame: 1 }],
+            frames: [{ key: 'frogAnim', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'player_frog_jump',
+            frames: this.anims.generateFrameNumbers('frogAnim', {start:1,end:9}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_fall',
+            frames: this.anims.generateFrameNumbers('frogAnim', {start:10,end:20}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_reception',
+            frames: this.anims.generateFrameNumbers('frogAnim', {start:21,end:29}),
+            frameRate: 40,
+            repeat : 0
+        });
+        
+        this.anims.create({
+            key: 'player_frog_walk',
+            frames: this.anims.generateFrameNumbers('frogAnim', {start:34,end:54}),
+            frameRate: 35,
+            repeat : -1
+        });
+
+        this.anims.create({
+            key: 'player_frog_wallGrab',
+            frames: [{ key: 'frogAnim', frame: 59 }],
+        });
+
+        this.anims.create({
+            key: 'player_frog_slideWall',
+            frames: this.anims.generateFrameNumbers('frogAnim', {start:60,end:64}),
+            frameRate: 10,
+            repeat : 0
         });
 
         this.scene.start("TestScene", {

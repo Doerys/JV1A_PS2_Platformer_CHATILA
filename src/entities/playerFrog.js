@@ -73,6 +73,7 @@ class PlayerFrog extends Player {
                     // verrouille les commandes de déplacement et valide le wall grab gauche
                     this.inputsMoveLocked = true;
                     this.grabLeft = true;
+                    this.isGrabing = true;
                 }
             }
 
@@ -89,12 +90,14 @@ class PlayerFrog extends Player {
                     // verrouille les commandes de déplacement et valide le wall grab gauche
                     this.inputsMoveLocked = true;
                     this.grabRight = true;
+                    this.isGrabing = true;
                 }
             }
 
             else if (!this.blockedLeft && !this.blockedRight && !this.onGround) {
                 this.grabRight = false;
                 this.grabLeft = false;
+                this.isGrabing = false;
             }
 
             // permet de désactiver le wall jump pour descendre, en pressant la touche du bas
