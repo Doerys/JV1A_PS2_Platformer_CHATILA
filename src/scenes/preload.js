@@ -10,8 +10,11 @@ class Preload extends Phaser.Scene {
 
         this.load.spritesheet('frogImage', 'assets/player_frog.png', { frameWidth: 64, frameHeight: 64});
         this.load.spritesheet('frogAnim', 'assets/spritesheet_frog.png', { frameWidth: 128, frameHeight: 128});
+
         this.load.spritesheet('hogImage', 'assets/player_hog.png', { frameWidth: 256, frameHeight: 128});
+
         this.load.spritesheet('ravenImage', 'assets/player_raven.png', { frameWidth: 128, frameHeight: 128});
+        this.load.spritesheet('ravenAnim', 'assets/spritesheet_raven.png', { frameWidth: 192, frameHeight: 192});
 
         this.load.spritesheet('mob', 'assets/mob_test.png', { frameWidth: 64, frameHeight: 128});
 
@@ -66,7 +69,7 @@ class Preload extends Phaser.Scene {
         // PLAYER
         this.anims.create({
             key: 'player_frog_left',
-            frames: [{ key: 'frogImage', frame: 0 }],
+            frames: [{ key: 'frogAnim', frame: 0 }],
         });
 
         this.anims.create({
@@ -112,6 +115,53 @@ class Preload extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('frogAnim', {start:60,end:64}),
             frameRate: 10,
             repeat : 0
+        });
+
+        // RAVEN 
+
+        this.anims.create({
+            key: 'player_raven_left',
+            frames: [{ key: 'ravenAnim', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'player_raven_right',
+            frames: [{ key: 'ravenAnim', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'player_raven_jump',
+            frames: this.anims.generateFrameNumbers('ravenAnim', {start:1,end:19}),
+            frameRate: 60,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_plane',
+            frames: this.anims.generateFrameNumbers('ravenAnim', {start:20,end:24}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_fall',
+            frames: this.anims.generateFrameNumbers('ravenAnim', {start:25,end:29}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_reception',
+            frames: this.anims.generateFrameNumbers('ravenAnim', {start:30,end:39}),
+            frameRate: 40,
+            repeat : 0
+        });
+        
+        this.anims.create({
+            key: 'player_raven_walk',
+            frames: this.anims.generateFrameNumbers('ravenAnim', {start:34,end:54}),
+            frameRate: 35,
+            repeat : -1
         });
 
 

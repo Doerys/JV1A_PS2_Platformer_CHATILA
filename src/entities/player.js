@@ -117,14 +117,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     animManager() {
+
         // ANIMATIONS
+        
+        if (this.facing == 'right') {
+            this.flipX = false;
+        }
+        if (this.facing == 'left') {
+            this.flipX = true;
+        }
+
         if (this.currentMob == "frog") {
-            if (this.facing == 'right') {
-                this.flipX = false;
-            }
-            if (this.facing == 'left') {
-                this.flipX = true;
-            }
 
             if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
                 this.play('player_frog_right', true);
@@ -169,6 +172,60 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.jumpAnim = false;
                 this.fallAnim = false;
                 this.slideAnim = false;
+            }
+        }
+
+        if (this.currentMob == "raven") {
+            if (this.facing == 'right') {
+                this.flipX = false;
+            }
+            if (this.facing == 'left') {
+                this.flipX = true;
+            }
+
+            if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
+                this.play('player_raven_right', true);
+            }
+
+            if (this.body.velocity.y < 0 && !this.jumpAnim) {
+                this.anims.play("player_raven_jump", true);
+                this.jumpAnim = true;
+            }
+
+            if (this.body.velocity.y > 0 && !this.planeAnim && (this.cursors.up.isDown || this.keyZ.isDown)) {
+                console.log("PLANE")
+                this.anims.play("player_raven_plane", true);
+                this.justFall = true;
+                
+                this.fallAnim = false;
+                this.planeAnim = true;
+            }
+
+            if (this.body.velocity.y > 0 && !this.fallAnim && !this.planeAnim && (this.cursors.up.isUp || this.keyZ.isUp)) {
+                console.log("TOMBE")
+                this.anims.play("player_raven_fall", true);
+                this.justFall = true;
+                
+                this.fallAnim = true;
+                this.planeAnim = false;
+            }
+
+            if (this.body.velocity.x != 0 && this.body.velocity.y == 0) {
+                //this.anims.play("player_frog_walk", true);
+            }
+
+            if (this.onGround) {
+                if (this.justFall) {
+                    this.anims.play("player_raven_reception", true);
+                }
+
+                setTimeout(() => {
+                    this.justFall = false
+                }, 100);
+
+                this.jumpAnim = false;
+                this.fallAnim = false;
+                this.planeAnim = false;
             }
         }
     }
@@ -311,6 +368,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.simpleJump();
             this.secondJump = true;
             this.canPlane = false;
+            
+            this.fallAnim = false;
+            this.justFall = false;
         }
 
         // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
