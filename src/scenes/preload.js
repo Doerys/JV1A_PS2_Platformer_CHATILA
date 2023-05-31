@@ -14,7 +14,8 @@ class Preload extends Phaser.Scene {
         this.load.spritesheet('hogImage', 'assets/player_hog.png', { frameWidth: 256, frameHeight: 128});
 
         this.load.spritesheet('ravenImage', 'assets/player_raven.png', { frameWidth: 128, frameHeight: 128});
-        this.load.spritesheet('ravenAnim', 'assets/spritesheet_raven.png', { frameWidth: 192, frameHeight: 192});
+        this.load.spritesheet('ravenAnim1', 'assets/spritesheet_raven1.png', { frameWidth: 192, frameHeight: 192});
+        this.load.spritesheet('ravenAnim2', 'assets/spritesheet_raven2.png', { frameWidth: 192, frameHeight: 192});
 
         this.load.spritesheet('mob', 'assets/mob_test.png', { frameWidth: 64, frameHeight: 128});
 
@@ -121,45 +122,94 @@ class Preload extends Phaser.Scene {
 
         this.anims.create({
             key: 'player_raven_left',
-            frames: [{ key: 'ravenAnim', frame: 0 }],
+            frames: [{ key: 'ravenAnim1', frame: 0 }],
         });
 
         this.anims.create({
             key: 'player_raven_right',
-            frames: [{ key: 'ravenAnim', frame: 0 }],
+            frames: [{ key: 'ravenAnim1', frame: 0 }],
         });
 
         this.anims.create({
-            key: 'player_raven_jump',
-            frames: this.anims.generateFrameNumbers('ravenAnim', {start:1,end:19}),
+            key: 'player_raven_groundToJump',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:1,end:19}),
             frameRate: 60,
             repeat : 0
         });
 
         this.anims.create({
-            key: 'player_raven_plane',
-            frames: this.anims.generateFrameNumbers('ravenAnim', {start:20,end:24}),
+            key: 'player_raven_jumpToPlane',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:20,end:24}),
             frameRate: 25,
             repeat : 0
         });
 
         this.anims.create({
-            key: 'player_raven_fall',
-            frames: this.anims.generateFrameNumbers('ravenAnim', {start:25,end:29}),
+            key: 'player_raven_planeToFall',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:25,end:29}),
             frameRate: 25,
             repeat : 0
         });
 
         this.anims.create({
-            key: 'player_raven_reception',
-            frames: this.anims.generateFrameNumbers('ravenAnim', {start:30,end:39}),
+            key: 'player_raven_fallToPlane',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:29,end:25}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_fallToReception',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:30,end:39}),
+            frameRate: 30,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_jumpToFall',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:40,end:45}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_planeToReception',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:46,end:54}),
+            frameRate: 30,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_doubleJump',
+            frames: this.anims.generateFrameNumbers('ravenAnim1', {start:59,end:74}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_fallToJump',
+            frames: this.anims.generateFrameNumbers('ravenAnim2', {start:0,end:19}),
             frameRate: 40,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_planeToJump',
+            frames: this.anims.generateFrameNumbers('ravenAnim2', {start:20,end:41}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_groundtoFall',
+            frames: this.anims.generateFrameNumbers('ravenAnim2', {start:43,end:48}),
+            frameRate: 25,
             repeat : 0
         });
         
         this.anims.create({
             key: 'player_raven_walk',
-            frames: this.anims.generateFrameNumbers('ravenAnim', {start:34,end:54}),
+            frames: this.anims.generateFrameNumbers('ravenAnim2', {start:49,end:79}),
             frameRate: 35,
             repeat : -1
         });

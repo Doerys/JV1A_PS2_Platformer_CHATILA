@@ -105,7 +105,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // METHODE POUR MECANIQUES COMMUNES
-    handlePlayer() {          
+    handlePlayer() {
         // déplacement latéraux
         this.basicMovements();
 
@@ -119,7 +119,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     animManager() {
 
         // ANIMATIONS
-        
+
         if (this.facing == 'right') {
             this.flipX = false;
         }
@@ -128,6 +128,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         if (this.currentMob == "frog") {
+
+            if (this.onGround) {
+                if (this.justFall) {
+                    this.anims.play("player_frog_reception", true);
+                }
+
+                setTimeout(() => {
+                    this.justFall = false
+                }, 100);
+
+                this.jumpAnim = false;
+                this.fallAnim = false;
+                this.slideAnim = false;
+            }
 
             if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
                 this.play('player_frog_right', true);
@@ -159,23 +173,38 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.jumpAnim = false;
                 this.fallAnim = false;
             }
+        }
+
+        // ANIMATIONS RAVEN
+        if (this.currentMob == "raven") {
 
             if (this.onGround) {
-                if (this.justFall) {
-                    this.anims.play("player_frog_reception", true);
+
+                // si on se réceptionne durant l'anim de planer
+                if (this.justFall && this.planeAnim) {
+                    //console.log("CHUTE PLANE") => GOOD
+
+                    this.anims.play("player_raven_planeToReception", true);
                 }
 
-                setTimeout(() => {
-                    this.justFall = false
-                }, 100);
+                // si on se réceptionne durant l'anim de chute
+                if (this.justFall && this.fallAnim) {
+                    //console.log("CHUTE RECEPTION") => GOOD
+
+                    this.anims.play("player_raven_fallToReception", true);
+                }
 
                 this.jumpAnim = false;
                 this.fallAnim = false;
-                this.slideAnim = false;
-            }
-        }
+                this.planeAnim = false;
+                this.doubleJumpAnim = false;
 
-        if (this.currentMob == "raven") {
+                setTimeout(() => {
+                    this.justFall = false
+                    this.firstFallAnim = false;
+                }, 100);
+            }
+
             if (this.facing == 'right') {
                 this.flipX = false;
             }
@@ -187,45 +216,97 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('player_raven_right', true);
             }
 
-            if (this.body.velocity.y < 0 && !this.jumpAnim) {
-                this.anims.play("player_raven_jump", true);
-                this.jumpAnim = true;
-            }
+            // si on va vers le bas
+            if (this.body.velocity.y > 0) {
 
-            if (this.body.velocity.y > 0 && !this.planeAnim && (this.cursors.up.isDown || this.keyZ.isDown)) {
-                console.log("PLANE")
-                this.anims.play("player_raven_plane", true);
-                this.justFall = true;
-                
-                this.fallAnim = false;
-                this.planeAnim = true;
-            }
+                // PLANER
+                if (this.cursors.up.isDown || this.keyZ.isDown) {
 
-            if (this.body.velocity.y > 0 && !this.fallAnim && !this.planeAnim && (this.cursors.up.isUp || this.keyZ.isUp)) {
-                console.log("TOMBE")
-                this.anims.play("player_raven_fall", true);
-                this.justFall = true;
-                
-                this.fallAnim = true;
-                this.planeAnim = false;
-            }
+                    // passage de jump à plane
+                    if (this.jumpAnim) {
+                        //console.log("JUMP TO PLANE") => GOOD
+                        this.anims.play("player_raven_jumpToPlane", true);
+                    }
 
-            if (this.body.velocity.x != 0 && this.body.velocity.y == 0) {
-                //this.anims.play("player_frog_walk", true);
-            }
+                    // passage de fall à plane
+                    if (this.fallAnim) {
+                        console.log("FALL TO PLANE") //=> GOOD
+                        this.anims.play("player_raven_fallToPlane", true);
+                    }
 
-            if (this.onGround) {
-                if (this.justFall) {
-                    this.anims.play("player_raven_reception", true);
+                    this.planeAnim = true;
+                    this.fallAnim = false;
                 }
 
-                setTimeout(() => {
-                    this.justFall = false
-                }, 100);
+                // CHUTE
+                if ((this.cursors.up.isUp && this.keyZ.isUp)) {
 
+                    // jump to fall
+                    if (this.jumpAnim) {
+                        // console.log("fall true") //=> GOOD
+                        this.anims.play("player_raven_jumpToFall", true);
+                    }
+
+                    // plane to fall
+                    else if (this.planeAnim) {
+                        // console.log("plane true"); //=> GOOD
+                        this.anims.play("player_raven_planeToFall", true);
+                    }
+
+                    else if (!this.firstFallAnim) {
+                        this.anims.play("player_raven_groundtoFall", true);
+                        this.firstFallAnim = true;
+                    }
+
+                    this.planeAnim = false;
+                    this.fallAnim = true;
+                }
+
+                this.firstFallAnim = true; // désactive la chute sans saut
                 this.jumpAnim = false;
-                this.fallAnim = false;
-                this.planeAnim = false;
+                this.justFall = true;
+            }
+
+            // ANIM DE JUMP
+
+            // si on va vers le haut
+            if (this.body.velocity.y < 0) {
+                if (!this.jumpAnim) {
+
+                    if (this.onGround) {
+                        //console.log("GROUND TO JUMP"); //=> GOOD
+
+                        this.anims.play("player_raven_groundToJump", true);
+                    }
+
+                    else {
+                        //console.log("FALL TO JUMP");
+
+                        this.anims.play("player_raven_fallToJump", true);
+                        this.fallAnim = false;
+                    }
+
+                    /*if (this.planeAnim && this.fallAnim) {
+                        console.log("PLANE TO JUMP"); 
+
+                        this.anims.play("player_raven_planeToJump", true);
+                        this.planeAnim = false;
+                    }*/
+
+                    this.jumpAnim = true;
+                    this.justFall = true;
+                }
+
+                if (this.jumpAnim && this.secondJump && !this.doubleJumpAnim && !this.justFall) {
+                    //console.log("DOUBLE JUMP")
+                    this.anims.play("player_raven_doubleJump", true);
+                    this.doubleJumpAnim = true;
+                }
+            }
+
+            // anim marche
+            if (this.body.velocity.x != 0 && this.body.velocity.y == 0) {
+                this.anims.play("player_raven_walk", true);
             }
         }
     }
@@ -313,7 +394,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         setTimeout(() => {
             this.canJump = true;
             this.newJump = false; // le saut n'est plus nouveau (utile pour le wall jump)
-        }, 100); 
+        }, 100);
     }
 
     jumpMovements() {
@@ -326,7 +407,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             // si le joueur est au sol, réinitialise son compteur de jump
             if (this.currentMob == "raven") {
-                this.jumpCounter = 2; 
+                this.jumpCounter = 2;
             }
             else {
                 this.jumpCounter = 1;
@@ -368,7 +449,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.simpleJump();
             this.secondJump = true;
             this.canPlane = false;
-            
+
             this.fallAnim = false;
             this.justFall = false;
         }
