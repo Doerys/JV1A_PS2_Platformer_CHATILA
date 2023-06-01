@@ -169,7 +169,7 @@ class SceneClass extends Phaser.Scene {
         layer_box.objects.forEach(box => {
             const box_create = this.physics.add.sprite(box.x + 32, box.y, "box").setDamping(true).setImmovable(true).setPipeline('Light2D');
 
-            this.physics.add.collider(box_create, this.movingPlat1);
+            this.physics.add.collider(box_create, this.movingPlat1, () => { box_create.setImmovable(false); console.log("CHECK")}, null, this);
             this.physics.add.collider(box_create, this.movingPlat2);
             this.physics.add.collider(box_create, this.movingPlat3);
             this.physics.add.collider(box_create, this.movingPlat4);
@@ -233,7 +233,7 @@ class SceneClass extends Phaser.Scene {
 
         // item de soin collectable
         layer_cure.objects.forEach(cure => {
-            cures.create(cure.x + 32, cure.y, "cure").setDepth(-1);
+            cures.create(cure.x + 32, cure.y, "cure").setDepth(1);
         })
 
         // création des plateformes qu'on peut créer en tirant dessus avec le raven
@@ -736,7 +736,7 @@ class SceneClass extends Phaser.Scene {
 
             if (victim.haveCure == true) {
                 setTimeout(() => {
-                    const newCure = this.physics.add.staticSprite(this.layers.spawnCure.x + 32, this.layers.spawnCure.y, "cure").setDepth(-1);
+                    const newCure = this.physics.add.staticSprite(this.layers.spawnCure.x + 32, this.layers.spawnCure.y, "cure").setDepth(1);
                     this.layers.cures.add(newCure);
                 }, 500);
             }
@@ -774,7 +774,7 @@ class SceneClass extends Phaser.Scene {
 
             this.player.haveCure = false;
 
-            const newCure = this.physics.add.staticSprite(this.player.x, this.player.y, 'cure').setDepth(-1);
+            const newCure = this.physics.add.staticSprite(this.player.x + 64, this.player.y + 64, 'cure').setDepth(1);
 
             this.layers.cures.add(newCure);
         }

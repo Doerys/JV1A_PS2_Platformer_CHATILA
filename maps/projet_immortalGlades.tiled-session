@@ -11,6 +11,7 @@
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
         "": {
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "#tileset": {
@@ -39,11 +40,11 @@
                 6,
                 15
             ],
-            "scale": 0.75,
-            "selectedLayer": 9,
+            "scale": 0.25,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 1534,
-                "y": 958
+                "x": 2054,
+                "y": 984
             }
         },
         "level_01.tmx#tileset": {
@@ -53,8 +54,8 @@
             "expandedObjectLayers": [
                 13,
                 12,
-                26,
                 11,
+                26,
                 10,
                 25,
                 9,
@@ -66,12 +67,15 @@
                 16,
                 15
             ],
-            "scale": 0.33,
-            "selectedLayer": 5,
+            "scale": 1,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 1534.848484848485,
-                "y": 962.121212121212
+                "x": 2148,
+                "y": 555
             }
+        },
+        "level_02.tmx#placeholder_test": {
+            "scaleInDock": 1
         },
         "level_02.tmx#tileset": {
             "scaleInDock": 0.5
@@ -88,8 +92,8 @@
             "scale": 0.25,
             "selectedLayer": 21,
             "viewCenter": {
-                "x": 1534,
-                "y": 962
+                "x": 732,
+                "y": 1700
             }
         },
         "level_03.tmx#tileset": {
@@ -97,8 +101,8 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
-                26,
                 11,
+                26,
                 10,
                 9,
                 8,
@@ -108,8 +112,8 @@
             "scale": 0.33,
             "selectedLayer": 20,
             "viewCenter": {
-                "x": 1534.848484848485,
-                "y": 962.121212121212
+                "x": 2506.060606060606,
+                "y": 1124.242424242424
             }
         },
         "level_04.tmx#tileset": {
@@ -118,18 +122,21 @@
         "test/testScene.tmx": {
             "expandedObjectLayers": [
                 14,
+                9,
                 21,
                 5,
+                20,
                 4,
+                3,
                 2,
                 17,
                 16
             ],
-            "scale": 0.25,
-            "selectedLayer": 9,
+            "scale": 1,
+            "selectedLayer": 19,
             "viewCenter": {
-                "x": 1534,
-                "y": 962
+                "x": 694,
+                "y": 1434
             }
         },
         "test/testScene.tmx#placeholder_test": {

@@ -22,18 +22,18 @@ class TestScene extends SceneClass {
 
         this.movingPlat1 = this.physics.add.image(1408, 1536, 'movingPlat')
             .setImmovable(true)
-            .setVelocity(100, 0);
+            //.setVelocity(100, 0);
 
         this.movingPlat1.body.setAllowGravity(false);
 
-        this.tweens.timeline({
+        /*this.tweens.timeline({
             targets: this.movingPlat1.body.velocity,
             loop: -1,
             tweens: [
                 { x: -200, y: 0, duration: 1000, ease: 'Stepped' },
                 { x: +200, y: 0, duration: 1000, ease: 'Stepped' },
             ]
-        });
+        });*/
 
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);

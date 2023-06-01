@@ -17,11 +17,11 @@ class Level_02 extends SceneClass {
     create() {
         this.activePossession = true;
 
-        this.movingPlat1 = this.physics.add.image(1024, 513, 'movingPlat')
-        //.setImmovable(true)
-        //.setVelocity(100, 0);
+        this.movingPlat1 = this.physics.add.image(1024, 544, 'movingPlat')
+        .setImmovable(true)
+        .setVelocity(100, 0);
 
-        //this.movingPlat1.body.setAllowGravity(false);
+        this.movingPlat1.body.setAllowGravity(false);
 
         this.tweens.timeline({
             targets: this.movingPlat1.body.velocity,
@@ -32,9 +32,7 @@ class Level_02 extends SceneClass {
             ]
         });
 
-        //layers.movingPlats.add(this.movingPlat1);
-
-        this.movingPlat2 = this.physics.add.image(512, 320, 'movingPlat')
+        this.movingPlat2 = this.physics.add.image(512, 352, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0);
 
@@ -49,23 +47,20 @@ class Level_02 extends SceneClass {
             ]
         });
 
-        //this.movingPlats.add(this.movingPlat2);
-
-        this.movingPlat3 = this.physics.add.image(1984, 384, 'movingPlat')
+        this.movingPlat3 = this.physics.add.image(1984, 416, 'movingPlat')
             .setImmovable(true)
-            //.setVelocity(100, 0)
-            .setOrigin(0, 0);
+            .setVelocity(100, 0)
 
         this.movingPlat3.body.setAllowGravity(false);
 
-        /*this.tweens.timeline({
+        this.tweens.timeline({
             targets: this.movingPlat3.body.velocity,
             loop: -1,
             tweens: [
-            { x:    -120, y: 0, duration: 1800, ease: 'Stepped' },
-            { x:    +120, y: 0, duration: 1800, ease: 'Stepped' },
+            { x:    -100, y: 0, duration: 1800, ease: 'Stepped' },
+            { x:    +100, y: 0, duration: 1800, ease: 'Stepped' },
             ]
-        });*/
+        });
 
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
@@ -77,7 +72,7 @@ class Level_02 extends SceneClass {
 
         this.loadVar(layers);
 
-        this.createPlayer(layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", 'frog', false);
+        this.createPlayer(layers.spawnFrog.x - 64, layers.spawnFrog.y - 64, layers, "right", 'frog', false);
 
         // CREATION DE MOBS
 
@@ -85,7 +80,7 @@ class Level_02 extends SceneClass {
         //this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
 
         //Création du mob
-        this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog", false, false);
+        this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", true, false);
 
         //Création du mob
         //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
