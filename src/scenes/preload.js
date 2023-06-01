@@ -12,6 +12,8 @@ class Preload extends Phaser.Scene {
         this.load.spritesheet('frogAnim', 'assets/spritesheet_frog.png', { frameWidth: 128, frameHeight: 128});
 
         this.load.spritesheet('hogImage', 'assets/player_hog.png', { frameWidth: 256, frameHeight: 128});
+        this.load.spritesheet('hogAnim1', 'assets/spritesheet_hog1.png', { frameWidth: 256, frameHeight: 192});
+        this.load.spritesheet('hogAnim2', 'assets/spritesheet_hog2.png', { frameWidth: 256, frameHeight: 192});
 
         this.load.spritesheet('ravenImage', 'assets/player_raven.png', { frameWidth: 128, frameHeight: 128});
         this.load.spritesheet('ravenAnim1', 'assets/spritesheet_raven1.png', { frameWidth: 192, frameHeight: 192});
@@ -120,6 +122,61 @@ class Preload extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('frogAnim', {start:60,end:64}),
             frameRate: 10,
             repeat : 0
+        });
+
+        // HOG
+
+        this.anims.create({
+            key: 'player_hog_left',
+            frames: [{ key: 'hogAnim1', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'player_hog_right',
+            frames: [{ key: 'hogAnim1', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'player_hog_jump',
+            frames: this.anims.generateFrameNumbers('hogAnim1', {start:1,end:19}),
+            frameRate: 50,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_hog_fall',
+            frames: this.anims.generateFrameNumbers('hogAnim1', {start:20,end:29}),
+            frameRate: 35,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_hog_reception',
+            frames: this.anims.generateFrameNumbers('hogAnim1', {start:30,end:39}),
+            frameRate: 55,
+            repeat : 0
+        });
+
+        
+        this.anims.create({
+            key: 'player_hog_hit',
+            frames: this.anims.generateFrameNumbers('hogAnim1', {start:40,end:58}),
+            frameRate: 25,
+            repeat : 0
+        });
+        
+        this.anims.create({
+            key: 'player_hog_walk',
+            frames: this.anims.generateFrameNumbers('hogAnim2', {start:0,end:32}),
+            frameRate: 25,
+            repeat : 0
+        });
+
+        this.anims.create({
+            key: 'player_hog_charge',
+            frames: this.anims.generateFrameNumbers('hogAnim2', {start:36,end:51}),
+            frameRate: 35,
+            repeat : -1
         });
 
         // RAVEN 

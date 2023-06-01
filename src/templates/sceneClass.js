@@ -490,7 +490,7 @@ class SceneClass extends Phaser.Scene {
         else if (currentMob == "hog") {
             this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure)
                 .setSize(128, 96)
-                .setOffset(64, 32);
+                .setOffset(64, 64);
         }
         else if (currentMob == "raven") {
             this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure)
