@@ -52,14 +52,14 @@ class TestScene extends SceneClass {
         this.playerGroup.add(this.player);
 
         //Création du mob
-        this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
+        this.createMob(this.mob1, layers.spawnFrog.x - 64, layers.spawnFrog.y - 64, layers, "right", "frog", false, false);
 
         //Création du mob
         //this.createMob(this.mob2, 1824, 320, layers, "left", "hog");
-        this.createMob(this.mob2, layers.spawnHog.x, layers.spawnHog.y, layers, "left", "hog", false, false);
+        this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", false, false);
 
         //Création du mob
-        this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
+        this.createMob(this.mob3, layers.spawnRaven.x - 64, layers.spawnRaven.y - 64, layers, "left", "raven", false, false);
     }
 
     update() {

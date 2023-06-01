@@ -40,7 +40,7 @@ class PlayerRaven extends Player {
             // TIR PLUME
             if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.disableShoot) {
 
-                const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
+                const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather").setOrigin(0, 0);
                 this.scene.projectilesPlayer.add(feather);
                 this.disableShoot = true;
                 feather.shoot(this);

@@ -78,7 +78,6 @@ class MobHog extends Mob {
                     }
 
                     if (this.body.blocked.left || this.body.blocked.right) {
-                        console.log("IS BLOCKED")
                         this.stopCharge();
                     }
                 }
@@ -87,7 +86,6 @@ class MobHog extends Mob {
     }
 
     stopCharge() {
-        console.log("STOP CHARGE")
         this.setVelocityX(0);
         this.canCharge = false;
         this.isCharging = false;

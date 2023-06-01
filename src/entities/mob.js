@@ -22,6 +22,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.jumpAnim = false;
         this.justFall = false;
         this.animCharge = false;
+        this.justCreated = true;
 
         // VARIABLES UNIVERSELLES AUX MOBS
 
@@ -66,8 +67,12 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         if (this.currentMob == "frog") {
 
+            if (this.justCreated && this.body.velocity.x == 0) {
+                this.play('player_frog_right', true);
+            }
+
             // AU SOL
-            if (this.body.blocked.down) {
+            else if (this.body.blocked.down) {
 
                 // RECEPTION
                 if (this.justFall) {
@@ -100,7 +105,8 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             }
 
             // FALL
-            else if (this.body.velocity.y > 0 && !this.fallAnim) {
+            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated) {
+                console.log("FALL MOB FROG");
                 this.anims.play("player_frog_fall", true);
                 this.fallAnim = true;
                 this.justFall = true;
@@ -125,11 +131,12 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         if (this.currentMob == "hog") {
 
-            // charge
-
+            if (this.justCreated && this.body.velocity.x == 0) {
+                this.play('player_hog_right', true);
+            }
 
             // AU SOL
-            if (this.body.blocked.down) {
+            else if (this.body.blocked.down) {
 
                 if (this.animCharge) {
 
@@ -177,7 +184,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             }
 
             // FALL
-            else if (this.body.velocity.y > 0 && !this.fallAnim) {
+            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated) {
                 this.anims.play("player_hog_fall", true);
                 this.fallAnim = true;
                 this.justFall = true;
@@ -187,7 +194,11 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         // ANIMATIONS RAVEN
         if (this.currentMob == "raven") {
 
-            if (this.body.blocked.down) {
+            if (this.justCreated && this.body.velocity.x == 0) {
+                this.play('player_raven_right', true);
+            }
+
+            else if (this.body.blocked.down) {
 
                 // si on se réceptionne durant l'anim de chute
                 if (this.justFall && this.fallAnim) {
@@ -226,7 +237,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                     this.anims.play("player_raven_jumpToFall", true);
                 }
 
-                else if (!this.firstFallAnim) {
+                else if (!this.firstFallAnim && !this.justCreated) {
                     this.anims.play("player_raven_groundtoFall", true);
                     this.firstFallAnim = true;
 
@@ -322,9 +333,9 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         // constantes pour repérer distance entre mob et player
 
-        const distanceX = this.scene.checkDistance(x2, x1);
+        const distanceX = this.scene.checkDistance(x2 + 64, x1 + 64);
 
-        const distanceY = this.scene.checkDistance(y2, y1);
+        const distanceY = this.scene.checkDistance(y2 + 64, y1 + 64);
 
         if (distanceX < 300 && distanceY < 128 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
             this.playerSpotted = true;

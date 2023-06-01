@@ -363,16 +363,19 @@ class SceneClass extends Phaser.Scene {
 
         if (currentMob == "frog") {
             nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure)
+                .setOrigin(0, 0)
                 .setSize(48, 64)
                 .setOffset(38, 32);
         }
         else if (currentMob == "hog") {
             nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure)
+                .setOrigin(0, 0)
                 .setSize(128, 96)
                 .setOffset(64, 64);
         }
         else if (currentMob == "raven") {
             nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure)
+                .setOrigin(0, 0)
                 .setSize(64, 96)
                 .setOffset(64, 64);
         }
@@ -400,6 +403,11 @@ class SceneClass extends Phaser.Scene {
         });*/
 
         //this.lightMouseOver.setFollow(nameMob);
+
+        this.time.delayedCall(500, () => {
+            nameMob.justCreated = false;
+        });
+        //this.jump(poids,blocCible)
 
         if (!isCorrupted) { // un mob corrompu ne peut pas être possédé
 
@@ -484,16 +492,19 @@ class SceneClass extends Phaser.Scene {
 
         if (currentMob == "frog") {
             this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure)
+                .setOrigin(0, 0)
                 .setSize(48, 64)
                 .setOffset(38, 32);
         }
         else if (currentMob == "hog") {
             this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure)
+                .setOrigin(0, 0)
                 .setSize(128, 96)
                 .setOffset(64, 64);
         }
         else if (currentMob == "raven") {
             this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure)
+                .setOrigin(0, 0)
                 .setSize(64, 96)
                 .setOffset(64, 64);
         }
@@ -505,6 +516,10 @@ class SceneClass extends Phaser.Scene {
 
         this.player.setCollideWorldBounds(true);
 
+        this.time.delayedCall(500, () => {
+            this.player.justCreated = false;
+        });
+
         this.emitterPlayer = this.add.particles("particule_cursor").setDepth(-1).createEmitter({
             //follow: this.player,
             //followOffset : x: 32, y: 0,
@@ -514,8 +529,6 @@ class SceneClass extends Phaser.Scene {
             quantity: 1,
             blendMode: 'COLOR_BURN',
         });
-
-        console.log(this.emitterPlayer);
 
         // COLLIDERS ET OVERLAPS
 
@@ -578,7 +591,7 @@ class SceneClass extends Phaser.Scene {
     replaceMobBySaveMob(player, layers, possessedMob) {
         player.disablePlayer(); // permet de désactiver le update du player pour éviter un crash
         player.destroy();
-        this.createMob(possessedMob, player.x, player.y, layers, possessedMob.facing, possessedMob.currentMob, possessedMob.isCorrupted, player.haveCure);
+        this.createMob(possessedMob, player.x, player.y, layers, player.facing, possessedMob.currentMob, possessedMob.isCorrupted, player.haveCure);
     }
 
     replaceMobByPlayer(player, layers) {
@@ -736,13 +749,13 @@ class SceneClass extends Phaser.Scene {
 
         setTimeout(() => {
             if (target.currentMob == "frog") {
-                this.createMob(target, this.layers.spawnFrog.x, this.layers.spawnFrog.y, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
+                this.createMob(target, this.layers.spawnFrog.x - 64, this.layers.spawnFrog.y - 64, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
             else if (target.currentMob == "hog") {
-                this.createMob(target, this.layers.spawnHog.x, this.layers.spawnHog.y, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
+                this.createMob(target, this.layers.spawnHog.x - 64, this.layers.spawnHog.y - 64, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
             else if (target.currentMob == "raven") {
-                this.createMob(target, this.layers.spawnRaven.x, this.layers.spawnRaven.y, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
+                this.createMob(target, this.layers.spawnRaven.x - 64, this.layers.spawnRaven.y - 64, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
         }, 500);
     }

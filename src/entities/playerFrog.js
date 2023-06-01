@@ -24,10 +24,8 @@ class PlayerFrog extends Player {
 
         //this.physics.add.collider(this.hook, layersmurs);
 
-        //this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
-
         if (!this.hookCreated) {
-            this.hook = new Hook(this.scene, this.x, this.y)
+            this.hook = new Hook(this.scene, this.x + 64, this.y  + 64)
                 .setCollideWorldBounds(true)
                 .setOrigin(0.5, 0.5)
                 .disableBody(true, true);
@@ -117,8 +115,8 @@ class PlayerFrog extends Player {
                 this.hook.enableBody();
 
                 // place le hook à l'emplacement du personnage
-                this.hook.x = this.x;
-                this.hook.y = this.y;
+                this.hook.x = this.x + 64;
+                this.hook.y = this.y + 64;
 
                 /*this.rope.x = this.x;
                 this.rope.y = this.y;
@@ -167,7 +165,7 @@ class PlayerFrog extends Player {
                 }
 
                 // si le grappin atteint la distance max : stoppe le grappin
-                if (this.scene.checkDistance(this.x, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
+                if (this.scene.checkDistance(this.x + 64, this.hook.x) >= this.maxHookDistance) { // longueur max de la chaine
                     this.hook.setVelocity(0);
                     this.hook.visible = false;
                     //this.rope.visible = false;

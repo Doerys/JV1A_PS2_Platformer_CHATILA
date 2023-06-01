@@ -37,7 +37,7 @@ class MobRaven extends Mob {
             this.animMobManager();
 
             // aller retour si joueur n'est pas spotted
-            this.patrolMob();
+           this.patrolMob();
 
             if (this.scene.activePossession) {
 
@@ -48,7 +48,7 @@ class MobRaven extends Mob {
 
                     this.setVelocity(0, 0);
 
-                    const feather = new Projectile(this.scene, this.x, this.y + 5, "feather");
+                    const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather");
                     this.scene.projectilesMob.add(feather);
                     this.disableShoot = true;
 
