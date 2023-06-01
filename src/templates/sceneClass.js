@@ -17,7 +17,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: false,
+                    debug: true,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -27,6 +27,10 @@ class SceneClass extends Phaser.Scene {
             fps: {
                 target: 60,
             },
+
+            render: {
+                pipeline: 'Light2D'
+            }
         })
     }
 
@@ -34,6 +38,220 @@ class SceneClass extends Phaser.Scene {
         this.mapName = data.mapName;
         this.mapTileset = data.mapTileset;
         this.mapTilesetImage = data.mapTilesetImage
+    }
+
+    // load des CALQUES / OBJETS / SPAWNS MOBS dans une constante liée à chaque niveau 
+    loadMap(levelMap) {
+
+        this.physics.world.setBounds(0, 0, 3072, 1920); // légèrement plus haut (pour dead zone hors caméra)
+
+        // CAMERA
+        this.cameras.main
+            .setBounds(0, 0, 3072, 1728) //format 16/9
+            .setSize(3072, 1728)
+            .setOrigin(0, 0)
+            .fadeIn(1500, 0, 0, 25) // fondu au noir
+
+        //Enlever commentaire pour voir la deadZone
+        //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
+
+        // ARRIERE PLAN - BACKGROUND
+        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-3); // profondeur
+
+        // Tileset dans le TILED
+        const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
+
+        // Calques layers
+        const layer_platforms = levelMap.createLayer("layer_platforms", tileset).setDepth(1).setPipeline('Light2D');
+        const layer_decos1 = levelMap.createLayer("layer_decos1", tileset).setDepth(2).setPipeline('Light2D');
+        const layer_decos2 = levelMap.createLayer("layer_decos2", tileset).setDepth(3).setPipeline('Light2D');
+        const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(false);
+        const layer_deadZone = levelMap.createLayer("layer_deadZone", tileset);
+
+        // Calques objets
+        const layer_spawnFrog = levelMap.getObjectLayer("SpawnFrog");
+        const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
+        const layer_spawnRaven = levelMap.getObjectLayer("SpawnRaven");
+
+        const layer_box = levelMap.getObjectLayer("Box");
+        const layer_bigBox = levelMap.getObjectLayer("BigBox");
+        const layer_stake = levelMap.getObjectLayer("Stake");
+
+        const layer_break = levelMap.getObjectLayer("Break");
+        const layer_pics = levelMap.getObjectLayer("Pics");
+
+        const layer_buttonBase = levelMap.getObjectLayer("ButtonBase");
+        const layer_button = levelMap.getObjectLayer("Button");
+        const layer_door = levelMap.getObjectLayer("Door");
+
+        const layer_cure = levelMap.getObjectLayer("Cure");
+
+        const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
+        const layer_weakPlat = levelMap.getObjectLayer("WeakPlat");
+        const layer_weakPlatVertical = levelMap.getObjectLayer("WeakPlatVertical");
+
+        const layer_movingPlats = levelMap.getObjectLayer("MovingPlats");
+
+        const layer_nextLevel = levelMap.getObjectLayer("NextLevel");
+
+        // ajout de collision sur plateformes
+        layer_platforms.setCollisionByProperty({ estSolide: true });
+        layer_limits.setCollisionByProperty({ estSolide: true });
+        layer_deadZone.setCollisionByProperty({ estSolide: true });
+
+        // SPAWNS - Mobs
+        const spawnFrog = layer_spawnFrog.objects[0];
+        const spawnHog = layer_spawnHog.objects[0];
+        const spawnRaven = layer_spawnRaven.objects[0];
+
+        // SPAWNS - Game objects
+        const spawnCure = layer_cure.objects[0];
+        const spawnDoor = layer_door.objects[0];
+        const spawnButton = layer_button.objects[0];
+        const spawnButtonBase = layer_buttonBase.objects[0];
+
+        // NEXT LEVEL
+
+        const nextLevel = layer_nextLevel.objects[0];
+
+        // ELEMENTS DE DECORS
+
+        // Boxes
+
+        const boxes = this.physics.add.group({
+            immovable: true,
+            damping: true
+        });
+
+        const bigBoxes = this.physics.add.group({
+            immovable: true,
+            damping: true
+        });
+
+        // Autres
+
+        const stakes = this.physics.add.group();
+
+        const breaks = this.physics.add.staticGroup();
+        const pics = this.physics.add.staticGroup();
+
+        const cures = this.physics.add.staticGroup();
+
+        // Plateformes spéciales
+
+        const ravenPlats = this.physics.add.staticGroup();
+        const weakPlats = this.physics.add.staticGroup();
+        const weakPlatsVertical = this.physics.add.staticGroup();
+
+        /*
+        // GROUP MIS DE COTE POUR L'INSTANT (non fonctionnel)
+        const movingPlats = this.physics.add.group({
+            immovable: true,
+            allowGravity: false,
+            velocityX : 100
+        });
+        
+        */
+
+        // CREATION DES ELEMENTS DE DECORS
+
+        // Systèmes boutons
+
+        const buttons = this.physics.add.sprite(spawnButton.x + 64, spawnButton.y - 24, "button").setImmovable(true).setPipeline('Light2D');
+        buttons.body.setAllowGravity(false);
+
+        const buttonBases = this.physics.add.staticSprite(spawnButtonBase.x + 64, spawnButtonBase.y - 8, "buttonBase").setPipeline('Light2D');
+
+        // Boxes normales        
+        layer_box.objects.forEach(box => {
+            const box_create = this.physics.add.sprite(box.x + 32, box.y, "box").setDamping(true).setImmovable(true).setPipeline('Light2D');
+
+            this.physics.add.collider(box_create, this.movingPlat1);
+            this.physics.add.collider(box_create, this.movingPlat2);
+            this.physics.add.collider(box_create, this.movingPlat3);
+            this.physics.add.collider(box_create, this.movingPlat4);
+
+            boxes.add(box_create);
+
+            box_create.setCollideWorldBounds(true);
+
+            this.physics.add.collider(boxes, layer_platforms, this.boxOnFloor, null, this);
+            this.physics.add.collider(boxes, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(boxes, buttons, this.pressButtonsBox, null, this);
+            this.physics.add.collider(boxes, this.door);
+
+        }, this)
+
+        // Grosses boxes
+        layer_bigBox.objects.forEach(bigBox => {
+
+            const box_create = this.physics.add.sprite(bigBox.x + 32, bigBox.y, "bigBox").setDamping(true).setImmovable(true).setPipeline('Light2D');;
+
+            this.physics.add.collider(box_create, this.movingPlat1);
+            this.physics.add.collider(box_create, this.movingPlat2);
+            this.physics.add.collider(box_create, this.movingPlat3);
+            this.physics.add.collider(box_create, this.movingPlat4);
+
+            bigBoxes.add(box_create);
+
+            box_create.setCollideWorldBounds(true);
+
+            this.physics.add.collider(bigBoxes, layer_platforms, this.boxOnFloor, null, this);
+            this.physics.add.collider(bigBoxes, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(bigBoxes, buttons, this.pressButtonsBox, null, this);
+            this.physics.add.collider(bigBoxes, this.door);
+        }, this)
+
+        // création des poteaux sur lesquels on peut se grappiner
+        layer_stake.objects.forEach(stake => {
+            const stake_create = this.physics.add.sprite(stake.x + 32, stake.y, "stake").setSize(32, 128).setPipeline('Light2D');
+
+            this.physics.add.collider(stake_create, this.movingPlat1);
+            this.physics.add.collider(stake_create, this.movingPlat2);
+            this.physics.add.collider(stake_create, this.movingPlat3);
+            this.physics.add.collider(stake_create, this.movingPlat4);
+
+            stakes.add(stake_create);
+
+            stake_create.setCollideWorldBounds(true);
+
+            this.physics.add.collider(stakes, layer_platforms);
+        }, this)
+
+        // création des éléments destructibles (charge)
+        layer_break.objects.forEach(break_create => {
+            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128, 256).setPipeline('Light2D');
+        }, this)
+
+        // pics mortels
+        layer_pics.objects.forEach(pic => {
+            pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
+        })
+
+        // item de soin collectable
+        layer_cure.objects.forEach(cure => {
+            cures.create(cure.x + 32, cure.y, "cure").setDepth(-1);
+        })
+
+        // création des plateformes qu'on peut créer en tirant dessus avec le raven
+        layer_ravenPlat.objects.forEach(ravenPlat => {
+            ravenPlats.create(ravenPlat.x + 54, ravenPlat.y + 54, "ravenPlatOff").setSize(64, 64).setOffset(10, 8).setPipeline('Light2D');
+        }, this)
+
+        // plateformes destructibles si Hog dessus
+        layer_weakPlat.objects.forEach(plat => {
+            weakPlats.create(plat.x + 96, plat.y + 16, "weakPlat").setSize(192, 32).setPipeline('Light2D');
+        })
+
+        // plateformes destructibles si Frog wall jump dessus
+        layer_weakPlatVertical.objects.forEach(plat => {
+            weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192).setPipeline('Light2D');
+        })
+
+        return { spawnFrog, spawnHog, spawnRaven, nextLevel, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
     }
 
     loadVar(layers) {
@@ -45,6 +263,8 @@ class SceneClass extends Phaser.Scene {
         this.input.gamepad.once('connected', function (pad) {
             controller = pad;
         });
+
+        this.reachNewLevel = false;
 
         // Variables pour possession 
         this.playerKilled = false;
@@ -97,214 +317,45 @@ class SceneClass extends Phaser.Scene {
         // PLAYER ET MOB pour certains colliders
         this.playerGroup = this.physics.add.group();
         this.mobGroup = this.physics.add.group();
-    }
 
-    // load des CALQUES / OBJETS / SPAWNS MOBS dans une constante liée à chaque niveau 
-    loadMap(levelMap) {
+        this.nextLevel = this.physics.add.staticSprite(layers.nextLevel.x + 32, layers.nextLevel.y - 96).setVisible(false).setSize(64, 320);
 
-        this.physics.world.setBounds(0, 0, 3072, 1920); // légèrement plus haut (pour dead zone hors caméra)
+        this.mouseOverMob = false;
 
-        // CAMERA
-        this.cameras.main
-        .setBounds(0, 0, 3072, 1728) //format 16/9
-        .setSize(3072, 1728)
-        .setOrigin(0, 0)
-        .fadeIn(1500, 0, 0, 25); // fondu au noir
+        // PLUS DE CURSEUR
+        const canvas = this.sys.canvas;
+        canvas.style.cursor = "none";
 
-        //Enlever commentaire pour voir la deadZone
-        //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
+        // LUMIERES
+        // lumière ambiante
+        this.lights.enable().setAmbientColor(0xffffff);
 
-        // ARRIERE PLAN - BACKGROUND
-        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background")
-        .setOrigin(0, 0)
-        .setDepth(-3); // profondeur
+        this.lightMouse = this.lights.addLight(0, 0, 95, 0x00aaff, 10).setVisible(true);
 
-        // Tileset dans le TILED
-        const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
-
-        // Calques layers
-        const layer_platforms = levelMap.createLayer("layer_platforms", tileset).setDepth(1);
-        const layer_decos1 = levelMap.createLayer("layer_decos1", tileset).setDepth(2);
-        const layer_decos2 = levelMap.createLayer("layer_decos2", tileset).setDepth(3);
-        const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(false);
-        const layer_deadZone = levelMap.createLayer("layer_deadZone", tileset);
-
-        // Calques objets
-        const layer_spawnFrog = levelMap.getObjectLayer("SpawnFrog");
-        const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
-        const layer_spawnRaven = levelMap.getObjectLayer("SpawnRaven");
-
-        const layer_box = levelMap.getObjectLayer("Box");
-        const layer_bigBox = levelMap.getObjectLayer("BigBox");
-        const layer_stake = levelMap.getObjectLayer("Stake");
-
-        const layer_break = levelMap.getObjectLayer("Break");
-        const layer_pics = levelMap.getObjectLayer("Pics");
-
-        const layer_buttonBase = levelMap.getObjectLayer("ButtonBase");
-        const layer_button = levelMap.getObjectLayer("Button");
-        const layer_door = levelMap.getObjectLayer("Door");
-
-        const layer_cure = levelMap.getObjectLayer("Cure");
-
-        const layer_ravenPlat = levelMap.getObjectLayer("RavenPlatform");
-        const layer_weakPlat = levelMap.getObjectLayer("WeakPlat");
-        const layer_weakPlatVertical = levelMap.getObjectLayer("WeakPlatVertical");
-
-        const layer_movingPlats = levelMap.getObjectLayer("MovingPlats");
-
-        // ajout de collision sur plateformes
-        layer_platforms.setCollisionByProperty({ estSolide: true });
-        layer_limits.setCollisionByProperty({ estSolide: true });
-        layer_deadZone.setCollisionByProperty({ estSolide: true });
-
-        // SPAWNS - Mobs
-        const spawnFrog = layer_spawnFrog.objects[0];
-        const spawnHog = layer_spawnHog.objects[0];
-        const spawnRaven = layer_spawnRaven.objects[0];
-
-        // SPAWNS - Game objects
-        const spawnCure = layer_cure.objects[0];
-        const spawnDoor = layer_door.objects[0];
-        const spawnButton = layer_button.objects[0];
-        const spawnButtonBase = layer_buttonBase.objects[0];
-
-        // ELEMENTS DE DECORS
-        
-        // Boxes
-
-        const boxes = this.physics.add.group({
-            immovable: true,
-            damping: true
+        const emitter = this.add.particles("particule_cursor").setDepth(-1).createEmitter({
+            follow: this.lightMouse,
+            lifespan: 50,
+            alpha: 0.25,
+            frequency: 50,
+            quantity: 1,
+            blendMode: 'COLOR_BURN',
         });
 
-        const bigBoxes = this.physics.add.group({
-            immovable: true,
-            damping: true
-        });
+        this.input.on('pointermove', (pointer) => {
+            this.lightMouse.x = pointer.x;
+            this.lightMouse.y = pointer.y;
 
-        // Autres
+            const particle = emitter.emitParticle();
+        }, this);
 
-        const stakes = this.physics.add.group();
+        this.checkPoint = true;
 
-        const breaks = this.physics.add.staticGroup();
-        const pics = this.physics.add.staticGroup();
+        // lumière mouse over au-dessus des mobs possédables
+        //this.lightMouseOver = this.lights.addLight(300, 250, 200, 0x00aaff, 5);
 
-        const cures = this.physics.add.staticGroup();
+        //  this.ambiantLight = this.lights.addLight(0, 0, 100000, 0xffffff, 1)
 
-        // Plateformes spéciales
-
-        const ravenPlats = this.physics.add.staticGroup();
-        const weakPlats = this.physics.add.staticGroup();
-        const weakPlatsVertical = this.physics.add.staticGroup();
-
-        /*
-        // GROUP MIS DE COTE POUR L'INSTANT (non fonctionnel)
-        const movingPlats = this.physics.add.group({
-            immovable: true,
-            allowGravity: false,
-            velocityX : 100
-        });
-        
-        */
-
-        // CREATION DES ELEMENTS DE DECORS
-
-        // Systèmes boutons
-
-        const buttons = this.physics.add.sprite(spawnButton.x + 64, spawnButton.y - 24, "button").setImmovable(true);
-        buttons.body.setAllowGravity(false);
-
-        const buttonBases = this.physics.add.staticSprite(spawnButtonBase.x + 64, spawnButtonBase.y - 8, "buttonBase");
-
-        // Boxes normales        
-        layer_box.objects.forEach(box => {
-            //boxes.create(box.x + 32, box.y, "box").setDamping(true).setImmovable(true);
-            const box_create = this.physics.add.sprite(box.x + 32, box.y, "box").setDamping(true).setImmovable(true);
-
-            this.physics.add.collider(box_create, this.movingPlat1);
-            this.physics.add.collider(box_create, this.movingPlat2);
-            this.physics.add.collider(box_create, this.movingPlat3);
-            this.physics.add.collider(box_create, this.movingPlat4);
-
-            boxes.add(box_create);
-
-            box_create.setCollideWorldBounds(true);
-
-            this.physics.add.collider(boxes, layer_platforms, this.boxOnFloor, null, this);
-            this.physics.add.collider(boxes, buttonBases, this.climbButtonBase, null, this);
-            this.physics.add.collider(boxes, buttons, this.pressButtonsBox, null, this);
-            this.physics.add.collider(boxes, this.door);
-
-        }, this)
-
-        // Grosses boxes
-        layer_bigBox.objects.forEach(bigBox => {
-
-            const box_create = this.physics.add.sprite(bigBox.x + 32, bigBox.y, "bigBox").setDamping(true).setImmovable(true);
-
-            this.physics.add.collider(box_create, this.movingPlat1);
-            this.physics.add.collider(box_create, this.movingPlat2);
-            this.physics.add.collider(box_create, this.movingPlat3);
-            this.physics.add.collider(box_create, this.movingPlat4);
-
-            bigBoxes.add(box_create);
-
-            box_create.setCollideWorldBounds(true);
-
-            this.physics.add.collider(bigBoxes, layer_platforms, this.boxOnFloor, null, this);
-            this.physics.add.collider(bigBoxes, buttonBases, this.climbButtonBase, null, this);
-            this.physics.add.collider(bigBoxes, buttons, this.pressButtonsBox, null, this);
-            this.physics.add.collider(bigBoxes, this.door);
-        }, this)
-
-        // création des poteaux sur lesquels on peut se grappiner
-        layer_stake.objects.forEach(stake => {
-            const stake_create = this.physics.add.sprite(stake.x + 32, stake.y, "stake").setSize(32, 128);
-
-            this.physics.add.collider(stake_create, this.movingPlat1);
-            this.physics.add.collider(stake_create, this.movingPlat2);
-            this.physics.add.collider(stake_create, this.movingPlat3);
-            this.physics.add.collider(stake_create, this.movingPlat4);
-
-            stakes.add(stake_create);
-
-            stake_create.setCollideWorldBounds(true);
-
-            this.physics.add.collider(stakes, layer_platforms);
-        }, this)
-
-        // création des éléments destructibles (charge)
-        layer_break.objects.forEach(break_create => {
-            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128, 256);
-        }, this)
-
-        // pics mortels
-        layer_pics.objects.forEach(pic => {
-            pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
-        })
-
-        // item de soin collectable
-        layer_cure.objects.forEach(cure => {
-            cures.create(cure.x + 32, cure.y, "cure").setDepth(-1);
-        })
-
-        // création des plateformes qu'on peut créer en tirant dessus avec le raven
-        layer_ravenPlat.objects.forEach(ravenPlat => {
-            ravenPlats.create(ravenPlat.x + 54, ravenPlat.y + 54, "ravenPlatOff").setSize(64, 64).setOffset(10, 8);
-        }, this)
-
-        // plateformes destructibles si Hog dessus
-        layer_weakPlat.objects.forEach(plat => {
-            weakPlats.create(plat.x + 96, plat.y + 16, "weakPlat").setSize(192, 32);
-        })
-
-        // plateformes destructibles si Frog wall jump dessus
-        layer_weakPlatVertical.objects.forEach(plat => {
-            weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192);
-        })
-
-        return { spawnFrog, spawnHog, spawnRaven, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
+        //this.lightPlayer = this.lights.addLight(300, 250, 200, 0, 0.5);
     }
 
     // Appelée au chargement de chaque scène, et quand on switch de possession de mob 
@@ -312,28 +363,62 @@ class SceneClass extends Phaser.Scene {
 
         if (currentMob == "frog") {
             nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure)
-            .setSize(52, 64)
-            .setOffset(8, 0);
+                .setSize(52, 64)
+                .setOffset(8, 0);
         }
         else if (currentMob == "hog") {
             nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure)
-            .setSize(128, 96)
-            .setOffset(64, 32);
+                .setSize(128, 96)
+                .setOffset(64, 32);
         }
         else if (currentMob == "raven") {
             nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure)
-            .setSize(64, 96)
-            .setOffset(0, 32);
+                .setSize(64, 96)
+                .setOffset(0, 32);
         }
 
         this.mobGroup.add(nameMob);
 
         nameMob.setCollideWorldBounds(true);
 
+        /*const particuleMouseOver = this.add.particles('particule_test').setDepth(-1).createEmitter({
+            follow : nameMob, 
+            lifespan: 2000,
+            alpha: 0.2,
+            quantity: 1,
+            blendMode : 'ADD'
+        });*/
+
+        /*const lightMouseOver = this.lights.addLight( {
+            x : nameMob.x,
+            y : nameMob.y,
+            radius : 200,
+            rgb : 0x00aaff,
+            intensity : 10,
+            follow : nameMob,
+            visible : true,
+        });*/
+
+        //this.lightMouseOver.setFollow(nameMob);
+
         if (!isCorrupted) { // un mob corrompu ne peut pas être possédé
 
             nameMob
-                .setInteractive({ useHandCursor: true }) // on peut cliquer dessus
+                .setInteractive() // on peut cliquer dessus
+                .on('pointerover', () => {
+                    this.lightMouse.setColor(0x46f264)
+                        .setIntensity(25);
+
+                    this.mouseOverMob = true;
+                })
+
+                .on('pointerout', () => {
+                    this.lightMouse.setColor(0x00aaff)
+                        .setIntensity(10);
+
+                    this.mouseOverMob = false;
+                })
+
                 .on('pointerdown', function () {
 
                     nameMob.disableIA(); // désactive le update du mob pour éviter un crash
@@ -359,7 +444,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(nameMob, layers.layer_platforms, this.removePressButtons, null, this);
         this.physics.add.collider(nameMob, layers.layer_limits);
         this.physics.add.collider(nameMob, layers.layer_deadZone, this.kill, null, this);
-        
+
         // collision boxes
         this.physics.add.collider(nameMob, layers.boxes);
         this.physics.add.collider(nameMob, layers.bigBoxes);
@@ -399,23 +484,26 @@ class SceneClass extends Phaser.Scene {
 
         if (currentMob == "frog") {
             this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure)
-            .setSize(48, 64)
-            .setOffset(38, 32);
+                .setSize(48, 64)
+                .setOffset(38, 32);
         }
         else if (currentMob == "hog") {
             this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure)
-            .setSize(128, 96)
-            .setOffset(64, 32);
+                .setSize(128, 96)
+                .setOffset(64, 32);
         }
         else if (currentMob == "raven") {
             this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure)
-            .setSize(64, 96)
-            .setOffset(64, 64);
+                .setSize(64, 96)
+                .setOffset(64, 64);
         }
 
         this.playerGroup.add(this.player);
 
-        this.player.setCollideWorldBounds(true)
+        //this.lightPlayer  = this.lights.addLight(this.player.x, this.player.y, 200, 0x00aaff, 10);
+        //this.player.setPipeline('Light2D');
+
+        this.player.setCollideWorldBounds(true);
 
         // COLLIDERS ET OVERLAPS
 
@@ -451,7 +539,7 @@ class SceneClass extends Phaser.Scene {
         }
 
         // Plateformes
-        
+
         this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
         this.physics.add.collider(this.player, layers.weakPlatsVertical, this.destroyVerticalPlat, null, this);
 
@@ -459,6 +547,8 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player, this.movingPlat2);
         this.physics.add.collider(this.player, this.movingPlat3);
         this.physics.add.collider(this.player, this.movingPlat4);
+
+        this.physics.add.overlap(this.player, this.nextLevel, this.startNextLevel, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -557,7 +647,7 @@ class SceneClass extends Phaser.Scene {
             }
         }
     }
-    
+
     removePressButtons(mob) { // si on quitte le bouton
         if (mob.currentMob == "hog") {
             mob.isPressingButton = false;
@@ -586,7 +676,7 @@ class SceneClass extends Phaser.Scene {
             }
         }
     }
-    
+
     manageDoor(layers) { // door qui s'ouvre ou non en fonction de buttonOn
         if (this.buttonOn) {
             this.door.disableBody(true, true);
@@ -601,7 +691,7 @@ class SceneClass extends Phaser.Scene {
     }
 
     // METHODES DE MORT ET DE RESPAWN
-    
+
     kill(victim) { // tue les mobs et les players
         victim.destroy();
 
@@ -653,7 +743,7 @@ class SceneClass extends Phaser.Scene {
             player.haveCure = true;
         }
     }
-    
+
     dropCure() { // dépose l'item de soin
         if (this.player.haveCure && this.player.onGround && Phaser.Input.Keyboard.JustDown(this.player.keyE)) {
 
@@ -856,6 +946,89 @@ class SceneClass extends Phaser.Scene {
     // détruit un projectile si collision
     cleanProj(projectile) {
         projectile.destroy();
+    }
+
+    // PASSAGE DE NIVEAU ---
+
+    updateManager() {
+        if (this.switchRavenPlatOn) {
+            this.ravenPlatOn.enableBody();
+        }
+
+        this.manageDoor(this.layers);
+
+        /*this.lightPlayer.x = this.player.x;
+        this.lightPlayer.y = this.player.y;*/
+
+        if (this.lightMouse.intensity > this.lightIntensity) {
+            this.lightMouse.intensity -= 0.1
+        }
+
+        else if (this.lightMouse.intensity < this.lightIntensity) {
+            this.lightMouse.intensity += 0.1
+        }
+
+        if (this.checkPoint) {
+
+            if (!this.mouseOverMob) {
+                this.lightIntensity = Phaser.Math.Between(8, 12);
+            }
+
+            if (this.mouseOverMob) {
+                this.lightIntensity = Phaser.Math.Between(25, 28);
+            }
+
+            this.checkPoint = false;
+
+            this.time.delayedCall(300, () => {
+                this.checkPoint = true;
+            });
+        }
+    }
+
+    startNextLevel(player, detectionZone) {
+
+        if (!this.reachNewLevel) {
+
+            this.cameras.main
+                .fadeOut(1500, 0, 0, 25) // fondu au noir
+
+            this.player.inputsMoveLocked = true;
+            this.reachNewLevel = true;
+            this.player.canJump = false;
+            this.player.setCollideWorldBounds(false);
+
+            this.time.delayedCall(1500, () => {
+
+                if (this.mapName == "map_01") {
+                    this.scene.start("Level_02", {
+                        mapName: "map_02", // nom de la map
+                        mapTileset: "tileset", // nom du tileset sur TILED
+                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                    });
+                }
+
+                if (this.mapName == "map_02") {
+                    this.scene.start("Level_03", {
+                        mapName: "map_03", // nom de la map
+                        mapTileset: "tileset", // nom du tileset sur TILED
+                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                    });
+                }
+
+                if (this.mapName == "map_03") {
+                    this.scene.start("Level_04", {
+                        mapName: "map_04", // nom de la map
+                        mapTileset: "tileset", // nom du tileset sur TILED
+                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                    });
+                }
+            });
+
+        }
+
+
+
     }
 }
 

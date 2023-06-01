@@ -323,8 +323,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.blockedLeft = this.body.blocked.left; // verifie si le joueur est contre une paroi gauche
         this.blockedRight = this.body.blocked.right; // verifie si le joueur est contre une paroi droite
 
+
+        // SI DEUX INPUTS PRESSES => IMMOBILE
+        if ((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && (this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la droite pressée
+            console.log("CHECK")
+            this.speedMoveX = 0;
+        }
+
         // DEPLACEMENT A GAUCHE <=
-        if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la gauche pressée
+        else if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la gauche pressée
 
             this.facing = 'left'; // rotation
 
@@ -338,7 +345,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         // DEPLACEMENT A DROITE =>
-        else if ((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked) { // si touche vers la droite pressée
+        else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked) || this.scene.reachNewLevel) { // si touche vers la droite pressée
 
             this.facing = 'right'; // rotation
 
@@ -354,7 +361,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // frottement au sol
         if (this.cursors.left.isUp && this.cursors.right.isUp && this.keyQ.isUp && this.keyD.isUp && /*!this.controller.left
-            && !this.controller.right &&*/ (this.onGround || this.body.velocity.y == 0) && this.speedPlayer != 0) { // si aucune touche de déplacement pressée + bloqué au sol + pas de saut + pas déjà immobile
+            && !this.controller.right &&*/ (this.onGround || this.body.velocity.y == 0) && this.speedPlayer != 0 && !this.scene.reachNewLevel) { // si aucune touche de déplacement pressée + bloqué au sol + pas de saut + pas déjà immobile
 
             //this.setDragX(0.0001); // pas fonctionnel encore
 

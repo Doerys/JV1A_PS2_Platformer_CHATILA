@@ -15,6 +15,7 @@ class TestScene extends SceneClass {
     };
 
     create() {
+
         this.activePossession = false;
 
         // plateforme qui bouge
@@ -62,11 +63,7 @@ class TestScene extends SceneClass {
     }
 
     update() {
-        if (this.switchRavenPlatOn) {
-            this.ravenPlatOn.enableBody();
-        }
-
-        this.manageDoor(this.layers);
+        this.updateManager()
     }
 }
 

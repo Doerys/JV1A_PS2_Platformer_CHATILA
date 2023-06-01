@@ -52,6 +52,8 @@ class PlayerFrog extends Player {
 
         if (this.isPossessed) {
 
+            console.log(this.inputsMoveLocked);
+
             // gestion des animations
             this.animManager();
 

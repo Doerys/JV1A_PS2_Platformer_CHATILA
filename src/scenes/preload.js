@@ -21,6 +21,10 @@ class Preload extends Phaser.Scene {
 
         this.load.image('background', 'assets/background.png');
 
+        this.load.image("particule_test", "assets/particule_test.png");
+
+        this.load.image("particule_cursor", "assets/particule_cursor.png");
+
         // Box
         this.load.image('box', 'assets/caisse.png');    
         this.load.image('bigBox', 'assets/bigBox.png')
@@ -226,9 +230,9 @@ class Preload extends Phaser.Scene {
             
             // POUR LE JEU :
 
-            /*mapName: "map_02", // nom de la map
-            mapTileset: "tileset", // nom du tileset sur TILED
-            mapTilesetImage: "tileset_image", // nom du fichier image du tileset*/
+            //mapName: "map_01", // nom de la map
+            //mapTileset: "tileset", // nom du tileset sur TILED
+            //mapTilesetImage: "tileset_image", // nom du fichier image du tileset
         });
     }
 

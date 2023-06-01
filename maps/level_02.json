@@ -221,8 +221,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1152,
-                 "y":192
+                 "x":0,
+                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -337,30 +337,6 @@
                  "width":64,
                  "x":1984,
                  "y":384
-                }, 
-                {
-                 "class":"",
-                 "gid":86,
-                 "height":64,
-                 "id":54,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":576,
-                 "y":192
-                }, 
-                {
-                 "class":"",
-                 "gid":86,
-                 "height":64,
-                 "id":55,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":896,
-                 "y":704
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -436,6 +412,17 @@
         }, 
         {
          "draworder":"topdown",
+         "id":23,
+         "name":"WeakPlatVertical",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":19,
          "name":"MovingPlats",
          "objects":[
@@ -480,17 +467,97 @@
         }, 
         {
          "draworder":"topdown",
+         "id":24,
+         "name":"Door",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":60,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":1280,
+                 "y":1920
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":25,
+         "name":"Button",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":58,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":1088,
+                 "y":1856
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":26,
+         "name":"ButtonBase",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":59,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":1152,
+                 "y":1856
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":15,
          "name":"NextLevel",
-         "objects":[],
+         "objects":[
+                {
+                 "class":"",
+                 "height":64,
+                 "id":63,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":3008,
+                 "y":1216
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
          "x":0,
          "y":0
         }],
- "nextlayerid":23,
- "nextobjectid":56,
+ "nextlayerid":27,
+ "nextobjectid":65,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

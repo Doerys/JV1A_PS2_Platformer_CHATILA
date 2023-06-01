@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_01.tmx",
+    "activeFile": "test/testScene.tmx",
     "expandedProjectPaths": [
-        "test",
-        "."
+        ".",
+        "test"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -35,15 +35,18 @@
             ],
             "expandedObjectLayers": [
                 6,
-                10,
+                22,
+                23,
+                21,
+                15,
                 12,
-                15
+                10
             ],
-            "scale": 0.33,
+            "scale": 0.5,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1531.8181818181818,
-                "y": 959.0909090909092
+                "x": 614,
+                "y": 1522
             }
         },
         "level_01.tmx#tileset": {
@@ -51,22 +54,22 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                7,
                 6,
-                9,
-                11,
-                10,
-                13,
-                12,
-                16,
+                7,
+                18,
                 19,
-                18
+                16,
+                12,
+                13,
+                10,
+                11,
+                9
             ],
             "scale": 0.5,
             "selectedLayer": 16,
             "viewCenter": {
-                "x": 1535,
-                "y": 959
+                "x": 1522,
+                "y": 946
             }
         },
         "level_02.tmx#tileset": {
@@ -75,16 +78,16 @@
         "level_03.tmx": {
             "expandedObjectLayers": [
                 20,
-                10,
-                17,
+                18,
                 16,
-                18
+                17,
+                10
             ],
             "scale": 0.25,
-            "selectedLayer": 16,
+            "selectedLayer": 20,
             "viewCenter": {
-                "x": 1534,
-                "y": 962
+                "x": 1508,
+                "y": 932
             }
         },
         "level_03.tmx#tileset": {
@@ -92,18 +95,18 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
-                9,
-                8,
-                11,
-                10,
+                19,
                 16,
-                19
+                10,
+                11,
+                8,
+                9
             ],
             "scale": 0.25,
-            "selectedLayer": 14,
+            "selectedLayer": 19,
             "viewCenter": {
-                "x": 1534,
-                "y": 962
+                "x": 1508,
+                "y": 932
             }
         },
         "level_04.tmx#tileset": {
@@ -112,17 +115,17 @@
         "test/testScene.tmx": {
             "expandedObjectLayers": [
                 4,
-                14,
-                17,
-                16,
+                5,
                 2,
-                5
+                16,
+                14,
+                17
             ],
-            "scale": 0.33,
-            "selectedLayer": 1,
+            "scale": 0.5,
+            "selectedLayer": 17,
             "viewCenter": {
-                "x": 1534.848484848485,
-                "y": 962.121212121212
+                "x": 1522,
+                "y": 946
             }
         },
         "test/testScene.tmx#placeholder_test": {
@@ -148,10 +151,10 @@
     "property.type": "bool",
     "recentFiles": [
         "test/testScene.tmx",
-        "level_04.tmx",
-        "level_03.tmx",
-        "level_02.tmx",
         "level_01.tmx",
+        "level_02.tmx",
+        "level_03.tmx",
+        "level_04.tmx",
         "level_01 - Copie.tmx"
     ],
     "tileset.embedInMap": true,

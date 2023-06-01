@@ -18,13 +18,22 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
     
         if(shooter.facing == "right"){
             this.x = shooter.x + 15; 
-            this.setVelocityX(this.speed); 
+            this.setVelocityX(this.speed);
             this.body.setAllowGravity(false);
+
+            setTimeout(() => {
+                this.body.setAllowGravity(true);
+            }, 250);
+
         }else if(shooter.facing == "left"){
             this.x = shooter.x - 15;
             this.setFlipX(true); 
             this.setVelocityX(-this.speed);
             this.body.setAllowGravity(false);
+
+            setTimeout(() => {
+                this.body.setAllowGravity(true);
+            }, 250);
         }
 
     }

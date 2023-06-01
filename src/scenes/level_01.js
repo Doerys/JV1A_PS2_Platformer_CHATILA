@@ -17,8 +17,23 @@ class Level_01 extends SceneClass {
     create() {
         this.activePossession = false;
 
-        this.loadVar();
-        
+        // plateforme qui bouge
+
+        this.movingPlat1 = this.physics.add.image(2752, 512, 'movingPlat')
+            .setImmovable(true)
+            .setVelocity(100, 0);
+
+        this.movingPlat1.body.setAllowGravity(false);
+
+        this.tweens.timeline({
+            targets: this.movingPlat1.body.velocity,
+            loop: -1,
+            tweens: [
+                { x: -90, y: 0, duration: 1500, ease: 'Stepped' },
+                { x: +90, y: 0, duration: 1500, ease: 'Stepped' },
+            ]
+        });
+
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
 
@@ -27,24 +42,9 @@ class Level_01 extends SceneClass {
 
         this.layers = layers;
 
-        // plateforme qui bouge
+        this.loadVar(layers);
 
-        this.movingPlat1 = this.physics.add.image(2752, 512, 'movingPlat')
-            .setImmovable(true)
-            .setVelocity(100, 0);
-
-        this.movingPlat1.body.setAllowGravity(false);
-            
-        this.tweens.timeline({
-            targets: this.movingPlat1.body.velocity,
-            loop: -1,
-            tweens: [
-            { x:    -90, y: 0, duration: 1500, ease: 'Stepped' },
-            { x:    +90, y: 0, duration: 1500, ease: 'Stepped' },
-            ]
-        });
-
-        this.player = new Player (this, 0, 0, "right", "frog").disableBody(true,true);
+        this.player = new Player(this, 0, 0, "right", "frog").disableBody(true, true);
 
         this.playerGroup.add(this.player);
 
@@ -59,10 +59,8 @@ class Level_01 extends SceneClass {
         //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
     }
 
-    update() { 
-        if(this.switchRavenPlatOn){
-            this.ravenPlatOn.enableBody();
-        }
+    update() {
+        this.updateManager()
     }
 }
 

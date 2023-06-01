@@ -17,42 +17,6 @@ class Level_02 extends SceneClass {
     create() {
         this.activePossession = true;
 
-        this.loadVar();
-
-        // load de la map
-        const levelMap = this.add.tilemap(this.mapName);
-
-        // chargement des calques
-        const layers = this.loadMap(levelMap);
-
-        this.layers = layers;
-
-        // plateforme qui bouge
-
-        /*layers.layer_movingPlats.objects.forEach(movingPlat => {
-            let movingPlat1 = null;
-            let movingPlat2 = null;
-            let movingPlat3 = null;
-            let movingPlat4 = null;
-
-            if (movingPlat.type == "1") {
-                movingPlat1 = this.physics.add.image(movingPlat.x, movingPlat.y, 'movingPlat')
-                    .setImmovable(true)
-                    .setVelocity(100, 0);
-
-                movingPlat1.body.setAllowGravity(false);
-
-                tweens.timeline({
-                    targets: movingPlat1.body.velocity,
-                    loop: -1,
-                    tweens: [
-                        { x: -150, y: 0, duration: 3400, ease: 'Stepped' },
-                        { x: +150, y: 0, duration: 3400, ease: 'Stepped' },
-                    ]
-                });
-            }
-        }, this)*/
-
         this.movingPlat1 = this.physics.add.image(1024, 513, 'movingPlat')
         //.setImmovable(true)
         //.setVelocity(100, 0);
@@ -85,9 +49,7 @@ class Level_02 extends SceneClass {
             ]
         });
 
-        this.movingPlats.add(this.movingPlat2);
-
-
+        //this.movingPlats.add(this.movingPlat2);
 
         this.movingPlat3 = this.physics.add.image(1984, 384, 'movingPlat')
             .setImmovable(true)
@@ -105,20 +67,17 @@ class Level_02 extends SceneClass {
             ]
         });*/
 
-        /*this.physics.add.collider(layers.boxes, this.movingPlat1, this.slowBox, null, this);
-        this.physics.add.collider(layers.boxes, this.movingPlat2, this.slowBox, null, this);
-        this.physics.add.collider(layers.boxes, this.movingPlat3, this.slowBox, null, this);
+        // load de la map
+        const levelMap = this.add.tilemap(this.mapName);
 
-        this.physics.add.collider(layers.bigBoxes, this.movingPlat1, this.slowBox, null, this);
-        this.physics.add.collider(layers.bigBoxes, this.movingPlat2, this.slowBox, null, this);
-        this.physics.add.collider(layers.bigBoxes, this.movingPlat3, this.slowBox, null, this);
+        // chargement des calques
+        const layers = this.loadMap(levelMap);
 
-        this.physics.add.collider(layers.stakes, this.movingPlat1);
-        this.physics.add.collider(layers.stakes, this.movingPlat2);
-        this.physics.add.collider(layers.stakes, this.movingPlat3);*/
+        this.layers = layers;
+
+        this.loadVar(layers);
 
         this.createPlayer(layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", 'frog', false);
-
 
         // CREATION DE MOBS
 
@@ -133,9 +92,7 @@ class Level_02 extends SceneClass {
     }
 
     update() {
-        if (this.switchRavenPlatOn) {
-            this.ravenPlatOn.enableBody();
-        }
+        this.updateManager()
     }
 }
 

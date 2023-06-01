@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="21" nextobjectid="65">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="22" nextobjectid="66">
  <editorsettings>
   <export target="testScene.json" format="json"/>
  </editorsettings>
@@ -689,7 +689,7 @@
   <object id="64" gid="86" x="704" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="9" name="SpawnRaven">
-  <object id="46" gid="58" x="512" y="384" width="64" height="64"/>
+  <object id="46" gid="58" x="832" y="1024" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="8" name="SpawnHog">
   <object id="58" gid="57" x="1344" y="640" width="64" height="64"/>
@@ -722,5 +722,8 @@
  </objectgroup>
  <objectgroup id="19" name="Button">
   <object id="44" gid="127" x="384" y="1600" width="128" height="64"/>
+ </objectgroup>
+ <objectgroup id="21" name="NextLevel">
+  <object id="65" x="2688" y="1600" width="64" height="64"/>
  </objectgroup>
 </map>
