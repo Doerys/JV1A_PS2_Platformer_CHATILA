@@ -32,6 +32,8 @@ class MobFrog extends Mob {
     update(time, delta) {
 
         if (!this.isPossessed) {
+
+            this.animMobManager();
             
             this.patrolMob();
 

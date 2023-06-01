@@ -33,13 +33,15 @@ class MobHog extends Mob {
         // check que le mob n'est pas possédé
         if (!this.isPossessed) {
 
+            this.animMobManager();
+
             //console.log("MOB HOG PRESSING BUTTON :" + this.isPressingButton);
 
-            if (!this.isPressingButton){
+            if (!this.isPressingButton) {
                 this.patrolMob();
             }
             else if (!this.playerSpotted) {
-                this.setVelocityX(0,0);
+                this.setVelocityX(0, 0);
             }
 
             if (this.scene.activePossession) {
@@ -47,7 +49,11 @@ class MobHog extends Mob {
                 // si le joueur possède un mob, détection du joueur
                 this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
 
-                if (this.playerSpotted && this.canCharge) {
+                if (this.playerSpotted) {
+                    this.isCharging = true;
+                }
+
+                if (this.isCharging) {
                     if (this.facing == 'right') {
                         this.setVelocityX(this.mobSpeedMoveX) // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
 
@@ -55,6 +61,7 @@ class MobHog extends Mob {
                             this.mobSpeedMoveX += this.mobAccelerationX;
                         }
                         else {
+                            //console.log("CHECK CHARGE MOB HOG")
                             this.mobSpeedMoveX = this.mobSpeedXMax * 3; // sinon, vitesse = vitesse max
                         }
                     }
@@ -70,9 +77,8 @@ class MobHog extends Mob {
                         }
                     }
 
-                    this.isCharging = true;
-
                     if (this.body.blocked.left || this.body.blocked.right) {
+                        console.log("IS BLOCKED")
                         this.stopCharge();
                     }
                 }
@@ -81,13 +87,17 @@ class MobHog extends Mob {
     }
 
     stopCharge() {
+        console.log("STOP CHARGE")
         this.setVelocityX(0);
         this.canCharge = false;
         this.isCharging = false;
+        this.canMove = false;
+        this.animCharge = true;
 
         setTimeout(() => {
             this.canCharge = true;
-        }, 500);
+            this.canMove = true;
+        }, 700);
     }
 }
 

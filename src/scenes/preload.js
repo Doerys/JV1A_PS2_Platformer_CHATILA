@@ -139,7 +139,7 @@ class Preload extends Phaser.Scene {
         this.anims.create({
             key: 'player_hog_jump',
             frames: this.anims.generateFrameNumbers('hogAnim1', {start:1,end:19}),
-            frameRate: 50,
+            frameRate: 130,
             repeat : 0
         });
 
@@ -153,11 +153,10 @@ class Preload extends Phaser.Scene {
         this.anims.create({
             key: 'player_hog_reception',
             frames: this.anims.generateFrameNumbers('hogAnim1', {start:30,end:39}),
-            frameRate: 55,
+            frameRate: 75,
             repeat : 0
         });
 
-        
         this.anims.create({
             key: 'player_hog_hit',
             frames: this.anims.generateFrameNumbers('hogAnim1', {start:40,end:58}),

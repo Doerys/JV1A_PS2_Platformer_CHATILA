@@ -689,13 +689,13 @@
   <object id="64" gid="86" x="704" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="9" name="SpawnRaven">
-  <object id="46" gid="58" x="832" y="1024" width="64" height="64"/>
+  <object id="46" gid="58" x="1472" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="8" name="SpawnHog">
-  <object id="58" gid="57" x="1600" y="640" width="64" height="64"/>
+  <object id="58" gid="57" x="1856" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="2" name="SpawnFrog">
-  <object id="50" gid="56" x="2624" y="576" width="64" height="64"/>
+  <object id="50" gid="56" x="1408" y="704" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="6" name="RavenPlatform">
   <object id="11" x="1408" y="1024" width="64" height="64"/>

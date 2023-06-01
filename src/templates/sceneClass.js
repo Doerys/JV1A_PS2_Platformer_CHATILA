@@ -345,7 +345,7 @@ class SceneClass extends Phaser.Scene {
             this.lightMouse.x = pointer.x;
             this.lightMouse.y = pointer.y;
 
-            const particle = emitter.emitParticle();
+            emitter.emitParticle();
         }, this);
 
         this.checkPoint = true;
@@ -363,18 +363,18 @@ class SceneClass extends Phaser.Scene {
 
         if (currentMob == "frog") {
             nameMob = new MobFrog(this, x, y, facing, currentMob, isCorrupted, haveCure)
-                .setSize(52, 64)
-                .setOffset(8, 0);
+                .setSize(48, 64)
+                .setOffset(38, 32);
         }
         else if (currentMob == "hog") {
             nameMob = new MobHog(this, x, y, facing, currentMob, isCorrupted, haveCure)
                 .setSize(128, 96)
-                .setOffset(64, 32);
+                .setOffset(64, 64);
         }
         else if (currentMob == "raven") {
             nameMob = new MobRaven(this, x, y, facing, currentMob, isCorrupted, haveCure)
                 .setSize(64, 96)
-                .setOffset(0, 32);
+                .setOffset(64, 64);
         }
 
         this.mobGroup.add(nameMob);
@@ -504,6 +504,18 @@ class SceneClass extends Phaser.Scene {
         //this.player.setPipeline('Light2D');
 
         this.player.setCollideWorldBounds(true);
+
+        this.emitterPlayer = this.add.particles("particule_cursor").setDepth(-1).createEmitter({
+            //follow: this.player,
+            //followOffset : x: 32, y: 0,
+            lifespan: 500,
+            alpha: 0.10,
+            frequency: 1,
+            quantity: 1,
+            blendMode: 'COLOR_BURN',
+        });
+
+        console.log(this.emitterPlayer);
 
         // COLLIDERS ET OVERLAPS
 
@@ -899,13 +911,14 @@ class SceneClass extends Phaser.Scene {
     destroyIfCharge(player, breaks) {
         if (player.isCharging && (player.body.touching.left || player.body.touching.right)) {
             breaks.destroy(breaks.x, breaks.y);
-            this.player.stopCharge()
+            player.stopCharge()
         }
     }
 
     checkCharge(hog, target) {
         if (hog.isCharging) {
             this.kill(target);
+            hog.stopCharge();
         }
     }
 
@@ -983,6 +996,10 @@ class SceneClass extends Phaser.Scene {
             this.time.delayedCall(300, () => {
                 this.checkPoint = true;
             });
+        }
+
+        if (this.activePossession && this.player.body.velocity.x != 0 && this.player.body.velocity.y != 0) {
+            this.emitterPlayer.emitParticle();
         }
     }
 

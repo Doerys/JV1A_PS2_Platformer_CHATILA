@@ -42,7 +42,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.jumpAnim = false;
         this.justFall = false;
-        this.animHit = false;
+        this.animCharge = false;
 
         // VARIABLES FROG
 
@@ -133,7 +133,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.currentMob == "frog") {
 
             // AU SOL
-            if (this.onGround) {
+            if (this.body.blocked.down) {
 
                 // RECEPTION
                 if (this.justFall) {
@@ -192,35 +192,33 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.currentMob == "hog") {
 
             // charge
-            
+
 
             // AU SOL
-            if (this.onGround && !this.animHit) {
+            if (this.body.blocked.down) {
 
-                if (this.blockedLeft || this.blockedRight && this.isCharging && !this.animHit) {
-                    console.log("CHECK");
-    
+                if (this.animCharge) {
+
                     this.anims.play("player_hog_hit", true);
-                    this.animHit = true;
-    
+
                     setTimeout(() => {
-                        this.animHit = false;
-                    }, 150);
+                        this.animCharge = false;
+                    }, 700);
                 }
 
                 // RECEPTION
-                else if (this.justFall) {
+                else if (this.justFall && !this.isCharging) {
                     this.anims.play("player_hog_reception", true);
                 }
 
                 // IDLE
 
-                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
+                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall && !this.isCharging && !this.blockedLeft && !this.blockedRight && !this.animCharge) { // condition pour idle
                     this.play('player_hog_right', true);
                 }
 
                 // WALK
-                else if (this.body.velocity.x != 0 && this.body.velocity.y == 0 && !this.justFall && !this.isCharging) {
+                else if (this.body.velocity.x != 0 && this.body.velocity.y == 0 && !this.justFall && !this.isCharging && !this.blockedLeft) {
                     this.anims.play("player_hog_walk", true);
                 }
 
@@ -231,7 +229,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 setTimeout(() => {
                     this.justFall = false
-                }, 150);
+                }, 100);
 
                 this.jumpAnim = false;
                 this.fallAnim = false;
@@ -255,24 +253,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // ANIMATIONS RAVEN
         if (this.currentMob == "raven") {
 
-            if (this.onGround) {
+            if (this.body.blocked.down) {
 
                 // si on se réceptionne durant l'anim de planer
                 if (this.justFall && this.planeAnim) {
-                    console.log("CHUTE PLANE") //=> GOOD
+                    //console.log("CHUTE PLANE") //=> GOOD
 
                     this.anims.play("player_raven_planeToReception", true);
                 }
 
                 // si on se réceptionne durant l'anim de chute
                 else if (this.justFall && this.fallAnim) {
-                    console.log("CHUTE RECEPTION") //=> GOOD
+                    //console.log("CHUTE RECEPTION") //=> GOOD
 
                     this.anims.play("player_raven_fallToReception", true);
                 }
 
                 else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
-                    console.log("IDLE")
+                    //console.log("IDLE")
                     this.play('player_raven_right', true);
                 }
 
@@ -306,7 +304,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                     // passage de fall à plane
                     if (this.fallAnim) {
-                        console.log("FALL TO PLANE") //=> GOOD
+                        //console.log("FALL TO PLANE") //=> GOOD
                         this.anims.play("player_raven_fallToPlane", true);
                     }
 
@@ -349,7 +347,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.body.velocity.y < 0) {
                 if (!this.jumpAnim) {
 
-                    if (this.onGround) {
+                    if (this.body.blocked.downd) {
                         //console.log("GROUND TO JUMP"); //=> GOOD
 
                         this.anims.play("player_raven_groundToJump", true);
@@ -397,7 +395,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // SI DEUX INPUTS PRESSES => IMMOBILE
         if ((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && (this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la droite pressée
-            console.log("CHECK")
             this.speedMoveX = 0;
         }
 

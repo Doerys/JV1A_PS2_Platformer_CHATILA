@@ -78,12 +78,13 @@ class PlayerHog extends Player {
         this.isCharging = false;
         this.canJump = false;
         this.canCharge = false;
+        this.animCharge = true;
 
         setTimeout(() => {
             this.canCharge = true;
             this.inputsMoveLocked = false;
             this.canJump = true;
-        }, 500);
+        }, 700);
     }
 }
 
