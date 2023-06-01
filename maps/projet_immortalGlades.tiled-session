@@ -71,8 +71,8 @@
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1533.3333333333335,
-                "y": 962.121212121212
+                "x": 2809.090909090909,
+                "y": 487.8787878787879
             }
         },
         "level_02.tmx#placeholder_test": {
@@ -130,14 +130,15 @@
                 5,
                 20,
                 21,
+                8,
                 9,
                 14
             ],
-            "scale": 0.33,
+            "scale": 0.25,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 1533.3333333333335,
-                "y": 962.121212121212
+                "x": -128,
+                "y": 1980
             }
         },
         "test/testScene.tmx#placeholder_test": {

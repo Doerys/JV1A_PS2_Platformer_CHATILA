@@ -174,13 +174,14 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat3);
             this.physics.add.collider(box_create, this.movingPlat4);
 
+            this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
+
             boxes.add(box_create);
 
             box_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(boxes, layer_platforms, this.boxOnFloor, null, this);
-            this.physics.add.collider(boxes, buttonBases, this.climbButtonBase, null, this);
-            this.physics.add.collider(boxes, buttons, this.pressButtonsBox, null, this);
             this.physics.add.collider(boxes, this.door);
 
         }, this)
@@ -194,14 +195,14 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat2);
             this.physics.add.collider(box_create, this.movingPlat3);
             this.physics.add.collider(box_create, this.movingPlat4);
+            this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
 
             bigBoxes.add(box_create);
 
             box_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(bigBoxes, layer_platforms, this.boxOnFloor, null, this);
-            this.physics.add.collider(bigBoxes, buttonBases, this.climbButtonBase, null, this);
-            this.physics.add.collider(bigBoxes, buttons, this.pressButtonsBox, null, this);
             this.physics.add.collider(bigBoxes, this.door);
         }, this)
 
@@ -613,9 +614,11 @@ class SceneClass extends Phaser.Scene {
     // Boîte qui presse un bouton
     pressButtonsBox(box, button) {
         if (box.body.blocked.left || box.body.blocked.right) {
+            box.setImmovable(false);
             box.y -= 8;
         }
         if (!box.body.blocked.left && !box.body.blocked.right && !this.mobPressingButton) {
+            console.log("BOUTON PRESSE")
             this.buttonOn = true;
             this.boxPressingButton = true;
         }
@@ -679,6 +682,7 @@ class SceneClass extends Phaser.Scene {
             this.mobPressingButton = false;
 
             if (!this.boxPressingButton) {
+                console.log("BOUTON ENLEVE");
                 this.buttonOn = false;
             }
         }
@@ -887,7 +891,7 @@ class SceneClass extends Phaser.Scene {
 
         if (this.attrack) {
             if (this.player.facing == 'right') {
-                if (this.player.x + 64 < box.x) {
+                if (this.player.x + 144 < box.x) {
                     box.body.setAllowGravity(false);
                     box.x -= 6
                     this.time.delayedCall(15, () => {
@@ -902,7 +906,7 @@ class SceneClass extends Phaser.Scene {
                 }
             }
             else if (this.player.facing == 'left') {
-                if (this.player.x - 64 > box.x) {
+                if (this.player.x - 16 > box.x) {
                     box.body.setAllowGravity(false);
                     box.x += 6
                     this.time.delayedCall(15, () => {
@@ -954,6 +958,10 @@ class SceneClass extends Phaser.Scene {
             if ((player.body.blocked.right || player.body.blocked.left) && player.currentMob == "hog" && !player.isCharging) {
                 box.setImmovable(false);
                 box.body.setAllowGravity(true);
+            }
+            else if (player.currentMob != "hog") {
+                box.setImmovable(true);
+                box.body.velocity.x = 0;
             }
         }
     }
