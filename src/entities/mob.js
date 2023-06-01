@@ -337,7 +337,9 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         const distanceY = this.scene.checkDistance(y2 + 64, y1 + 64);
 
-        if (distanceX < 300 && distanceY < 128 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
+        console.log(distanceY);
+
+        if (distanceX < 250 && distanceY < 96 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
             this.playerSpotted = true;
 
             // on pivote le mob vers le joueur

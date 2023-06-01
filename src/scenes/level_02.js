@@ -47,7 +47,7 @@ class Level_02 extends SceneClass {
             ]
         });
 
-        this.movingPlat3 = this.physics.add.image(1984, 416, 'movingPlat')
+        this.movingPlat3 = this.physics.add.image(2272, 416, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0)
 

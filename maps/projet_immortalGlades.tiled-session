@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_01.tmx",
+    "activeFile": "level_02.tmx",
     "expandedProjectPaths": [
-        "test",
-        "."
+        ".",
+        "test"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -35,16 +35,16 @@
                 5
             ],
             "expandedObjectLayers": [
-                12,
-                10,
                 6,
-                15
+                10,
+                15,
+                12
             ],
             "scale": 0.25,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 2054,
-                "y": 984
+                "x": 1536,
+                "y": 958
             }
         },
         "level_01.tmx#tileset": {
@@ -52,26 +52,27 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                13,
-                12,
+                18,
+                19,
+                16,
+                6,
+                7,
+                23,
+                10,
                 11,
                 26,
-                10,
-                25,
                 9,
                 24,
-                7,
-                6,
-                19,
-                18,
-                16,
-                15
+                25,
+                15,
+                12,
+                13
             ],
-            "scale": 1,
-            "selectedLayer": 11,
+            "scale": 0.33,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 2148,
-                "y": 555
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "level_02.tmx#placeholder_test": {
@@ -82,18 +83,18 @@
         },
         "level_03.tmx": {
             "expandedObjectLayers": [
-                10,
-                20,
                 18,
-                17,
                 16,
+                17,
+                20,
+                10,
                 15
             ],
             "scale": 0.25,
-            "selectedLayer": 21,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 732,
-                "y": 1700
+                "x": 1536,
+                "y": 962
             }
         },
         "level_03.tmx#tileset": {
@@ -101,19 +102,19 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
+                19,
+                16,
+                10,
                 11,
                 26,
-                10,
-                9,
                 8,
-                19,
-                16
+                9
             ],
             "scale": 0.33,
-            "selectedLayer": 20,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 2506.060606060606,
-                "y": 1124.242424242424
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "level_04.tmx#tileset": {
@@ -121,22 +122,22 @@
         },
         "test/testScene.tmx": {
             "expandedObjectLayers": [
-                14,
-                9,
-                21,
+                2,
+                3,
+                16,
+                17,
+                4,
                 5,
                 20,
-                4,
-                3,
-                2,
-                17,
-                16
+                21,
+                9,
+                14
             ],
-            "scale": 1,
-            "selectedLayer": 19,
+            "scale": 0.33,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 694,
-                "y": 1434
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "test/testScene.tmx#placeholder_test": {
@@ -162,10 +163,10 @@
     "property.type": "bool",
     "recentFiles": [
         "level_01.tmx",
-        "level_02.tmx",
-        "level_03.tmx",
-        "level_04.tmx",
         "test/testScene.tmx",
+        "level_04.tmx",
+        "level_03.tmx",
+        "level_02.tmx",
         "level_01 - Copie.tmx"
     ],
     "tileset.embedInMap": true,

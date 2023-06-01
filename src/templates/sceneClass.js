@@ -122,13 +122,13 @@ class SceneClass extends Phaser.Scene {
         // Boxes
 
         const boxes = this.physics.add.group({
-            immovable: true,
-            damping: true
+            //immovable: true,
+            //damping: true
         });
 
         const bigBoxes = this.physics.add.group({
-            immovable: true,
-            damping: true
+            //immovable: true,
+            //damping: true
         });
 
         // Autres
@@ -169,7 +169,7 @@ class SceneClass extends Phaser.Scene {
         layer_box.objects.forEach(box => {
             const box_create = this.physics.add.sprite(box.x + 32, box.y, "box").setDamping(true).setImmovable(true).setPipeline('Light2D');
 
-            this.physics.add.collider(box_create, this.movingPlat1, () => { box_create.setImmovable(false); console.log("CHECK")}, null, this);
+            this.physics.add.collider(box_create, this.movingPlat1);
             this.physics.add.collider(box_create, this.movingPlat2);
             this.physics.add.collider(box_create, this.movingPlat3);
             this.physics.add.collider(box_create, this.movingPlat4);
@@ -454,8 +454,8 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(nameMob, layers.layer_deadZone, this.kill, null, this);
 
         // collision boxes
-        this.physics.add.collider(nameMob, layers.boxes);
-        this.physics.add.collider(nameMob, layers.bigBoxes);
+        this.physics.add.collider(nameMob, layers.boxes, this.pushBox, null, this);
+        this.physics.add.collider(nameMob, layers.bigBoxes, this.pushBox, null, this);
 
         // collisions obstacles brisables
         this.physics.add.collider(nameMob, layers.breaks, this.destroyIfCharge, null, this);
@@ -937,15 +937,24 @@ class SceneClass extends Phaser.Scene {
 
     pushBox(player, box) {
 
-        // empêche le joueur de tressauter quand il est sur la caisse
-        if (player.body.blocked.down && box.body.touching.up && !player.blockedLeft && !player.blockedLeft) {
-            player.body.velocity.y = 0;
-            box.body.setAllowGravity(false);
+        // si on contrôle le joueur => on peut pousser la boxe
+        if (!player.isPossessed) {
             box.setImmovable(true);
+            box.body.velocity.x = 0;
         }
-        if ((player.body.blocked.right || player.body.blocked.left) && player.currentMob == "hog" && !player.isCharging) {
-            box.setImmovable(false);
-            box.body.setAllowGravity(true);
+
+        // si on contrôle le joueur => on peut pousser la boxe
+        if (player.isPossessed) {
+            // empêche le joueur de tressauter quand il est sur la caisse
+            if (player.body.blocked.down && box.body.touching.up && !player.blockedLeft && !player.blockedLeft) {
+                player.body.velocity.y = 0;
+                box.body.setAllowGravity(false);
+                box.setImmovable(true);
+            }
+            if ((player.body.blocked.right || player.body.blocked.left) && player.currentMob == "hog" && !player.isCharging) {
+                box.setImmovable(false);
+                box.body.setAllowGravity(true);
+            }
         }
     }
 
