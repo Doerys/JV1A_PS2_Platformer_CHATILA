@@ -44,7 +44,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.justFall = false;
         this.animCharge = false;
         this.justCreated = true;
+
         this.hookAnim = false;
+        this.throwHookAnim = false;
+        this.animFallHook = false;
 
         this.prepareShootAnim = false;
         this.shootAnim = false;
@@ -143,7 +146,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // AU SOL
-            else if (this.body.blocked.down) {
+            else if (this.body.blocked.down && !this.isHooking && !this.throwHookAnim) {
 
                 // RECEPTION
                 if (this.justFall) {
@@ -169,25 +172,62 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.slideAnim = false;
             }
 
-            /*else if (this.isHooking) {
-                if (this.body.onGround) {
+            // HOOK
 
+            else if (this.isHooking && !this.throwHookAnim) {
+                if (this.body.blocked.down) { // C'est okay
+                    this.anims.play("player_frog_hookStartGround", true);
                 }
-                else if (this.jumpAnim) {
 
+                else if (this.jumpAnim) { // c'est okay
+                    this.anims.play("player_frog_hookStartJump", true);
                 }
-                else if (this )
+                this.throwHookAnim = true;
+            }
 
-            }*/
+            if (this.throwHookAnim) {
+                if (this.boxCatched || !this.isHooking) {
+                    if (this.body.blocked.down) { // c'est okay
+                        console.log("AU SOL")
+                        this.anims.play("player_frog_hookBackGround", true);
+                    }
+
+                    // anim foirée
+                    /*else if (this.jumpAnim) { // ça a l'air okay
+                        this.anims.play("player_frog_hookBackJump", true);
+                    }*/
+
+                    this.throwHookAnim = false;
+                    this.animFallHook = true;
+                }
+
+                /*if (this.stakeCatched) {
+                    
+                    if (this.body.blocked.down) {
+                        this.anims.play("player_frog_hookAttrackGround", true);
+                    }
+
+                    else if (this.jumpAnim) {
+                        this.anims.play("player_frog_hookAttrackJump", true);
+                    }            
+                    
+                    this.attrackAnim = true;
+                }*/
+
+                /*if (!this.stakeCatched && this.animFallHook && !this.body.blocked.down) {
+                    console.log("CHUTE ELEGAANTE")
+                    this.anims.play("player_frog_hookFall", true);
+                }*/
+            }
 
             // JUMP
-            else if (this.body.velocity.y < 0 && !this.jumpAnim) {
+            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isHooking) {
                 this.anims.play("player_frog_jump", true);
                 this.jumpAnim = true;
             }
 
             // FALL
-            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated) {
+            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated && !this.isHooking && !this.throwHookAnim && !this.animFallHook) {
                 this.anims.play("player_frog_fall", true);
                 this.fallAnim = true;
                 this.justFall = true;
@@ -472,12 +512,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.speedMoveX = 0;
         }
 
+        if (this.currentMob == "raven") { // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions. (/!\ Cause des soucis au wall jump du frog)
+            this.setVelocityX(this.speedMoveX);
+        }
+
         // DEPLACEMENT A GAUCHE <=
-        else if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked && !this.isHooking && !this.isShooting) { // si touche vers la gauche pressée
-
+        if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked && !this.isHooking && !this.isShooting) { // si touche vers la gauche pressée
             this.facing = 'left'; // rotation
-
-            this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+            
+            if (this.currentMob != "raven") {
+                this.setVelocityX(this.speedMoveX);
+            }
 
             if (Math.abs(this.speedMoveX) < this.speedXMax) {
                 this.speedMoveX -= this.accelerationX;
@@ -488,10 +533,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         // DEPLACEMENT A DROITE =>
         else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked && !this.isHooking && !this.isShooting) || this.scene.reachNewLevel) { // si touche vers la droite pressée
-
             this.facing = 'right'; // rotation
 
-            this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
+            if (this.currentMob != "raven") {
+                this.setVelocityX(this.speedMoveX);
+            }
 
             if (Math.abs(this.speedMoveX) < this.speedXMax) { // tant que la vitesse est inférieure à la vitesse max, on accélère 
                 this.speedMoveX += this.accelerationX;
@@ -549,7 +595,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     jumpMovements() {
 
         // réinitilise des variables quand on est au sol
-        if (this.onGround && !this.newJump && !this.isHooking && this.canCharge && !this.isHooking) {
+        if (this.onGround && !this.newJump && !this.isHooking && this.canCharge && !this.isShooting) {
 
             // si le joueur est au sol, réinitialise son compteur de jump
             if (this.currentMob == "raven") {
@@ -586,7 +632,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // SAUT (plus on appuie, plus on saut haut)
 
         // déclencheur du saut
-        if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround) { // si on vient de presser saut + peut sauter true + au sol
+        if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround && !this.isShooting) { // si on vient de presser saut + peut sauter true + au sol
             this.simpleJump();
         }
 

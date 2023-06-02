@@ -140,43 +140,51 @@ class Preload extends Phaser.Scene {
             repeat: 0
         });
 
+        // HOOK
+
         this.anims.create({
-            key: 'player_frog_hookGroundGo',
+            key: 'player_frog_hookStartGround',//
             frames: this.anims.generateFrameNumbers('frogAnim2', { start: 0, end: 4 }),
             frameRate: 40,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'player_frog_hookGroundBack',
+            key: 'player_frog_hookBackGround', //
             frames: this.anims.generateFrameNumbers('frogAnim2', { start: 5, end: 9 }),
-            frameRate: 40,
+            frameRate: 20,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'player_frog_hookJumpGo',
+            key: 'player_frog_hookStartJump',//
             frames: this.anims.generateFrameNumbers('frogAnim2', { start: 14, end: 19 }),
             frameRate: 25,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'player_frog_hookJumpBack',
+            key: 'player_frog_hookBackJump',//
             frames: this.anims.generateFrameNumbers('frogAnim2', { start: 19, end: 14 }),
             frameRate: 25,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'player_frog_hookGroundAttrack',
+            key: 'player_frog_hookAttrackGround', 
             frames: this.anims.generateFrameNumbers('frogAnim2', { start: 24, end: 33 }),
             frameRate: 25,
             repeat: 0
         });
 
+        this.anims.create({//
+            key: 'player_frog_hookAttrackJump', //
+            frames: [{ key: 'frogAnim', frame: 33 }],
+
+        });
+
         this.anims.create({
-            key: 'player_frog_hookReceptionAttrack',
+            key: 'player_frog_hookFall', //
             frames: this.anims.generateFrameNumbers('frogAnim2', { start: 34, end: 44 }),
             frameRate: 25,
             repeat: 0

@@ -41,6 +41,7 @@ class PlayerRaven extends Player {
 
             // TIR PLUME
             if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isShooting && this.canShoot) {
+                console.log("INPUT SHOOT");
 
                 this.canJump = false;
                 this.isShooting = true;
@@ -50,11 +51,8 @@ class PlayerRaven extends Player {
                 // fixe le joueur sur place
                 this.inputsMoveLocked = true; // commandes bloquées
                 this.body.setAllowGravity(false); //gravité annulée 
-                this.setVelocityX(0);
-                this.body.velocity.x = 0; // vélocité annulée
-                this.body.velocity.y = 0
-
-
+                this.setVelocityY(0);
+                this.speedMoveX = 0;
 
                 setTimeout(() => {
                     const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather").setDepth(-1).setOrigin(0, 0);
@@ -63,18 +61,21 @@ class PlayerRaven extends Player {
 
                     this.prepareShootAnim = false;
                     this.shootAnim = true;
-                    this.canJump = true;
 
-                    //this.inputsMoveLocked = false; // commandes débloquées
+                    this.inputsMoveLocked = false; // commandes débloquées
                     this.canJump = true;
                     this.body.setAllowGravity(true); //gravité rétablie
 
                     this.isShooting = false;
-                }, 1000);
+                }, 250);
 
                 setTimeout(() => {
                     this.canShoot = true;
                 }, 1000);
+            }
+
+            if (!this.isShooting){
+
             }
         }
     }
