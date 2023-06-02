@@ -176,13 +176,13 @@ class SceneClass extends Phaser.Scene {
 
             this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
             this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
+            this.physics.add.collider(box_create, this.door);
 
             boxes.add(box_create);
 
             box_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(boxes, layer_platforms, this.boxOnFloor, null, this);
-            this.physics.add.collider(boxes, this.door);
 
         }, this)
 
@@ -197,13 +197,13 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat4);
             this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
             this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
+            this.physics.add.collider(box_create, this.door);
 
             bigBoxes.add(box_create);
 
             box_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(bigBoxes, layer_platforms, this.boxOnFloor, null, this);
-            this.physics.add.collider(bigBoxes, this.door);
         }, this)
 
         // création des poteaux sur lesquels on peut se grappiner
@@ -465,7 +465,7 @@ class SceneClass extends Phaser.Scene {
 
         // Projectiles et pics qui tuent au contact
         this.physics.add.collider(this.projectilesPlayer, nameMob, this.hitProjectile, null, this);
-        this.physics.add.overlap(nameMob, layers.pics, this.kill, null, this);
+        this.physics.add.collider(nameMob, layers.pics, this.kill, null, this);
 
         // Système de boutons et porte qui bloque
         this.physics.add.collider(nameMob, layers.buttonBases);
@@ -547,7 +547,7 @@ class SceneClass extends Phaser.Scene {
 
         // Projectiles et pics qui tuent au contact
         this.physics.add.collider(this.projectilesMob, this.player, this.hitProjectile, null, this);
-        this.physics.add.overlap(this.player, layers.pics, this.kill, null, this);
+        this.physics.add.collider(this.player, layers.pics, this.kill, null, this);
 
         // Item à récupérer en overlap
         this.physics.add.overlap(this.player, layers.cures, this.getCure, null, this);
@@ -618,8 +618,6 @@ class SceneClass extends Phaser.Scene {
             box.y -= 8;
         }
         if (!box.body.blocked.left && !box.body.blocked.right && !this.mobPressingButton) {
-            console.log("BOUTON PRESSE")
-            this.buttonOn = true;
             this.boxPressingButton = true;
         }
     }
@@ -632,7 +630,7 @@ class SceneClass extends Phaser.Scene {
         }
 
         // Verification qu'on est bien SUR le bouton, et pas collé à gauche ou à droite
-        if (!mob.body.blocked.left && !mob.body.blocked.right && !this.boxPressingButton) {
+        if (!mob.body.blocked.left && !mob.body.blocked.right) {
 
             // SI HOG
             if (mob.currentMob == "hog") {
@@ -680,11 +678,6 @@ class SceneClass extends Phaser.Scene {
         if (mob.currentMob == "hog") {
             mob.isPressingButton = false;
             this.mobPressingButton = false;
-
-            if (!this.boxPressingButton) {
-                console.log("BOUTON ENLEVE");
-                this.buttonOn = false;
-            }
         }
     }
 
@@ -693,12 +686,9 @@ class SceneClass extends Phaser.Scene {
         if (box.body.blocked.down) {
             if (box.body.blocked.right || box.body.blocked.left) {
                 //box.body.setImmovable(true);
-                box.setVelocity(0, 0);
+                box.setVelocityX(0);
             }
             box.setDragX(0.0001);
-
-            // désactive le press bouton
-            this.boxPressingButton = false;
 
             if (!this.mobPressingButton) {
                 this.buttonOn = false;
@@ -707,13 +697,13 @@ class SceneClass extends Phaser.Scene {
     }
 
     manageDoor(layers) { // door qui s'ouvre ou non en fonction de buttonOn
-        if (this.buttonOn) {
+        if (layers.buttons.body.touching.up && (this.mobPressingButton || this.boxPressingButton)) {
             this.door.disableBody(true, true);
             if (!this.firstDisableDoor) {
                 this.firstDisableDoor = true;
             }
         }
-        else if (this.firstDisableDoor && !this.buttonOn) {
+        else if (this.firstDisableDoor && !this.mobPressingButton && !this.boxPressingButton) {
             this.door.enableBody();
             this.door.visible = true;
         }
@@ -721,14 +711,20 @@ class SceneClass extends Phaser.Scene {
 
     // METHODES DE MORT ET DE RESPAWN
 
-    kill(victim) { // tue les mobs et les players
+    kill(victim, killer) { // tue les mobs et les players
+
+        console.log("DIE")
         victim.destroy();
 
         // si un mob meurt
-        if (!victim.isPossessed) { victim.disableIA(); }
+        if (!victim.isPossessed) {
+            //console.log("DIE MOB")
+            victim.disableIA();
+        }
 
         // si un player meurt
         else if (victim.isPossessed) {
+            //console.log("DIE PLAYER")
             victim.disablePlayer();
             this.playerKilled = true;
             this.player = new Player(this, 0, 0, "right", "frog", false).disableBody(true, true);
@@ -737,13 +733,13 @@ class SceneClass extends Phaser.Scene {
                 this.activePossession = false;
                 this.playerKilled = false;
             }, 100);
+        }
 
-            if (victim.haveCure == true) {
-                setTimeout(() => {
-                    const newCure = this.physics.add.staticSprite(this.layers.spawnCure.x + 32, this.layers.spawnCure.y, "cure").setDepth(1);
-                    this.layers.cures.add(newCure);
-                }, 500);
-            }
+        if (victim.haveCure == true) {
+            setTimeout(() => {
+                const newCure = this.physics.add.staticSprite(this.layers.spawnCure.x + 32, this.layers.spawnCure.y, "cure").setDepth(1);
+                this.layers.cures.add(newCure);
+            }, 500);
         }
 
         this.respawnMob(victim);
@@ -849,7 +845,7 @@ class SceneClass extends Phaser.Scene {
 
         if (this.jumpHook) {
             if (this.player.facing == 'right') {
-                if (this.player.x < stake.x) {
+                if (this.player.x - 64 < stake.x) {
                     this.player.x += 6
                     this.time.delayedCall(15, () => {
                         this.goToHook(hook, stake)
@@ -862,7 +858,7 @@ class SceneClass extends Phaser.Scene {
                 }
             }
             else if (this.player.facing == 'left') {
-                if (this.player.x > stake.x) {
+                if (this.player.x + 64 > stake.x) {
                     this.player.x -= 6
                     this.time.delayedCall(15, () => {
                         this.goToHook(hook, stake)
@@ -994,6 +990,7 @@ class SceneClass extends Phaser.Scene {
     // PASSAGE DE NIVEAU ---
 
     updateManager() {
+
         if (this.switchRavenPlatOn) {
             this.ravenPlatOn.enableBody();
         }

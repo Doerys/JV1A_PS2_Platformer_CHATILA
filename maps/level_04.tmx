@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="27" nextobjectid="103">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="27" nextobjectid="106">
  <editorsettings>
-  <export target="level_02.json" format="json"/>
+  <export target="level_04.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64" tilecount="2052" columns="38">
   <image source="../assets/tileset.png" width="2480" height="3508"/>
@@ -249,10 +249,21 @@
   <object id="93" class="4" x="576" y="1600" width="192" height="64"/>
   <object id="94" class="3" x="448" y="1280" width="128" height="64"/>
  </objectgroup>
- <objectgroup id="24" name="Door"/>
- <objectgroup id="25" name="Button"/>
+ <objectgroup id="24" name="Door">
+  <object id="105" x="320" y="1920">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="25" name="Button">
+  <object id="103" x="128" y="1920">
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="26" name="ButtonBase">
   <object id="102" x="3008" y="192" width="64" height="64"/>
+  <object id="104" x="256" y="1920">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="15" name="NextLevel"/>
 </map>
