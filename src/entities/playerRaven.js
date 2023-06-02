@@ -31,6 +31,8 @@ class PlayerRaven extends Player {
 
         if (this.isPossessed) {
 
+            console.log(this.body.velocity.x)
+
             // gestion des animations
             this.animManager();
 
@@ -38,16 +40,41 @@ class PlayerRaven extends Player {
             this.handlePlayer();
 
             // TIR PLUME
-            if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.disableShoot) {
+            if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isShooting && this.canShoot) {
 
-                const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather").setOrigin(0, 0);
-                this.scene.projectilesPlayer.add(feather);
-                this.disableShoot = true;
-                feather.shoot(this);
+                this.canJump = false;
+                this.isShooting = true;
+                this.canShoot = false;
+                this.prepareShootAnim = true;
+
+                // fixe le joueur sur place
+                this.inputsMoveLocked = true; // commandes bloquées
+                this.body.setAllowGravity(false); //gravité annulée 
+                this.setVelocityX(0);
+                this.body.velocity.x = 0; // vélocité annulée
+                this.body.velocity.y = 0
+
+
 
                 setTimeout(() => {
-                    this.disableShoot = false;
-                }, 500);
+                    const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather").setDepth(-1).setOrigin(0, 0);
+                    this.scene.projectilesPlayer.add(feather);
+                    feather.shoot(this);
+
+                    this.prepareShootAnim = false;
+                    this.shootAnim = true;
+                    this.canJump = true;
+
+                    //this.inputsMoveLocked = false; // commandes débloquées
+                    this.canJump = true;
+                    this.body.setAllowGravity(true); //gravité rétablie
+
+                    this.isShooting = false;
+                }, 1000);
+
+                setTimeout(() => {
+                    this.canShoot = true;
+                }, 1000);
             }
         }
     }

@@ -46,6 +46,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.justCreated = true;
         this.hookAnim = false;
 
+        this.prepareShootAnim = false;
+        this.shootAnim = false;
+
         // VARIABLES FROG
 
         // wall jump
@@ -74,7 +77,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // VARIABLES RAVEN
         this.canPlane = false; // autorise de planer
         this.secondJump = false;
-        this.disableShoot = false;
+        this.canShoot = true;
+        this.isShooting = false;
 
         // COMMANDES
 
@@ -147,24 +151,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
 
                 // IDLE
-                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) {
-
-                    // idle
-                    if (!this.isHooking && !this.hookAnim) {
-                        this.play('player_frog_right', true);
-                    }
-
-                    // HOOK
-
-                    else if (this.isHooking && !this.hookAnim) {
-                        this.play('player_frog_hookGroundGo', true);
-                        this.hookAnim = true;
-                    }
-
-                    else if (!this.isHooking && this.hookAnim) {
-                        this.play('player_frog_hookGroundBack', true);
-                        this.hookAnim = false;
-                    }
+                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
+                    this.play('player_frog_right', true);
                 }
 
                 // WALK
@@ -181,37 +169,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.slideAnim = false;
             }
 
-            else if (!this.onGround) {
-                if (this.isHooking && !this.hookAnim && !this.stakeCatched) {
-                    this.anims.play("player_frog_hookJumpGo", true);
-                    this.hookAnim = true;
+            /*else if (this.isHooking) {
+                if (this.body.onGround) {
+
                 }
+                else if (this.jumpAnim) {
 
-                if (!this.isHooking && this.hookAnim && !this.stakeCatched) {
-                    this.anims.play("player_frog_hookJumpBack", true);
-                    this.hookAnim = false;
                 }
+                else if (this )
 
-                if (this.stakeCatched && this.hookAnim) {
-                    console.log("CHECK HOOOK");
-                    this.play('player_frog_hookGroundAttrack', true);
-                }
-
-                /*else if (!this.stakeCatched && this.hookAnim) {
-                    console.log("RECEPTION HOOOK");
-                    this.play('player_frog_hookGroundAttrack', true);
-
-                    this.hookAnim = false;
-                }*/
-            }
+            }*/
 
             // JUMP
             else if (this.body.velocity.y < 0 && !this.jumpAnim) {
-
-                if (!this.isHooking && !this.hookAnim) {
-                    this.anims.play("player_frog_jump", true);
-                }
-
+                this.anims.play("player_frog_jump", true);
                 this.jumpAnim = true;
             }
 
@@ -288,9 +259,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // JUMP
-            else if (this.body.velocity.y < 0 && !this.jumpAnim) {
+            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isShooting) {
                 this.anims.play("player_hog_jump", true);
                 this.jumpAnim = true;
+            }
+
+            else if (this.prepareShootAnim) {
+                this.anims.play("player_raven_prepareShootOnGround", true);
+            }
+
+            else if (this.shootAnim) {
+                this.anims.play("player_raven_shootOnGround", true);
+                setTimeout(() => {
+                    this.shootAnim = false;
+                }, 500);
             }
 
             // FALL
@@ -308,29 +290,34 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('player_raven_right', true);
             }
 
-            else if (this.body.blocked.down) {
+            else if (this.body.blocked.down && !this.isShooting) {
 
-                // si on se réceptionne durant l'anim de planer
-                if (this.justFall && this.planeAnim) {
-                    //console.log("CHUTE PLANE") //=> GOOD
+                // RECEPTION
+                if (this.justFall) {
 
-                    this.anims.play("player_raven_planeToReception", true);
+                    // si on se réceptionne durant l'anim planer
+                    if (this.planeAnim) {
+                        //console.log("CHUTE PLANE") //=> GOOD
+
+                        this.anims.play("player_raven_planeToReception", true);
+                    }
+
+                    // si on se réceptionne durant l'anim de chute
+                    else if (this.fallAnim) {
+                        //console.log("CHUTE RECEPTION") //=> GOOD
+
+                        this.anims.play("player_raven_fallToReception", true);
+                    }
                 }
 
-                // si on se réceptionne durant l'anim de chute
-                else if (this.justFall && this.fallAnim) {
-                    //console.log("CHUTE RECEPTION") //=> GOOD
-
-                    this.anims.play("player_raven_fallToReception", true);
-                }
-
-                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
+                // IDLE
+                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall && !this.isShooting && !this.shootAnim) { // condition pour idle
                     //console.log("IDLE")
                     this.play('player_raven_right', true);
                 }
 
-                // anim marche
-                else if (this.body.velocity.x != 0 && this.body.velocity.y == 0 && !this.justFall) {
+                // WALK
+                else if (this.body.velocity.x != 0 && this.body.velocity.y == 0 && !this.justFall && !this.isShooting && !this.shootAnim) {
                     this.anims.play("player_raven_walk", true);
                 }
 
@@ -345,11 +332,44 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }, 250);
             }
 
+            // PREPARE SHOOT
+            if (this.prepareShootAnim) {
+                if (this.jumpAnim) {
+                    this.anims.play("player_raven_prepareShootOnJump", true);
+                    this.jumpAnim = false;
+                }
+
+                else if (this.planeAnim) {
+                    this.anims.play("player_raven_prepareShootOnPlane", true);
+                    this.planeAnim = false;
+                }
+
+                else if (this.body.blocked.down) {
+                    this.anims.play("player_raven_prepareShootOnGround", true);
+                }
+            }
+
+            // SHOOT
+            else if (this.shootAnim) {
+                if (!this.body.blocked.down) {
+                    this.anims.play("player_raven_shootOnAir", true);
+                    setTimeout(() => {
+                        this.shootAnim = false;
+                    }, 250);
+                }
+                else {
+                    this.anims.play("player_raven_shootOnGround", true);
+                    setTimeout(() => {
+                        this.shootAnim = false;
+                    }, 500);
+                }
+            }
+
             // si on va vers le bas
             if (this.body.velocity.y > 0) {
 
                 // PLANER
-                if (this.cursors.up.isDown || this.keyZ.isDown) {
+                if (this.cursors.up.isDown || this.keyZ.isDown && !this.isShooting && !this.shootAnim) {
 
                     // passage de jump à plane
                     if (this.jumpAnim) {
@@ -368,7 +388,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
 
                 // CHUTE
-                if ((this.cursors.up.isUp && this.keyZ.isUp)) {
+                if ((this.cursors.up.isUp && this.keyZ.isUp && !this.shootAnim)) {
 
                     // jump to fall
                     if (this.jumpAnim) {
@@ -399,7 +419,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             // ANIM DE JUMP
 
             // si on va vers le haut
-            if (this.body.velocity.y < 0) {
+            if (this.body.velocity.y < 0 && !this.isShooting && !this.shootAnim) {
                 if (!this.jumpAnim) {
 
                     if (this.body.blocked.downd) {
@@ -447,14 +467,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.blockedLeft = this.body.blocked.left; // verifie si le joueur est contre une paroi gauche
         this.blockedRight = this.body.blocked.right; // verifie si le joueur est contre une paroi droite
 
-
         // SI DEUX INPUTS PRESSES => IMMOBILE
         if ((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && (this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la droite pressée
             this.speedMoveX = 0;
         }
 
         // DEPLACEMENT A GAUCHE <=
-        else if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la gauche pressée
+        else if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked && !this.isHooking && !this.isShooting) { // si touche vers la gauche pressée
 
             this.facing = 'left'; // rotation
 
@@ -468,7 +487,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         // DEPLACEMENT A DROITE =>
-        else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked) || this.scene.reachNewLevel) { // si touche vers la droite pressée
+        else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked && !this.isHooking && !this.isShooting) || this.scene.reachNewLevel) { // si touche vers la droite pressée
 
             this.facing = 'right'; // rotation
 
@@ -530,7 +549,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     jumpMovements() {
 
         // réinitilise des variables quand on est au sol
-        if (this.onGround && !this.newJump && !this.isHooking && this.canCharge) {
+        if (this.onGround && !this.newJump && !this.isHooking && this.canCharge && !this.isHooking) {
+
             // si le joueur est au sol, réinitialise son compteur de jump
             if (this.currentMob == "raven") {
                 this.jumpCounter = 2;
@@ -575,7 +595,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // déclencheur du saut en l'air (utile pour double jump)
-        else if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && !this.canHighJump && this.currentMob == "raven") {
+        else if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && !this.canHighJump && this.currentMob == "raven" && !this.isShooting) {
             this.simpleJump();
             this.secondJump = true;
             this.canPlane = false;
@@ -585,7 +605,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
-        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump && !this.isHooking) { // si le curseur haut est pressé et jump timer =/= 0
+        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump && this.canJump && !this.isHooking) { // si le curseur haut est pressé et jump timer =/= 0
 
             if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                 this.canHighJump = false;
@@ -600,7 +620,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // planer - MECANIQUE RAVEN
-        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canPlane && this.currentMob == "raven") {
+        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canPlane && this.currentMob == "raven" && !this.isShooting) {
             this.setVelocityY(50);
         }
 

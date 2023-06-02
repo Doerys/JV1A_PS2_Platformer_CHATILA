@@ -8,6 +8,8 @@ import MobFrog from "../entities/mobFrog.js";
 import MobHog from "../entities/mobHog.js";
 import MobRaven from "../entities/mobRaven.js";
 
+import Projectile from "../entities/projectile.js";
+
 class SceneClass extends Phaser.Scene {
 
     constructor(name) { // name = on reprend le nom qu'on trouve dans le constructeur du niveau
@@ -713,7 +715,6 @@ class SceneClass extends Phaser.Scene {
 
     kill(victim, killer) { // tue les mobs et les players
 
-        console.log("DIE")
         victim.destroy();
 
         // si un mob meurt
@@ -965,6 +966,12 @@ class SceneClass extends Phaser.Scene {
     }
 
     // METHODES POUR PLAYER = RAVEN ------
+
+    /*createProj( shooter ) {
+        const newProj = new Projectile(this, shooter.x + 64, shooter.y + 90, "feather").setOrigin(0, 0);
+
+        return { newProj }
+    }*/
 
     // crée une plateforme si on tire sur un élément de décor
     createPlat(proj, ravenPlatOff) {

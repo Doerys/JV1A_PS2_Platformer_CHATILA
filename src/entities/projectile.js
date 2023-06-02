@@ -1,8 +1,9 @@
 class Projectile extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(scene, x, y) {
-        super(scene, x, y, "feather");
+    constructor(scene, x, y, sprite) {
+        super(scene, x, y, sprite);
 
+        scene.add.existing(this);
         scene.physics.add.existing(this);
         this.init();
     }
@@ -17,12 +18,13 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
     shoot(shooter) {
 
         if (shooter.facing == "right") {
-            this.x = shooter.x + 15;
+            this.x = shooter.x + 64;
+            this.flipX = false;
             this.setVelocityX(this.speed);
 
         } else if (shooter.facing == "left") {
-            this.x = shooter.x - 15;
-            this.setFlipX(true);
+            this.x = shooter.x + 64;
+            this.flipX = true;
             this.setVelocityX(-this.speed);
         }
 
@@ -30,9 +32,9 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         
         setTimeout(() => {
             // check si le projectile n'est pas destroy
-            if (!this.scene.playerKilled) {
+            //if (!this.scene.playerKilled) {
                 this.body.setAllowGravity(true);
-            }
+            //}
         }, 350);
 
     }

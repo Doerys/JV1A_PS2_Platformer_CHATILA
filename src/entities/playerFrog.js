@@ -25,7 +25,7 @@ class PlayerFrog extends Player {
         //this.physics.add.collider(this.hook, layersmurs);
 
         if (!this.hookCreated) {
-            this.hook = new Hook(this.scene, this.x + 64, this.y  + 64)
+            this.hook = new Hook(this.scene, this.x + 64, this.y  + 64, "hook")
                 .setCollideWorldBounds(true)
                 .setOrigin(0.5, 0.5)
                 .disableBody(true, true);
@@ -154,7 +154,6 @@ class PlayerFrog extends Player {
                     this.inputsMoveLocked = false; // commandes débloquées
                 }
                 this.body.setAllowGravity(true); //gravité rétablie
-                this.inputsMoveLocked = false; // commandes débloquées
             }
 
             if (this.hookCreated) {

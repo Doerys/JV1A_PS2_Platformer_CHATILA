@@ -44,18 +44,26 @@ class MobRaven extends Mob {
                 // si le joueur possède un mob, détection du joueur
                 this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
 
-                if (this.playerSpotted && !this.disableShoot) {
+                if (this.playerSpotted && !this.isShooting && this.canShoot) {
 
                     this.setVelocity(0, 0);
-
-                    const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather");
-                    this.scene.projectilesMob.add(feather);
-                    this.disableShoot = true;
-
-                    feather.shoot(this);
+                    this.isShooting = true;
+                    this.canShoot = false;
+                    this.prepareShootAnim = true;
 
                     setTimeout(() => {
-                        this.disableShoot = false;
+                        const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather").setDepth(-1).setOrigin(0, 0);
+                        this.scene.projectilesMob.add(feather);
+                        feather.shoot(this);
+
+                        this.prepareShootAnim = false;
+                        this.shootAnim = true;
+
+                        this.isShooting = false;
+                    }, 250);
+
+                    setTimeout(() => {
+                        this.canShoot = true;
                     }, 1000);
                 }
             }

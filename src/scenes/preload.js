@@ -37,13 +37,9 @@ class Preload extends Phaser.Scene {
 
         this.load.image('break', 'assets/break.png');
 
-        //this.load.image('feather', 'src/scenes/feather.png');
-
         this.load.image('ravenPlatOff', 'assets/ravenPlatOff.png');
         this.load.image('ravenPlatOn', 'assets/ravenPlatOn.png');
 
-        this.load.image('hook', 'assets/hook.png');
-        this.load.image('rope', 'assets/rope.png');
         this.load.image('stake', 'assets/stake.png');
 
         this.load.image('cure', 'assets/cure.png');
@@ -59,6 +55,13 @@ class Preload extends Phaser.Scene {
         this.load.image('buttonBase', 'assets/buttonBase.png')
         this.load.image('button', 'assets/button.png')
         this.load.image('door', 'assets/door.png')
+
+                
+        this.load.image('feather', 'assets/feather.png');
+
+        this.load.image('hook', 'assets/hook.png');
+        this.load.image('rope', 'assets/rope.png');
+
 
         // SOUND
 
@@ -329,21 +332,56 @@ class Preload extends Phaser.Scene {
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'player_raven_prepareShootOnGround',
+            frames: this.anims.generateFrameNumbers('ravenAnim3', { start: 0, end: 8 }),
+            frameRate: 35
+        });
+
+        this.anims.create({
+            key: 'player_raven_prepareShootOnJump',
+            frames: this.anims.generateFrameNumbers('ravenAnim3', { start: 34, end: 39 }),
+            frameRate: 35,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_prepareShootOnPlane',
+            frames: this.anims.generateFrameNumbers('ravenAnim3', { start: 40, end: 45 }),
+            frameRate: 35,
+            repeat: 0
+        });
+        
+        this.anims.create({
+            key: 'player_raven_shootOnAir',
+            frames: this.anims.generateFrameNumbers('ravenAnim3', { start: 9, end: 26 }),
+            frameRate: 35,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_raven_shootOnGround',
+            frames: this.anims.generateFrameNumbers('ravenAnim3', { start: 9, end: 33 }),
+            frameRate: 45,
+            repeat: 0
+        });
+
+
 
         // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
 
-        this.scene.start("Level_04", {
+        this.scene.start("TestScene", {
             // POUR LA TESTROOM :
 
-            //mapName: "map_test", // nom de la map
-            //mapTileset: "placeholder_test", // nom du tileset sur TILED
-            //mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
+            mapName: "map_test", // nom de la map
+            mapTileset: "placeholder_test", // nom du tileset sur TILED
+            mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
 
             // POUR LE JEU :
 
-            mapName: "map_04", // nom de la map
-            mapTileset: "tileset", // nom du tileset sur TILED
-            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+            //mapName: "map_04", // nom de la map
+            //mapTileset: "tileset", // nom du tileset sur TILED
+            //mapTilesetImage: "tileset_image", // nom du fichier image du tileset
         });
     }
 

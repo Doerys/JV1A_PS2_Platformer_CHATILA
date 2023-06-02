@@ -24,6 +24,9 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.animCharge = false;
         this.justCreated = true;
 
+        this.prepareShootAnim = false;
+        this.shootAnim = false;
+
         // VARIABLES UNIVERSELLES AUX MOBS
 
         this.isPossessed = false; // vérifie que le mob est possédé ou non (utile pour la méthode disableIA)
@@ -38,7 +41,8 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.canCharge = true
 
         // VARIABLES RAVEN
-        this.disableShoot = false;
+        this.isShooting = false;
+        this.canShoot = true;
     }
 
     create() {
@@ -198,7 +202,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                 this.play('player_raven_right', true);
             }
 
-            else if (this.body.blocked.down) {
+            else if (this.body.blocked.down && !this.isShooting) {
 
                 // si on se réceptionne durant l'anim de chute
                 if (this.justFall && this.fallAnim) {
@@ -207,13 +211,14 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                     this.anims.play("player_raven_fallToReception", true);
                 }
 
-                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
+                // IDLE
+                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall && !this.isShooting && !this.shootAnim) { // condition pour idle
                     //console.log("IDLE")
                     this.play('player_raven_right', true);
                 }
 
-                // anim marche
-                else if (this.body.velocity.x != 0 && this.body.velocity.y == 0 && !this.justFall) {
+                // WALK
+                else if (this.body.velocity.x != 0 && this.body.velocity.y == 0 && !this.justFall && !this.isShooting && !this.shootAnim) {
                     this.anims.play("player_raven_walk", true);
                 }
 
@@ -226,6 +231,39 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                     this.justFall = false
                     this.firstFallAnim = false;
                 }, 250);
+            }
+
+            // PREPARE SHOOT
+            if (this.prepareShootAnim) {
+                if (this.jumpAnim) {
+                    this.anims.play("player_raven_prepareShootOnJump", true);
+                    this.jumpAnim = false;
+                }
+
+                else if (this.planeAnim) {
+                    this.anims.play("player_raven_prepareShootOnPlane", true);
+                    this.planeAnim = false;
+                }
+
+                else if (this.body.blocked.down) {
+                    this.anims.play("player_raven_prepareShootOnGround", true);
+                }
+            }
+
+            // SHOOT
+            else if (this.shootAnim) {
+                if (!this.body.blocked.down) {
+                    this.anims.play("player_raven_shootOnAir", true);
+                    setTimeout(() => {
+                        this.shootAnim = false;
+                    }, 250);
+                }
+                else {
+                    this.anims.play("player_raven_shootOnGround", true);
+                    setTimeout(() => {
+                        this.shootAnim = false;
+                    }, 500);
+                }
             }
 
             // si on va vers le bas
