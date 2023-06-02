@@ -17,7 +17,7 @@ class Level_04 extends SceneClass {
     create() {
         this.activePossession = true;
 
-        this.movingPlat1 = this.physics.add.image(1024, 544, 'movingPlat')
+        this.movingPlat1 = this.physics.add.image(960, 928, 'movingPlat')
         .setImmovable(true)
         .setVelocity(100, 0);
 
@@ -27,14 +27,14 @@ class Level_04 extends SceneClass {
             targets: this.movingPlat1.body.velocity,
             loop: -1,
             tweens: [
-                { x: -150, y: 0, duration: 3400, ease: 'Stepped' },
-                { x: +150, y: 0, duration: 3400, ease: 'Stepped' },
+                { x: +150, y: 0, duration: 2000, ease: 'Stepped' },
+                { x: -150, y: 0, duration: 2000, ease: 'Stepped' },
             ]
         });
 
-        this.movingPlat2 = this.physics.add.image(512, 352, 'movingPlat')
+        this.movingPlat2 = this.physics.add.image(896, 1312, 'movingPlat')
             .setImmovable(true)
-            .setVelocity(100, 0);
+            //.setVelocity(100, 0);
 
         this.movingPlat2.body.setAllowGravity(false);
 
@@ -42,14 +42,14 @@ class Level_04 extends SceneClass {
             targets: this.movingPlat2.body.velocity,
             loop: -1,
             tweens: [
-                { x: +150, y: 0, duration: 3400, ease: 'Stepped' },
-                { x: -150, y: 0, duration: 3400, ease: 'Stepped' },
+                { x: +150, y: 0, duration: 1400, ease: 'Stepped' },
+                { x: -150, y: 0, duration: 1400, ease: 'Stepped' },
             ]
         });
 
-        this.movingPlat3 = this.physics.add.image(2016, 288, 'movingPlat')
+        this.movingPlat3 = this.physics.add.image(576, 1312, 'movingPlat')
             .setImmovable(true)
-            .setVelocity(100, 0)
+            //.setVelocity(100, 0)
 
         this.movingPlat3.body.setAllowGravity(false);
 
@@ -57,8 +57,23 @@ class Level_04 extends SceneClass {
             targets: this.movingPlat3.body.velocity,
             loop: -1,
             tweens: [
-            { x:    -100, y: 0, duration: 1600, ease: 'Stepped' },
-            { x:    +100, y: 0, duration: 1600, ease: 'Stepped' },
+            { x:    -150, y: 0, duration: 1400, ease: 'Stepped' },
+            { x:    +150, y: 0, duration: 1400, ease: 'Stepped' },
+            ]
+        });
+
+        this.movingPlat4 = this.physics.add.image(1120, 1632, 'movingPlat')
+            .setImmovable(true)
+            .setVelocity(100, 0)
+
+        this.movingPlat4.body.setAllowGravity(false);
+
+        this.tweens.timeline({
+            targets: this.movingPlat4.body.velocity,
+            loop: -1,
+            tweens: [
+                { x: -150, y: 0, duration: 5250, ease: 'Stepped' },
+                { x: +150, y: 0, duration: 5250, ease: 'Stepped' },
             ]
         });
 
@@ -72,7 +87,7 @@ class Level_04 extends SceneClass {
 
         this.loadVar(layers);
 
-        this.createPlayer(layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "right", 'hog', false);
+        this.createPlayer(layers.spawnFrog.x - 64, layers.spawnFrog.y - 64, layers, "right", 'frog', false);
 
         // CREATION DE MOBS
 
@@ -80,10 +95,10 @@ class Level_04 extends SceneClass {
         //this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
 
         //Création du mob
-        this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", false, false);
+        //this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", false, false);
 
         //Création du mob
-        //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
+        this.createMob(this.mob3, layers.spawnRaven.x - 64, layers.spawnRaven.y - 64, layers, "left", "raven", false, false);
     }
 
     update() {

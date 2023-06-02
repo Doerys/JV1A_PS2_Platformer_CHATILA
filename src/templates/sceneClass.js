@@ -845,8 +845,9 @@ class SceneClass extends Phaser.Scene {
 
         if (this.jumpHook) {
             if (this.player.facing == 'right') {
-                if (this.player.x - 64 < stake.x) {
-                    this.player.x += 6
+                if (this.player.x - 32 < stake.x) {
+                    this.player.y = stake.y - 64;
+                    this.player.x += 10
                     this.time.delayedCall(15, () => {
                         this.goToHook(hook, stake)
                     });
@@ -858,8 +859,9 @@ class SceneClass extends Phaser.Scene {
                 }
             }
             else if (this.player.facing == 'left') {
-                if (this.player.x + 64 > stake.x) {
-                    this.player.x -= 6
+                if (this.player.x + 96 > stake.x) {
+                    this.player.y = stake.y - 64;
+                    this.player.x -= 10
                     this.time.delayedCall(15, () => {
                         this.goToHook(hook, stake)
                     });

@@ -32,7 +32,7 @@ class Level_03 extends SceneClass {
             ]
         });*/
 
-        this.movingPlat2 = this.physics.add.image(576, 352, 'movingPlat')
+        this.movingPlat2 = this.physics.add.image(576, 416, 'movingPlat')
             .setImmovable(true)
             //.setVelocity(100, 0);
 
@@ -42,12 +42,12 @@ class Level_03 extends SceneClass {
             targets: this.movingPlat2.body.velocity,
             loop: -1,
             tweens: [
-                { x: -100, y: 0, duration: 2500, ease: 'Stepped' },
-                { x: +100, y: 0, duration: 2500, ease: 'Stepped' },
+                { x: -100, y: 0, duration: 3000, ease: 'Stepped' },
+                { x: +100, y: 0, duration: 3000, ease: 'Stepped' },
             ]
         });
 
-        this.movingPlat3 = this.physics.add.image(2240, 1248, 'movingPlat')
+        this.movingPlat3 = this.physics.add.image(2240, 1312, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0)
 
@@ -62,7 +62,7 @@ class Level_03 extends SceneClass {
             ]
         });
 
-        this.movingPlat4 = this.physics.add.image(1472, 800, 'movingPlat')
+        this.movingPlat4 = this.physics.add.image(1600, 864, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0)
 
@@ -72,8 +72,8 @@ class Level_03 extends SceneClass {
             targets: this.movingPlat4.body.velocity,
             loop: -1,
             tweens: [
-                { x: +100, y: 0, duration: 1600, ease: 'Stepped' },
-                { x: -100, y: 0, duration: 1600, ease: 'Stepped' },
+                { x: -150, y: 0, duration: 2500, ease: 'Stepped' },
+                { x: +150, y: 0, duration: 2500, ease: 'Stepped' },
             ]
         });
 

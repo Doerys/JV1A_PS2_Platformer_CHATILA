@@ -145,14 +145,16 @@ class PlayerFrog extends Player {
                     //this.isHooking = false; // n'est plus en train de grappiner
                     //this.inputsMoveLocked = false; // commandes débloquées
                     //this.body.setAllowGravity(true); //gravité rétablie 
-                }, 1000); // après un certain temps, on repasse la possibilité de sauter à true
+                }, 100); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
             // débloque les commandes après l'utilisation du grappin
-            if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook && !this.isWallJumping) {
-
-                this.inputsMoveLocked = false; // commandes débloquées
+            if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook) {
+                if (!this.isWallJumping) {
+                    this.inputsMoveLocked = false; // commandes débloquées
+                }
                 this.body.setAllowGravity(true); //gravité rétablie
+                this.inputsMoveLocked = false; // commandes débloquées
             }
 
             if (this.hookCreated) {

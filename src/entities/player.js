@@ -44,6 +44,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.justFall = false;
         this.animCharge = false;
         this.justCreated = true;
+        this.hookAnim = false;
 
         // VARIABLES FROG
 
@@ -146,8 +147,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
 
                 // IDLE
-                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) { // condition pour idle
-                    this.play('player_frog_right', true);
+                else if (this.body.velocity.x == 0 && this.body.velocity.y == 0 && !this.justFall) {
+
+                    // idle
+                    if (!this.isHooking && !this.hookAnim) {
+                        this.play('player_frog_right', true);
+                    }
+
+                    // HOOK
+
+                    else if (this.isHooking && !this.hookAnim) {
+                        this.play('player_frog_hookGroundGo', true);
+                        this.hookAnim = true;
+                    }
+
+                    else if (!this.isHooking && this.hookAnim) {
+                        this.play('player_frog_hookGroundBack', true);
+                        this.hookAnim = false;
+                    }
                 }
 
                 // WALK
@@ -164,9 +181,37 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.slideAnim = false;
             }
 
+            else if (!this.onGround) {
+                if (this.isHooking && !this.hookAnim && !this.stakeCatched) {
+                    this.anims.play("player_frog_hookJumpGo", true);
+                    this.hookAnim = true;
+                }
+
+                if (!this.isHooking && this.hookAnim && !this.stakeCatched) {
+                    this.anims.play("player_frog_hookJumpBack", true);
+                    this.hookAnim = false;
+                }
+
+                if (this.stakeCatched && this.hookAnim) {
+                    console.log("CHECK HOOOK");
+                    this.play('player_frog_hookGroundAttrack', true);
+                }
+
+                /*else if (!this.stakeCatched && this.hookAnim) {
+                    console.log("RECEPTION HOOOK");
+                    this.play('player_frog_hookGroundAttrack', true);
+
+                    this.hookAnim = false;
+                }*/
+            }
+
             // JUMP
             else if (this.body.velocity.y < 0 && !this.jumpAnim) {
-                this.anims.play("player_frog_jump", true);
+
+                if (!this.isHooking && !this.hookAnim) {
+                    this.anims.play("player_frog_jump", true);
+                }
+
                 this.jumpAnim = true;
             }
 
@@ -258,7 +303,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // ANIMATIONS RAVEN
         if (this.currentMob == "raven") {
-            
+
             if (this.justCreated && this.body.velocity.x == 0) {
                 this.play('player_raven_right', true);
             }

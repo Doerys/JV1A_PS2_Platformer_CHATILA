@@ -10,6 +10,7 @@ class Preload extends Phaser.Scene {
 
         this.load.spritesheet('frogImage', 'assets/player_frog.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('frogAnim', 'assets/spritesheet_frog.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('frogAnim2', 'assets/spritesheet_frog3.png', { frameWidth: 128, frameHeight: 128 });
 
         this.load.spritesheet('hogImage', 'assets/player_hog.png', { frameWidth: 256, frameHeight: 128 });
         this.load.spritesheet('hogAnim1', 'assets/spritesheet_hog1.png', { frameWidth: 256, frameHeight: 192 });
@@ -18,6 +19,7 @@ class Preload extends Phaser.Scene {
         this.load.spritesheet('ravenImage', 'assets/player_raven.png', { frameWidth: 128, frameHeight: 128 });
         this.load.spritesheet('ravenAnim1', 'assets/spritesheet_raven1.png', { frameWidth: 192, frameHeight: 192 });
         this.load.spritesheet('ravenAnim2', 'assets/spritesheet_raven2.png', { frameWidth: 192, frameHeight: 192 });
+        this.load.spritesheet('ravenAnim3', 'assets/spritesheet_raven3.png', { frameWidth: 192, frameHeight: 192 });
 
         this.load.spritesheet('mob', 'assets/mob_test.png', { frameWidth: 64, frameHeight: 128 });
 
@@ -72,6 +74,7 @@ class Preload extends Phaser.Scene {
         this.load.tilemapTiledJSON('map_01', 'maps/level_01.json');
         this.load.tilemapTiledJSON('map_02', 'maps/level_02.json');
         this.load.tilemapTiledJSON('map_03', 'maps/level_03.json');
+        this.load.tilemapTiledJSON('map_04', 'maps/level_04.json');
     }
 
     create() {
@@ -131,6 +134,48 @@ class Preload extends Phaser.Scene {
             key: 'player_frog_slideWall',
             frames: this.anims.generateFrameNumbers('frogAnim', { start: 60, end: 64 }),
             frameRate: 10,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_hookGroundGo',
+            frames: this.anims.generateFrameNumbers('frogAnim2', { start: 0, end: 4 }),
+            frameRate: 40,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_hookGroundBack',
+            frames: this.anims.generateFrameNumbers('frogAnim2', { start: 5, end: 9 }),
+            frameRate: 40,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_hookJumpGo',
+            frames: this.anims.generateFrameNumbers('frogAnim2', { start: 14, end: 19 }),
+            frameRate: 25,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_hookJumpBack',
+            frames: this.anims.generateFrameNumbers('frogAnim2', { start: 19, end: 14 }),
+            frameRate: 25,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_hookGroundAttrack',
+            frames: this.anims.generateFrameNumbers('frogAnim2', { start: 24, end: 33 }),
+            frameRate: 25,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'player_frog_hookReceptionAttrack',
+            frames: this.anims.generateFrameNumbers('frogAnim2', { start: 34, end: 44 }),
+            frameRate: 25,
             repeat: 0
         });
 
@@ -287,7 +332,7 @@ class Preload extends Phaser.Scene {
 
         // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
 
-        this.scene.start("Level_03", {
+        this.scene.start("Level_04", {
             // POUR LA TESTROOM :
 
             //mapName: "map_test", // nom de la map
@@ -296,7 +341,7 @@ class Preload extends Phaser.Scene {
 
             // POUR LE JEU :
 
-            mapName: "map_03", // nom de la map
+            mapName: "map_04", // nom de la map
             mapTileset: "tileset", // nom du tileset sur TILED
             mapTilesetImage: "tileset_image", // nom du fichier image du tileset
         });
