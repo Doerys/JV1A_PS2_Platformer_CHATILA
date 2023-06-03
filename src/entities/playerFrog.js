@@ -202,10 +202,10 @@ class PlayerFrog extends Player {
 
                 if (this.isHooking) {
 
-                    if (this.facing == "left") {
+                    // crée des longueurs de langue à l'aller
+                    if (!this.returnHook) {
+                        if (this.facing == "left") {
 
-                        // crée des longueurs de langue à l'aller
-                        if (!this.returnHook) {
                             if (distanceHook >= 120) {
                                 this.rope2.enableBody(true, this.x - 50, this.y + 64, true, true)
                             }
@@ -221,36 +221,11 @@ class PlayerFrog extends Player {
                             if (distanceHook >= 240) {
                                 this.rope5.enableBody(true, this.x - 190, this.y + 64, true, true)
                             }
+
                         }
 
-                        // enlève les longueurs de langue au retour
-                        if (this.returnHook) {
-                            if (distanceHook < 80) {
-                                this.rope.disableBody(true, true);
-                            }
+                        if (this.facing == "right") {
 
-                            if (distanceHook < 120) {
-                                this.rope2.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 160) {
-                                this.rope3.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 200) {
-                                this.rope4.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 240) {
-                                this.rope5.disableBody(true, true);
-                            }
-                        }
-                    }
-
-                    if (this.facing == "right") {
-
-                        // crée des longueurs de langue à l'aller
-                        if (!this.returnHook) {
                             if (distanceHook >= 120) {
                                 this.rope2.enableBody(true, this.x + 115, this.y + 64, true, true)
                             }
@@ -267,9 +242,12 @@ class PlayerFrog extends Player {
                                 this.rope5.enableBody(true, this.x + 260, this.y + 64, true, true)
                             }
                         }
+                    }
 
-                        // enlève les longueurs de langue au retour
-                        if (this.returnHook) {
+                    // enlève les longueurs de langue au retour
+                    if (this.returnHook) {
+
+                        if (!this.stakeCatched) {
                             if (distanceHook < 80) {
                                 this.rope.disableBody(true, true);
                             }
@@ -290,64 +268,70 @@ class PlayerFrog extends Player {
                                 this.rope5.disableBody(true, true);
                             }
                         }
-                    }
 
-                    /*if (distanceHook >= 120) {
-                        if (this.facing == "right") {
-                            this.rope2.enableBody(true, this.x + 184, this.y + 64, true, true)
-                        }
-                        
-                        if (this.facing == "left") {
-                            this.rope2.enableBody(true, this.x - 56, this.y + 64, true, true)
+                        if (this.stakeCatched) {
+
+                            // enlève les longueurs de langue au retour
+                            if (distanceHook < 240) {
+                                this.rope.disableBody(true, true);
+                            }
+
+                            if (distanceHook < 200) {
+                                this.rope2.disableBody(true, true);
+                            }
+
+                            if (distanceHook < 160) {
+                                this.rope3.disableBody(true, true);
+                            }
+
+                            if (distanceHook < 120) {
+                                this.rope4.disableBody(true, true);
+                            }
+
+                            if (distanceHook < 80) {
+                                this.rope5.disableBody(true, true);
+                            }
                         }
                     }
-    
-                    if (distanceHook >= 240) {
-                        if (this.facing == "right") {
-                            this.rope3.enableBody(true, this.x + 304, this.y + 64, true, true)
-                        }
-                        
-                        if (this.facing == "left") {
-                            this.rope3.enableBody(true, this.x - 176, this.y + 64, true, true)
-                        }
-                    }*/
+                }
+            }
 
+            // si le grappin atteint la distance max OU choppe une caisse ou EST IMMOBILE : renvoie le grappin
+            if ((distanceHook >= this.maxHookDistance) || (this.boxCatched) || (this.hook.body.velocity.x == 0 && !this.stakeCatched && !this.boxCatched && !this.returnHook && this.isHooking)) {
+
+                if (this.facing == "right" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
+                    this.hook.setVelocityX(-this.speedHook);
                 }
 
-                // si le grappin atteint la distance max OU choppe une caisse ou EST IMMOBILE : renvoie le grappin
-                if ((distanceHook >= this.maxHookDistance) || (this.boxCatched) || (this.hook.body.velocity.x == 0 && !this.stakeCatched && !this.boxCatched && !this.returnHook && this.isHooking)) { // longueur max de la chaine
-                    
-                    if (this.facing == "right" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
-                        this.hook.setVelocityX(-this.speedHook);
-                    }
-
-                    else if (this.facing == "left" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
-                        this.hook.setVelocityX(this.speedHook);
-                    }
-
-                    this.returnHook = true;
-
-                    //this.hook.visible = false;
-                    //this.rope.visible = false;
-                    //this.rope.stop();
-                    //this.rope.visible = false;
+                else if (this.facing == "left" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
+                    this.hook.setVelocityX(this.speedHook);
                 }
 
-                // stoppe le grapin lors du retour et le fait disparaître
-                if (this.returnHook) {
-                    if (distanceHook <= 15) {
-                        this.hook.setVelocityX(0);
+                this.returnHook = true;
+            }
 
-                        this.hook.disableBody(true, true);
-                        this.rope.disableBody(true, true);
-                        this.rope2.disableBody(true, true);
-                        this.rope3.disableBody(true, true);
-                        this.rope4.disableBody(true, true);
-                        this.rope5.disableBody(true, true);
+            // si le grappin atteint un poteau
+            if (this.stakeCatched) {
 
-                        this.returnHook = false;
-                        this.isHooking = false;
-                    }
+                this.hook.setVelocity(0);
+
+                this.returnHook = true;
+            }
+
+            // stoppe le grapin lors du retour et le fait disparaître
+            if (this.returnHook) {
+                if (distanceHook <= 15) {
+                    this.hook.setVelocityX(0);
+
+                    this.hook.disableBody(true, true);
+                    this.rope.disableBody(true, true);
+                    this.rope2.disableBody(true, true);
+                    this.rope3.disableBody(true, true);
+                    this.rope4.disableBody(true, true);
+                    this.rope5.disableBody(true, true);
+
+                    this.returnHook = false;
+                    this.isHooking = false;
                 }
             }
         }

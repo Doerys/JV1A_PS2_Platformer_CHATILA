@@ -847,24 +847,17 @@ class SceneClass extends Phaser.Scene {
 
         this.player.stakeCatched = true;
 
-        hook.setVelocity(0);
-        hook.disableBody(true, true);
-
-        //this.rope.stop();
-        hook.visible = false;
-        //this.rope.visible = false;
-
         this.jumpHook = true;
 
         if (this.jumpHook) {
+            //this.player.y = stake.y - 64;
+
             if (this.player.facing == 'right') {
-                if (this.player.x - 32 < stake.x) {
-                    this.player.y = stake.y - 64;
+                if (this.player.x + 32 < stake.x) {
                     this.player.x += 10
                     this.time.delayedCall(15, () => {
                         this.goToHook(hook, stake)
                     });
-                    //this.jump(poids,blocCible)
                 }
                 else {
                     this.jumpHook = false;
@@ -873,7 +866,6 @@ class SceneClass extends Phaser.Scene {
             }
             else if (this.player.facing == 'left') {
                 if (this.player.x + 96 > stake.x) {
-                    this.player.y = stake.y - 64;
                     this.player.x -= 10
                     this.time.delayedCall(15, () => {
                         this.goToHook(hook, stake)

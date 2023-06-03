@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="22" nextobjectid="81">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="22" nextobjectid="82">
  <editorsettings>
   <export target="testScene.json" format="json"/>
  </editorsettings>
@@ -683,6 +683,7 @@
   <object id="10" x="704" y="1024" width="64" height="64"/>
   <object id="76" gid="48" x="1920" y="1152" width="64" height="64"/>
   <object id="77" gid="48" x="1600" y="960" width="64" height="64"/>
+  <object id="81" gid="48" x="1344" y="1600" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="4" name="Box">
   <object id="67" gid="86" x="1920" y="704" width="64" height="64"/>
@@ -690,7 +691,6 @@
   <object id="69" gid="86" x="576" y="1600" width="64" height="64"/>
   <object id="78" gid="86" x="1600" y="1216" width="64" height="64"/>
   <object id="79" gid="86" x="2048" y="1024" width="64" height="64"/>
-  <object id="80" gid="86" x="1408" y="1664" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="14" name="BigBox">
   <object id="64" gid="86" x="704" y="640" width="64" height="64"/>
