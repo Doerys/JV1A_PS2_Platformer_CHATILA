@@ -510,6 +510,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // SI DEUX INPUTS PRESSES => IMMOBILE
         if ((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && (this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked) { // si touche vers la droite pressée
+            this.setVelocityX(this.speedMoveX); // a chaque frame, applique la vitesse déterminée en temps réelle par d'autres fonctions.
             this.speedMoveX = 0;
         }
 
@@ -518,9 +519,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // DEPLACEMENT A GAUCHE <=
-        if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked && !this.isHooking && !this.isShooting) { // si touche vers la gauche pressée
+        if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked && !this.isHooking && this.canHook && !this.isShooting) { // si touche vers la gauche pressée
             this.facing = 'left'; // rotation
-            
+        
+
             if (this.currentMob != "raven") {
                 this.setVelocityX(this.speedMoveX);
             }
@@ -533,7 +535,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         // DEPLACEMENT A DROITE =>
-        else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked && !this.isHooking && !this.isShooting) || this.scene.reachNewLevel) { // si touche vers la droite pressée
+        else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked && !this.isHooking && this.canHook && !this.isShooting) || this.scene.reachNewLevel) { // si touche vers la droite pressée
             this.facing = 'right'; // rotation
 
             if (this.currentMob != "raven") {

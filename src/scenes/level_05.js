@@ -2,10 +2,10 @@ import SceneClass from "../templates/sceneClass.js";
 import Player from "../entities/player.js";
 import Mob from "../entities/mob.js";
 
-class Level_04 extends SceneClass {
+class Level_05 extends SceneClass {
 
     constructor() {
-        super('Level_04');
+        super('Level_05');
     }
 
     init(data) {
@@ -17,7 +17,7 @@ class Level_04 extends SceneClass {
     create() {
         this.activePossession = true;
 
-        this.movingPlat1 = this.physics.add.image(1152, 864, 'movingPlat')
+        /*this.movingPlat1 = this.physics.add.image(1152, 864, 'movingPlat')
         .setImmovable(true)
         .setVelocity(100, 0);
 
@@ -75,7 +75,7 @@ class Level_04 extends SceneClass {
                 { x: -150, y: 0, duration: 5500, ease: 'Stepped' },
                 { x: +150, y: 0, duration: 5500, ease: 'Stepped' },
             ]
-        });
+        });*/
 
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
@@ -87,7 +87,7 @@ class Level_04 extends SceneClass {
 
         this.loadVar(layers);
 
-        this.createPlayer(layers.spawnFrog.x - 64, layers.spawnFrog.y - 64, layers, "right", 'frog', false);
+        this.createPlayer(layers.spawnRaven.x - 64, layers.spawnRaven.y - 64, layers, "right", 'raven', false);
 
         // CREATION DE MOBS
 
@@ -95,10 +95,10 @@ class Level_04 extends SceneClass {
         //this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
 
         //Création du mob
-        //this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", false, false);
+        this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", true, false);
 
         //Création du mob
-        this.createMob(this.mob3, layers.spawnRaven.x - 64, layers.spawnRaven.y - 64, layers, "left", "raven", true, false);
+        //this.createMob(this.mob3, layers.spawnRaven.x - 64, layers.spawnRaven.y - 64, layers, "left", "raven", true, false);
     }
 
     update() {
@@ -106,4 +106,4 @@ class Level_04 extends SceneClass {
     }
 }
 
-export default Level_04
+export default Level_05

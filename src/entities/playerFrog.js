@@ -157,6 +157,7 @@ class PlayerFrog extends Player {
                 this.inputsMoveLocked = true; // commandes bloquées
                 this.body.setAllowGravity(false); //gravité annulée 
                 this.setVelocity(0, 0); // vélocité annulée
+                this.speedMoveX = 0;
 
                 setTimeout(() => {
                     this.hook.enableBody(true, this.x + 64, this.y + 54, true, true)
@@ -297,7 +298,7 @@ class PlayerFrog extends Player {
             }
 
             // si le grappin atteint la distance max OU choppe une caisse ou EST IMMOBILE : renvoie le grappin
-            if ((distanceHook >= this.maxHookDistance) || (this.boxCatched) || (this.hook.body.velocity.x == 0 && !this.stakeCatched && !this.boxCatched && !this.returnHook && this.isHooking)) {
+            if ((distanceHook >= this.maxHookDistance) || (this.boxCatched) || (this.hook.body.velocity.x == 0 && !this.stakeCatched && !this.boxCatched && !this.returnHook && this.isHooking) || (this.scene.hookCollideMovingPlat)) {
 
                 if (this.facing == "right" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
                     this.hook.setVelocityX(-this.speedHook);

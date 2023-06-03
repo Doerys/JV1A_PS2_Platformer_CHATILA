@@ -57,8 +57,8 @@ class Level_03 extends SceneClass {
             targets: this.movingPlat3.body.velocity,
             loop: -1,
             tweens: [
-                { x: -125, y: 0, duration: 1500, ease: 'Stepped' },
-                { x: +125, y: 0, duration: 1500, ease: 'Stepped' },
+                { x: -125, y: 0, duration: 2500, ease: 'Stepped' },
+                { x: +125, y: 0, duration: 2500, ease: 'Stepped' },
             ]
         });
 

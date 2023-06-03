@@ -78,6 +78,8 @@ class Preload extends Phaser.Scene {
         this.load.tilemapTiledJSON('map_02', 'maps/level_02.json');
         this.load.tilemapTiledJSON('map_03', 'maps/level_03.json');
         this.load.tilemapTiledJSON('map_04', 'maps/level_04.json');
+        this.load.tilemapTiledJSON('map_05', 'maps/level_05.json');
+        this.load.tilemapTiledJSON('map_05', 'maps/level_06.json');
     }
 
     create() {
@@ -378,18 +380,18 @@ class Preload extends Phaser.Scene {
 
         // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
 
-        this.scene.start("TestScene", {
+        this.scene.start("Level_05", {
             // POUR LA TESTROOM :
 
-            mapName: "map_test", // nom de la map
-            mapTileset: "placeholder_test", // nom du tileset sur TILED
-            mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
+            //mapName: "map_test", // nom de la map
+            //mapTileset: "placeholder_test", // nom du tileset sur TILED
+            //mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
 
             // POUR LE JEU :
 
-            //mapName: "map_04", // nom de la map
-            //mapTileset: "tileset", // nom du tileset sur TILED
-            //mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+            mapName: "map_05", // nom de la map
+            mapTileset: "tileset", // nom du tileset sur TILED
+            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
         });
     }
 

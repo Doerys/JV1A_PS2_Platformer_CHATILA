@@ -31,8 +31,6 @@ class PlayerRaven extends Player {
 
         if (this.isPossessed) {
 
-            console.log(this.body.velocity.x)
-
             // gestion des animations
             this.animManager();
 

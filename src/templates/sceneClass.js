@@ -285,6 +285,8 @@ class SceneClass extends Phaser.Scene {
         this.projectilesMob = new Phaser.GameObjects.Group;
         this.projectilesPlayer = new Phaser.GameObjects.Group;
 
+        this.hookCollideMovingPlat = false;
+
         this.physics.add.collider(this.projectilesMob, layers.ravenPlats, this.createPlat, null, this);
 
         this.physics.add.collider(this.projectilesMob, layers.layer_platforms, this.cleanProj, null, this);
@@ -568,10 +570,10 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(this.player.hook, layers.pics);
             this.physics.add.collider(this.player.hook, layers.bigBox);
             this.physics.add.collider(this.player.hook, layers.mobGroup);
-            this.physics.add.collider(this.player.hook, this.movingPlat1);
-            this.physics.add.collider(this.player.hook, this.movingPlat2);
-            this.physics.add.collider(this.player.hook, this.movingPlat3);
-            this.physics.add.collider(this.player.hook, this.movingPlat4);
+            this.physics.add.collider(this.player.hook, this.movingPlat1, this.cleanHook, null, this);
+            this.physics.add.collider(this.player.hook, this.movingPlat2, this.cleanHook, null, this);
+            this.physics.add.collider(this.player.hook, this.movingPlat3, this.cleanHook, null, this);
+            this.physics.add.collider(this.player.hook, this.movingPlat4, this.cleanHook, null, this);
             this.physics.add.collider(this.player.hook, this.door);
             this.physics.add.collider(this.player.hook, layers.weakPlatsVertical);
         }
@@ -787,9 +789,20 @@ class SceneClass extends Phaser.Scene {
 
             this.player.haveCure = false;
 
-            const newCure = this.physics.add.staticSprite(this.player.x + 64, this.player.y + 64, 'cure').setDepth(1);
+            if (this.player.currentMob == "frog") {
+                const newCure = this.physics.add.staticSprite(this.player.x + 64, this.player.y + 64, 'cure').setDepth(1);
+                this.layers.cures.add(newCure);
+            }
 
-            this.layers.cures.add(newCure);
+            if (this.player.currentMob == "hog") {
+                const newCure = this.physics.add.staticSprite(this.player.x + 128, this.player.y + 128, 'cure').setDepth(1);
+                this.layers.cures.add(newCure);
+            }
+
+            if (this.player.currentMob == "raven") {
+                const newCure = this.physics.add.staticSprite(this.player.x + 96, this.player.y + 128, 'cure').setDepth(1);
+                this.layers.cures.add(newCure);
+            }
         }
     }
 
@@ -850,7 +863,13 @@ class SceneClass extends Phaser.Scene {
         this.jumpHook = true;
 
         if (this.jumpHook) {
-            //this.player.y = stake.y - 64;
+            this.player.y = stake.y - 64;
+            this.player.rope.y = stake.y;
+            this.player.rope2.y = stake.y;
+            this.player.rope3.y = stake.y;
+            this.player.rope4.y = stake.y;
+            this.player.rope5.y = stake.y;
+            hook.y = stake.y;
 
             if (this.player.facing == 'right') {
                 if (this.player.x + 32 < stake.x) {
@@ -918,6 +937,14 @@ class SceneClass extends Phaser.Scene {
         }
     }
 
+    cleanHook(hook) {
+        this.hookCollideMovingPlat = true;
+        
+        this.time.delayedCall(300, () => {
+            this.hookCollideMovingPlat = false;
+        });
+    }
+
     // METHODES POUR PLAYER = HOG ---------------
 
     // si collision pendant charge, détruit l'objet et stop la charge
@@ -973,8 +1000,8 @@ class SceneClass extends Phaser.Scene {
     // crée une plateforme si on tire sur un élément de décor
     createPlat(proj, ravenPlatOff) {
 
-        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y - 16, "ravenPlatOn").setSize(128, 64).setOffset(8, 24);
-        this.physics.add.collider(this.player, newRavenPlat);
+        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y - 16, "ravenPlatOn").setDepth(1).setSize(128, 64).setOffset(8, 24);
+        this.physics.add.collider(this.playerGroup, newRavenPlat);
         this.physics.add.collider(this.mobGroup, newRavenPlat);
         this.physics.add.collider(this.projectilesMob, newRavenPlat, this.cleanProj, null, this);
         this.physics.add.collider(this.projectilesPlayer, newRavenPlat, this.cleanProj, null, this);
@@ -1074,12 +1101,17 @@ class SceneClass extends Phaser.Scene {
                         mapTilesetImage: "tileset_image", // nom du fichier image du tileset
                     });
                 }
+
+                if (this.mapName == "map_04") {
+                    this.scene.start("Level_05", {
+                        mapName: "map_05", // nom de la map
+                        mapTileset: "tileset", // nom du tileset sur TILED
+                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                    });
+                }
             });
 
         }
-
-
-
     }
 }
 

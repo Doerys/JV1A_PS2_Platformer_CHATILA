@@ -47,7 +47,7 @@ class Level_02 extends SceneClass {
             ]
         });
 
-        this.movingPlat3 = this.physics.add.image(2016, 288, 'movingPlat')
+        /*this.movingPlat3 = this.physics.add.image(2016, 288, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0)
 
@@ -60,7 +60,7 @@ class Level_02 extends SceneClass {
             { x:    -100, y: 0, duration: 1600, ease: 'Stepped' },
             { x:    +100, y: 0, duration: 1600, ease: 'Stepped' },
             ]
-        });
+        });*/
 
         // load de la map
         const levelMap = this.add.tilemap(this.mapName);
@@ -80,7 +80,7 @@ class Level_02 extends SceneClass {
         //this.createMob(this.mob1, layers.spawnFrog.x, layers.spawnFrog.y, layers, "right", "frog", false, false);
 
         //Création du mob
-        this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", false, false);
+        this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", true, false);
 
         //Création du mob
         //this.createMob(this.mob3, layers.spawnRaven.x, layers.spawnRaven.y, layers, "left", "raven", false, false);
