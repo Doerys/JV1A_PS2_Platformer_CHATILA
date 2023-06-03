@@ -19,7 +19,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: true,
+                    debug: false,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -564,12 +564,24 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.overlap(this.player.hook, layers.stakes, this.goToHook, null, this);
             this.physics.add.overlap(this.player.hook, layers.boxes, this.attrackHook, null, this);
             this.physics.add.collider(this.player.hook, layers.layer_platforms);
+            this.physics.add.collider(this.player.hook, layers.breaks);
+            this.physics.add.collider(this.player.hook, layers.pics);
+            this.physics.add.collider(this.player.hook, layers.bigBox);
+            this.physics.add.collider(this.player.hook, layers.mobGroup);
+            this.physics.add.collider(this.player.hook, this.movingPlat1);
+            this.physics.add.collider(this.player.hook, this.movingPlat2);
+            this.physics.add.collider(this.player.hook, this.movingPlat3);
+            this.physics.add.collider(this.player.hook, this.movingPlat4);
+            this.physics.add.collider(this.player.hook, this.door);
+            this.physics.add.collider(this.player.hook, layers.weakPlatsVertical);
         }
 
         // Plateformes
 
         this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
         this.physics.add.collider(this.player, layers.weakPlatsVertical, this.destroyVerticalPlat, null, this);
+
+        this.physics.add.collider(this.player, layers.ravenPlat);
 
         this.physics.add.collider(this.player, this.movingPlat1);
         this.physics.add.collider(this.player, this.movingPlat2);
@@ -879,20 +891,13 @@ class SceneClass extends Phaser.Scene {
     attrackHook(hook, box) {
         this.player.boxCatched = true;
 
-        hook.setVelocity(0);
-        hook.disableBody(true, true);
-
-        //this.rope.stop();
-        hook.visible = false;
-        //this.rope.visible = false;
-
         this.attrack = true;
 
         if (this.attrack) {
             if (this.player.facing == 'right') {
                 if (this.player.x + 144 < box.x) {
                     box.body.setAllowGravity(false);
-                    box.x -= 6
+                    box.x -= 10;
                     this.time.delayedCall(15, () => {
                         this.attrackHook(hook, box)
                     });
@@ -907,7 +912,7 @@ class SceneClass extends Phaser.Scene {
             else if (this.player.facing == 'left') {
                 if (this.player.x - 16 > box.x) {
                     box.body.setAllowGravity(false);
-                    box.x += 6
+                    box.x += 10;
                     this.time.delayedCall(15, () => {
                         this.attrackHook(hook, box)
                     });
@@ -978,6 +983,7 @@ class SceneClass extends Phaser.Scene {
 
         const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y - 16, "ravenPlatOn").setSize(128, 64).setOffset(8, 24);
         this.physics.add.collider(this.player, newRavenPlat);
+        this.physics.add.collider(this.mobGroup, newRavenPlat);
         this.physics.add.collider(this.projectilesMob, newRavenPlat, this.cleanProj, null, this);
         this.physics.add.collider(this.projectilesPlayer, newRavenPlat, this.cleanProj, null, this);
 

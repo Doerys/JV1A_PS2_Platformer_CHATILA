@@ -66,8 +66,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.canHook = true;
         this.isHooking = false;
+        this.returnHook = false;
 
-        this.speedHook = 1000;
+        this.speedHook = 1500;
         this.maxHookDistance = 256;
 
         this.stakeCatched = false;
@@ -632,7 +633,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // SAUT (plus on appuie, plus on saut haut)
 
         // déclencheur du saut
-        if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround && !this.isShooting) { // si on vient de presser saut + peut sauter true + au sol
+        if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround && !this.isShooting && this.canHook) { // si on vient de presser saut + peut sauter true + au sol
             this.simpleJump();
         }
 
@@ -651,7 +652,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
-        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump && this.canJump && !this.isHooking) { // si le curseur haut est pressé et jump timer =/= 0
+        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump && this.canJump && !this.isHooking && this.canHook) { // si le curseur haut est pressé et jump timer =/= 0
 
             if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
                 this.canHighJump = false;
