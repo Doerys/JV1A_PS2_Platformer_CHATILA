@@ -17,69 +17,66 @@ class PlayerFrog extends Player {
     }
 
     init() {
+
         super.init();
 
         this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
-        //console.log("PLAYER = FROG");
+        console.log("PLAYER = FROG");
 
         //this.physics.add.collider(this.hook, layersmurs);
 
-        if (!this.hookCreated) {
-            this.hook = new Hook(this.scene, this.x + 64, this.y + 64, "hook")
-                .setCollideWorldBounds(true)
-                .setOrigin(0.5, 0.5)
-                .disableBody(true, true);
+        this.hook = new Hook(this.scene, this.x + 64, this.y + 64, "hook")
+            .setCollideWorldBounds(true)
+            .setOrigin(0.5, 0.5)
+            .disableBody(true, true);
 
-            this.hook.body.setAllowGravity(false);
+        this.hook.body.setAllowGravity(false);
 
-            //
+        //
 
-            this.rope = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
-                .setOrigin(0, 0.5)
-                .setDepth(-1)
-                .disableBody(true, true);
+        this.rope = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setOrigin(0, 0.5)
+            .setDepth(-1)
+            .disableBody(true, true);
 
-            this.rope.body.setAllowGravity(false);
+        this.rope.body.setAllowGravity(false);
 
-            //
+        //
 
-            this.rope2 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
-                .setOrigin(0, 0.5)
-                .setDepth(-1)
-                .disableBody(true, true);
+        this.rope2 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setOrigin(0, 0.5)
+            .setDepth(-1)
+            .disableBody(true, true);
 
-            this.rope2.body.setAllowGravity(false);
+        this.rope2.body.setAllowGravity(false);
 
-            //
+        //
 
-            this.rope3 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
-                .setOrigin(0, 0.5)
-                .setDepth(-1)
-                .disableBody(true, true);
+        this.rope3 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setOrigin(0, 0.5)
+            .setDepth(-1)
+            .disableBody(true, true);
 
-            this.rope3.body.setAllowGravity(false);
+        this.rope3.body.setAllowGravity(false);
 
-            //
+        //
 
-            this.rope4 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
-                .setOrigin(0, 0.5)
-                .setDepth(-1)
-                .disableBody(true, true);
+        this.rope4 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setOrigin(0, 0.5)
+            .setDepth(-1)
+            .disableBody(true, true);
 
-            this.rope4.body.setAllowGravity(false);
+        this.rope4.body.setAllowGravity(false);
 
-            //
+        //
 
-            this.rope5 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
-                .setOrigin(0, 0.5)
-                .setDepth(-1)
-                .disableBody(true, true);
+        this.rope5 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setOrigin(0, 0.5)
+            .setDepth(-1)
+            .disableBody(true, true);
 
-            this.rope5.body.setAllowGravity(false);
-
-            this.hookCreated = true;
-        }
+        this.rope5.body.setAllowGravity(false);
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update
@@ -90,7 +87,7 @@ class PlayerFrog extends Player {
 
         if (this.isPossessed) {
 
-            //console.log(this.body.velocity.y)
+            console.log(this.returnHook);
 
             // gestion des animations
             this.animManager();
@@ -101,14 +98,14 @@ class PlayerFrog extends Player {
             // débloque la capacité de se mouvoir en chute libre
             if (this.body.velocity.y > 300) {
                 this.inputsMoveLocked = false;
-            } 
+            }
 
             // WALL GRAB - on se fixe au mur une fois en contact avec lui
 
             // WALL GRAB GAUCHE
             if (this.blockedLeft && (this.cursors.left.isDown || this.keyQ.isDown) && !this.onGround) { // si on est bloqué sur une paroi de gauche, et pas en contact avec le sol
 
-                if (!this.newJump /*|| this.body.velocity.y > 300*/) { // si le saut actuel n'est pas nouveau
+                if (!this.newJump) { // si le saut actuel n'est pas nouveau
 
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
@@ -126,7 +123,7 @@ class PlayerFrog extends Player {
             // WALL GRAB DROIT
             else if (this.blockedRight && (this.cursors.right.isDown || this.keyD.isDown) && !this.onGround) { // si on est bloqué sur une paroi de droite, et pas en contact avec le sol
 
-                if (!this.newJump /*|| this.body.velocity.y > 300*/) { // si le saut actuel n'est pas nouveau
+                if (!this.newJump) { // si le saut actuel n'est pas nouveau
 
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
@@ -135,7 +132,7 @@ class PlayerFrog extends Player {
 
                     // verrouille les commandes de déplacement et valide le wall grab gauche
                     this.inputsMoveLocked = true;
-                    this.grabRight = true;                    
+                    this.grabRight = true;
                     this.wasGrabingRight = true;
                     this.isGrabing = true;
                 }
@@ -155,10 +152,8 @@ class PlayerFrog extends Player {
                 this.inputsMoveLocked = false;
             }
 
-            const distanceHook = this.scene.checkDistance(this.x + 64, this.hook.x);
-
             // GRAPPIN
-            if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isHooking && this.canHook) {
+            if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isHooking && this.canHook && !this.grabLeft && !this.grabRight) {
 
                 this.canHook = false;
 
@@ -168,7 +163,11 @@ class PlayerFrog extends Player {
                 this.setVelocity(0, 0); // vélocité annulée
                 this.speedMoveX = 0;
 
+                // crée la langue
                 setTimeout(() => {
+
+                    console.log("HOOK");
+
                     this.hook.enableBody(true, this.x + 64, this.y + 54, true, true)
 
                     //PROJECTION HOOK (en fonction de l'orientation du perso, projette le grappin à droite ou à gauche)
@@ -200,6 +199,144 @@ class PlayerFrog extends Player {
                 }, 200); // après un certain temps, on repasse la possibilité de sauter à true
             }
 
+            if (this.isHooking) {
+                const distanceHook = this.scene.checkDistance(this.x + 64, this.hook.x);
+
+
+                // si le grappin atteint la distance max OU choppe une caisse OU est immobile sans toucher d'élément interactif OU touche une plat mobile : renvoie le grappin
+                if ((distanceHook >= this.maxHookDistance) || (this.boxCatched) || (this.hook.body.velocity.x == 0 && !this.stakeCatched && !this.boxCatched && !this.returnHook && this.isHooking) || (this.scene.hookCollideMovingPlat)) {
+
+                    if (this.facing == "right" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
+                        this.hook.setVelocityX(-this.speedHook);
+                    }
+
+                    else if (this.facing == "left" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
+                        this.hook.setVelocityX(this.speedHook);
+                    }
+
+                    this.returnHook = true;
+                }
+
+                // crée des longueurs de langue à l'aller
+                if (!this.returnHook) {
+                    if (this.facing == "left") {
+
+                        if (distanceHook >= 120) {
+                            this.rope2.enableBody(true, this.x - 50, this.y + 64, true, true)
+                        }
+
+                        if (distanceHook >= 160) {
+                            this.rope3.enableBody(true, this.x - 96, this.y + 64, true, true)
+                        }
+
+                        if (distanceHook >= 200) {
+                            this.rope4.enableBody(true, this.x - 146, this.y + 64, true, true)
+                        }
+
+                        if (distanceHook >= 240) {
+                            this.rope5.enableBody(true, this.x - 190, this.y + 64, true, true)
+                        }
+
+                    }
+
+                    if (this.facing == "right") {
+
+                        if (distanceHook >= 120) {
+                            this.rope2.enableBody(true, this.x + 115, this.y + 64, true, true)
+                        }
+
+                        if (distanceHook >= 160) {
+                            this.rope3.enableBody(true, this.x + 166, this.y + 64, true, true)
+                        }
+
+                        if (distanceHook >= 200) {
+                            this.rope4.enableBody(true, this.x + 216, this.y + 64, true, true)
+                        }
+
+                        if (distanceHook >= 240) {
+                            this.rope5.enableBody(true, this.x + 260, this.y + 64, true, true)
+                        }
+                    }
+                }
+
+                // enlève les longueurs de langue au retour
+                if (this.returnHook) {
+
+                    if (!this.stakeCatched) {
+                        if (distanceHook < 80) {
+                            this.rope.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 120) {
+                            this.rope2.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 160) {
+                            this.rope3.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 200) {
+                            this.rope4.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 240) {
+                            this.rope5.disableBody(true, true);
+                        }
+                    }
+
+                    if (this.stakeCatched) {
+
+                        // enlève les longueurs de langue au retour
+                        if (distanceHook < 240) {
+                            this.rope.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 200) {
+                            this.rope2.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 160) {
+                            this.rope3.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 120) {
+                            this.rope4.disableBody(true, true);
+                        }
+
+                        if (distanceHook < 80) {
+                            this.rope5.disableBody(true, true);
+                        }
+                    }
+                }
+
+                // si le grappin atteint un poteau
+                if (this.stakeCatched) {
+
+                    this.hook.setVelocity(0);
+                    this.returnHook = true;
+                }
+
+                // stoppe le grapin lors du retour et le fait disparaître
+                if (this.returnHook) {
+                    if (distanceHook <= 15) {
+                        this.hook.setVelocityX(0);
+
+                        this.hook.disableBody(true, true);
+                        this.rope.disableBody(true, true);
+                        this.rope2.disableBody(true, true);
+                        this.rope3.disableBody(true, true);
+                        this.rope4.disableBody(true, true);
+                        this.rope5.disableBody(true, true);
+
+                        this.returnHook = false;
+                        this.isHooking = false;
+                    }
+                }
+
+            }
+
+
+
             // débloque les commandes après l'utilisation du grappin
             if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook) {
                 if (!this.isWallJumping) {
@@ -208,142 +345,6 @@ class PlayerFrog extends Player {
                 this.body.setAllowGravity(true); //gravité rétablie
             }
 
-            if (this.hookCreated) {
-
-                if (this.isHooking) {
-
-                    // crée des longueurs de langue à l'aller
-                    if (!this.returnHook) {
-                        if (this.facing == "left") {
-
-                            if (distanceHook >= 120) {
-                                this.rope2.enableBody(true, this.x - 50, this.y + 64, true, true)
-                            }
-
-                            if (distanceHook >= 160) {
-                                this.rope3.enableBody(true, this.x - 96, this.y + 64, true, true)
-                            }
-
-                            if (distanceHook >= 200) {
-                                this.rope4.enableBody(true, this.x - 146, this.y + 64, true, true)
-                            }
-
-                            if (distanceHook >= 240) {
-                                this.rope5.enableBody(true, this.x - 190, this.y + 64, true, true)
-                            }
-
-                        }
-
-                        if (this.facing == "right") {
-
-                            if (distanceHook >= 120) {
-                                this.rope2.enableBody(true, this.x + 115, this.y + 64, true, true)
-                            }
-
-                            if (distanceHook >= 160) {
-                                this.rope3.enableBody(true, this.x + 166, this.y + 64, true, true)
-                            }
-
-                            if (distanceHook >= 200) {
-                                this.rope4.enableBody(true, this.x + 216, this.y + 64, true, true)
-                            }
-
-                            if (distanceHook >= 240) {
-                                this.rope5.enableBody(true, this.x + 260, this.y + 64, true, true)
-                            }
-                        }
-                    }
-
-                    // enlève les longueurs de langue au retour
-                    if (this.returnHook) {
-
-                        if (!this.stakeCatched) {
-                            if (distanceHook < 80) {
-                                this.rope.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 120) {
-                                this.rope2.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 160) {
-                                this.rope3.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 200) {
-                                this.rope4.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 240) {
-                                this.rope5.disableBody(true, true);
-                            }
-                        }
-
-                        if (this.stakeCatched) {
-
-                            // enlève les longueurs de langue au retour
-                            if (distanceHook < 240) {
-                                this.rope.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 200) {
-                                this.rope2.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 160) {
-                                this.rope3.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 120) {
-                                this.rope4.disableBody(true, true);
-                            }
-
-                            if (distanceHook < 80) {
-                                this.rope5.disableBody(true, true);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // si le grappin atteint la distance max OU choppe une caisse ou EST IMMOBILE : renvoie le grappin
-            if ((distanceHook >= this.maxHookDistance) || (this.boxCatched) || (this.hook.body.velocity.x == 0 && !this.stakeCatched && !this.boxCatched && !this.returnHook && this.isHooking) || (this.scene.hookCollideMovingPlat)) {
-
-                if (this.facing == "right" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
-                    this.hook.setVelocityX(-this.speedHook);
-                }
-
-                else if (this.facing == "left" && distanceHook != 0 && (this.hook.x != this.x + 64)) {
-                    this.hook.setVelocityX(this.speedHook);
-                }
-
-                this.returnHook = true;
-            }
-
-            // si le grappin atteint un poteau
-            if (this.stakeCatched) {
-
-                this.hook.setVelocity(0);
-
-                this.returnHook = true;
-            }
-
-            // stoppe le grapin lors du retour et le fait disparaître
-            if (this.returnHook) {
-                if (distanceHook <= 15) {
-                    this.hook.setVelocityX(0);
-
-                    this.hook.disableBody(true, true);
-                    this.rope.disableBody(true, true);
-                    this.rope2.disableBody(true, true);
-                    this.rope3.disableBody(true, true);
-                    this.rope4.disableBody(true, true);
-                    this.rope5.disableBody(true, true);
-
-                    this.returnHook = false;
-                    this.isHooking = false;
-                }
-            }
         }
     }
 }

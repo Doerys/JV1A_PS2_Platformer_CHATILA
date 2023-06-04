@@ -640,7 +640,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // SAUT (plus on appuie, plus on saut haut)
 
         // déclencheur du saut
-        if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround && !this.isShooting && this.canHook) { // si on vient de presser saut + peut sauter true + au sol
+        if ((this.upOnce || this.ZOnce) && this.canJump && this.jumpCounter > 0 && this.onGround && !this.isShooting && !this.isHooking && this.canHook) { // si on vient de presser saut + peut sauter true + au sol
             this.simpleJump();
         }
 
