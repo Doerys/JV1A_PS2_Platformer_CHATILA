@@ -5,8 +5,8 @@
     },
     "activeFile": "test/testScene.tmx",
     "expandedProjectPaths": [
-        "test",
-        "."
+        ".",
+        "test"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -22,7 +22,7 @@
             "scale": 0.125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2044,
+                "x": 2048,
                 "y": 2648
             }
         },
@@ -38,21 +38,21 @@
                 5
             ],
             "expandedObjectLayers": [
+                12,
+                19,
                 16,
+                6,
                 23,
                 22,
-                6,
                 21,
                 10,
-                15,
-                12,
-                19
+                15
             ],
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 422,
-                "y": 1354
+                "x": 1536,
+                "y": 959
             }
         },
         "level_01.tmx#placeholder_test": {
@@ -84,28 +84,28 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                18,
-                17,
-                16,
-                23,
-                7,
-                6,
-                11,
-                26,
-                10,
-                25,
-                9,
-                24,
-                15,
                 13,
                 12,
-                19
+                19,
+                18,
+                17,
+                7,
+                16,
+                6,
+                23,
+                11,
+                10,
+                9,
+                26,
+                25,
+                24,
+                15
             ],
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 669.6969696969697,
-                "y": 863.6363636363637
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "level_02.tmx#placeholder_test": {
@@ -117,25 +117,25 @@
         },
         "level_03.tmx": {
             "expandedObjectLayers": [
+                13,
                 18,
                 17,
-                16,
                 7,
+                16,
                 6,
                 20,
+                10,
                 27,
                 26,
-                10,
                 25,
                 24,
-                15,
-                13
+                15
             ],
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1324.242424242424,
-                "y": 1003.030303030303
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "level_03.tmx#tileset": {
@@ -155,24 +155,24 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
+                19,
                 16,
-                23,
                 6,
+                23,
                 11,
-                26,
                 10,
-                25,
                 9,
-                24,
+                26,
                 8,
-                15,
-                19
+                25,
+                24,
+                15
             ],
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1009.0909090909092,
-                "y": 763.6363636363637
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "level_04.tmx#tileset": {
@@ -184,21 +184,21 @@
                 4
             ],
             "expandedObjectLayers": [
+                13,
                 18,
+                7,
                 16,
                 23,
-                7,
                 11,
                 9,
                 8,
-                15,
-                13
+                15
             ],
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1715.1515151515152,
-                "y": 866.6666666666667
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "level_05.tmx#tileset": {
@@ -209,8 +209,8 @@
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1533.3333333333335,
-                "y": 962.121212121212
+                "x": 1536.3636363636363,
+                "y": 963.6363636363637
             }
         },
         "level_06 - Copie.tmx#placeholder_test": {
@@ -221,28 +221,28 @@
         },
         "level_06.tmx": {
             "expandedObjectLayers": [
-                18,
-                16,
-                23,
-                7,
-                6,
-                11,
-                26,
-                10,
-                25,
-                9,
-                24,
-                8,
-                15,
                 13,
                 12,
-                19
+                19,
+                18,
+                7,
+                16,
+                6,
+                23,
+                11,
+                10,
+                9,
+                26,
+                8,
+                25,
+                24,
+                15
             ],
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1251.5151515151515,
-                "y": 869.6969696969697
+                "x": 1533.3333333333335,
+                "y": 962.121212121212
             }
         },
         "level_06.tmx#placeholder_test": {
@@ -255,15 +255,15 @@
         "test/testScene.tmx": {
             "expandedObjectLayers": [
                 3,
-                18,
                 2,
+                18,
                 17,
                 16,
                 6,
-                21,
                 5,
-                20,
                 4,
+                21,
+                20,
                 9,
                 15,
                 14
@@ -271,7 +271,7 @@
             "scale": 0.33,
             "selectedLayer": 11,
             "viewCenter": {
-                "x": 1045.4545454545455,
+                "x": 1048.4848484848485,
                 "y": 1587.878787878788
             }
         },
@@ -295,8 +295,7 @@
         "level_04.tmx",
         "level_05.tmx",
         "level_06.tmx",
-        "test/testScene.tmx",
-        "level_06 - Copie.tmx"
+        "test/testScene.tmx"
     ],
     "project": "projet_immortalGlades.tiled-project",
     "property.type": "bool",
@@ -307,10 +306,10 @@
         "level_04.tmx",
         "level_05.tmx",
         "level_06.tmx",
-        "level_06 - Copie.tmx",
         "test/testScene.tmx",
-        "level_02 - Copie.tmx",
         "level_01 - Copie.tmx",
+        "level_06 - Copie.tmx",
+        "level_02 - Copie.tmx",
         "level_04 - Copie.tmx"
     ],
     "tileset.embedInMap": true,
