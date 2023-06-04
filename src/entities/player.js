@@ -57,6 +57,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // wall jump
         this.grabLeft = false;
         this.grabRight = false;
+        this.wasGrabingLeft = false;
+        this.wasGrabingRight = false;
+
         this.isWallJumping = false;
 
         this.isGrabing = false;
@@ -521,7 +524,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // DEPLACEMENT A GAUCHE <=
         if ((this.cursors.left.isDown || this.keyQ.isDown /* || this.controller.left */) && !this.inputsMoveLocked && !this.isHooking && this.canHook && !this.isShooting) { // si touche vers la gauche pressée
             this.facing = 'left'; // rotation
-        
+
 
             if (this.currentMob != "raven") {
                 this.setVelocityX(this.speedMoveX);
@@ -623,6 +626,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 this.grabRight = false;
                 this.grabLeft = false;
+                this.wasGrabingLeft = false;
+                this.wasGrabingRight = false;
                 this.isGrabing = false;
             }
         }
@@ -639,7 +644,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.simpleJump();
         }
 
-        else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump) {
+        else if ((this.cursors.up.isUp && this.keyZ.isUp) && this.canHighJump && !this.wasGrabingLeft && !this.wasGrabingRight) {
             this.canHighJump = false; // contraint de rester appuyé pour monter plus haut (évite de pouvoir spammer à la place) 
         }
 
@@ -654,17 +659,32 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // SAUT PLUS HAUT - allonge la hauteur du saut en fonction du timer
-        else if ((this.cursors.up.isDown || this.keyZ.isDown) && this.canHighJump && this.canJump && !this.isHooking && this.canHook) { // si le curseur haut est pressé et jump timer =/= 0
+        else if (this.canHighJump && this.canJump && !this.isHooking && this.canHook) { // si le curseur haut est pressé et jump timer =/= 0
 
-            if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
-                this.canHighJump = false;
-                setTimeout(() => {
-                    this.canPlane = true;
-                }, 300);
+            if ((this.cursors.up.isDown || this.keyZ.isDown)) {
+                if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
+                    this.canHighJump = false;
+                    setTimeout(() => {
+                        this.canPlane = true;
+                    }, 300);
+                }
+                else {
+                    // saute plus haut si on reste appuyé sur l'input de saut
+                    this.setVelocityY(-this.speedMoveY);
+                }
             }
-            else {
-                // saute plus haut si on reste appuyé sur l'input de saut
-                this.setVelocityY(-this.speedMoveY);
+
+            else if ((this.wasGrabingRight && (this.cursors.left.isDown || this.keyQ.isDown)) || (this.wasGrabingLeft && (this.cursors.right.isDown || this.keyD.isDown))) {
+                if (this.jumpTimer.getElapsedSeconds() > .3 || this.body.blocked.up) { // Si le timer du jump est supérieur à 12, le stoppe.
+                    this.canHighJump = false;
+                    setTimeout(() => {
+                        this.canPlane = true;
+                    }, 300);
+                }
+                else {
+                    // saute plus haut si on reste appuyé sur l'input de saut
+                    this.setVelocityY(-this.speedMoveY);
+                }
             }
         }
 

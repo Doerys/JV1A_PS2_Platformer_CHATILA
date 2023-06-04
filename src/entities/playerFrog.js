@@ -90,18 +90,25 @@ class PlayerFrog extends Player {
 
         if (this.isPossessed) {
 
+            //console.log(this.body.velocity.y)
+
             // gestion des animations
             this.animManager();
 
             // METHODE POUR MECANIQUES COMMUNES
             this.handlePlayer();
 
+            // débloque la capacité de se mouvoir en chute libre
+            if (this.body.velocity.y > 300) {
+                this.inputsMoveLocked = false;
+            } 
+
             // WALL GRAB - on se fixe au mur une fois en contact avec lui
 
             // WALL GRAB GAUCHE
-            if (this.blockedLeft && !this.onGround) { // si on est bloqué sur une paroi de gauche, et pas en contact avec le sol
+            if (this.blockedLeft && (this.cursors.left.isDown || this.keyQ.isDown) && !this.onGround) { // si on est bloqué sur une paroi de gauche, et pas en contact avec le sol
 
-                if (!this.newJump) { // si le saut actuel n'est pas nouveau
+                if (!this.newJump /*|| this.body.velocity.y > 300*/) { // si le saut actuel n'est pas nouveau
 
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
@@ -111,14 +118,15 @@ class PlayerFrog extends Player {
                     // verrouille les commandes de déplacement et valide le wall grab gauche
                     this.inputsMoveLocked = true;
                     this.grabLeft = true;
+                    this.wasGrabingLeft = true;
                     this.isGrabing = true;
                 }
             }
 
             // WALL GRAB DROIT
-            else if (this.blockedRight && !this.onGround) { // si on est bloqué sur une paroi de droite, et pas en contact avec le sol
+            else if (this.blockedRight && (this.cursors.right.isDown || this.keyD.isDown) && !this.onGround) { // si on est bloqué sur une paroi de droite, et pas en contact avec le sol
 
-                if (!this.newJump) { // si le saut actuel n'est pas nouveau
+                if (!this.newJump /*|| this.body.velocity.y > 300*/) { // si le saut actuel n'est pas nouveau
 
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
@@ -127,7 +135,8 @@ class PlayerFrog extends Player {
 
                     // verrouille les commandes de déplacement et valide le wall grab gauche
                     this.inputsMoveLocked = true;
-                    this.grabRight = true;
+                    this.grabRight = true;                    
+                    this.wasGrabingRight = true;
                     this.isGrabing = true;
                 }
             }
