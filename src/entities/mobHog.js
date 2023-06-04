@@ -21,7 +21,7 @@ class MobHog extends Mob {
 
         super.init();
 
-        console.log("new MOB HOG");
+        //console.log("new MOB HOG");
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update

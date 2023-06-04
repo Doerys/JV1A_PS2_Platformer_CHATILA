@@ -19,7 +19,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: true,
+                    debug: false,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -731,11 +731,11 @@ class SceneClass extends Phaser.Scene {
 
             // SI RAVEN OU FROG
             else if (mob.isPossessed) {
-                console.log("check Frog player")
+                //console.log("check Frog player")
                 // Petit mouvement de plaque, mais rien de plus
             }
             else {
-                console.log("check Frog mob")
+                //console.log("check Frog mob")
                 // Petit mouvement de plaque, mais rien de plus
             }
         }
@@ -1205,8 +1205,6 @@ class SceneClass extends Phaser.Scene {
                 }
                 else {
                     this.counterVictory += 1;
-
-                    console.log(this.counterVictory)
 
                     this.time.delayedCall(1500, () => {
                         this.reachNewLevel = false;

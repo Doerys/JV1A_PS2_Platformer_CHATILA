@@ -17,7 +17,7 @@ class PlayerHog extends Player {
     init() {
         super.init();
         
-        console.log("PLAYER = HOG");
+        //console.log("PLAYER = HOG");
         this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
     }
 

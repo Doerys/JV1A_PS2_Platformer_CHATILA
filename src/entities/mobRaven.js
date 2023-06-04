@@ -22,7 +22,7 @@ class MobRaven extends Mob {
 
         super.init();
 
-        console.log("new MOB RAVEN");
+        //console.log("new MOB RAVEN");
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update

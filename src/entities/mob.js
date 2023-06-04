@@ -110,7 +110,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
             // FALL
             else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated) {
-                console.log("FALL MOB FROG");
+                //console.log("FALL MOB FROG");
                 this.anims.play("player_frog_fall", true);
                 this.fallAnim = true;
                 this.justFall = true;

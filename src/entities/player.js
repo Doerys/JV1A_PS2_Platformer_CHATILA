@@ -189,7 +189,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.throwHookAnim) {
                 if (this.boxCatched || !this.isHooking) {
                     if (this.body.blocked.down) { // c'est okay
-                        console.log("AU SOL")
+                        //console.log("AU SOL")
                         this.anims.play("player_frog_hookBackGround", true);
                     }
 

@@ -20,7 +20,7 @@ class PlayerRaven extends Player {
 
         this.jumpCounter = 2; // le nombre de sauts restants (utile pour double jump)
 
-        console.log("PLAYER = RAVEN");
+        //console.log("PLAYER = RAVEN");
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update
@@ -39,7 +39,7 @@ class PlayerRaven extends Player {
 
             // TIR PLUME
             if (Phaser.Input.Keyboard.JustDown(this.spaceBar) && !this.isShooting && this.canShoot) {
-                console.log("INPUT SHOOT");
+                //console.log("INPUT SHOOT");
 
                 this.canJump = false;
                 this.isShooting = true;

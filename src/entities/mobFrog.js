@@ -22,7 +22,7 @@ class MobFrog extends Mob {
 
         super.init();
 
-        console.log("new MOB FROG");
+        //console.log("new MOB FROG");
     }
 
     initEvents() { // fonction qui permet de déclencher la fonction update

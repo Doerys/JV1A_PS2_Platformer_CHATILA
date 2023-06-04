@@ -21,7 +21,7 @@ class PlayerFrog extends Player {
 
         this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
-        console.log("PLAYER = FROG");
+        //console.log("PLAYER = FROG");
 
         //this.physics.add.collider(this.hook, layersmurs);
 
