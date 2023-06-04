@@ -17,6 +17,12 @@ class Level_01 extends SceneClass {
     create() {
         this.activePossession = false;
 
+        this.ambianceSound = this.sound.add('ambiance_sound');
+
+        this.ambianceSound.play();
+        this.ambianceSound.setLoop(true)
+            .setVolume(0.6);
+
         // plateforme qui bouge
 
         this.movingPlat1 = this.physics.add.image(2752, 512, 'movingPlat')

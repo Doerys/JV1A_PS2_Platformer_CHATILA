@@ -46,6 +46,7 @@ class SceneClass extends Phaser.Scene {
     loadMap(levelMap) {
 
         this.physics.world.setBounds(0, 0, 3072, 1920); // légèrement plus haut (pour dead zone hors caméra)
+        this.physics.world.setBoundsCollision(true, true, false, false)
 
         // CAMERA
         this.cameras.main
@@ -117,7 +118,8 @@ class SceneClass extends Phaser.Scene {
 
         // NEXT LEVEL
 
-        const nextLevel = layer_nextLevel.objects[0];
+        const nextLevel = this.physics.add.staticGroup();
+        //layer_nextLevel.objects[0];
 
         // ELEMENTS DE DECORS
 
@@ -175,6 +177,7 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat2);
             this.physics.add.collider(box_create, this.movingPlat3);
             this.physics.add.collider(box_create, this.movingPlat4);
+            this.physics.add.collider(box_create, this.movingPlat5);
 
             this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
             this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
@@ -197,6 +200,7 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat2);
             this.physics.add.collider(box_create, this.movingPlat3);
             this.physics.add.collider(box_create, this.movingPlat4);
+            this.physics.add.collider(box_create, this.movingPlat5);
             this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
             this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
             this.physics.add.collider(box_create, this.door);
@@ -216,6 +220,7 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(stake_create, this.movingPlat2);
             this.physics.add.collider(stake_create, this.movingPlat3);
             this.physics.add.collider(stake_create, this.movingPlat4);
+            this.physics.add.collider(stake_create, this.movingPlat5);
 
             stakes.add(stake_create);
 
@@ -254,6 +259,11 @@ class SceneClass extends Phaser.Scene {
             weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192).setPipeline('Light2D');
         })
 
+        // plateformes destructibles si Frog wall jump dessus
+        layer_nextLevel.objects.forEach(nextlvl => {
+            nextLevel.create(nextlvl.x + 32, nextlvl.y - 96).setVisible(false).setSize(64, 320);
+        })
+
         return { spawnFrog, spawnHog, spawnRaven, nextLevel, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
     }
 
@@ -267,7 +277,16 @@ class SceneClass extends Phaser.Scene {
             controller = pad;
         });
 
+        this.possessFrogSound = this.sound.add('possessFrogSound');
+        this.possessHogSound = this.sound.add('possessHogSound');
+        this.possessRavenSound = this.sound.add('possessRavenSound');
+
+        this.deathFrogSound = this.sound.add('deathFrogSound');
+        this.deathHogSound = this.sound.add('deathHogSound');
+        this.deathRavenSound = this.sound.add('deathRavenSound');
+
         this.reachNewLevel = false;
+        this.counterVictory = 0;
 
         // Variables pour possession 
         this.playerKilled = false;
@@ -302,6 +321,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.projectilesMob, this.movingPlat2, this.cleanProj, null, this);
         this.physics.add.collider(this.projectilesMob, this.movingPlat3, this.cleanProj, null, this);
         this.physics.add.collider(this.projectilesMob, this.movingPlat4, this.cleanProj, null, this);
+        this.physics.add.collider(this.projectilesMob, this.movingPlat5, this.cleanProj, null, this);
 
         this.physics.add.collider(this.projectilesPlayer, layers.ravenPlats, this.createPlat, null, this);
 
@@ -318,12 +338,13 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.projectilesPlayer, this.movingPlat2, this.cleanProj, null, this);
         this.physics.add.collider(this.projectilesPlayer, this.movingPlat3, this.cleanProj, null, this);
         this.physics.add.collider(this.projectilesPlayer, this.movingPlat4, this.cleanProj, null, this);
+        this.physics.add.collider(this.projectilesPlayer, this.movingPlat5, this.cleanProj, null, this);
 
         // PLAYER ET MOB pour certains colliders
         this.playerGroup = this.physics.add.group();
         this.mobGroup = this.physics.add.group();
 
-        this.nextLevel = this.physics.add.staticSprite(layers.nextLevel.x + 32, layers.nextLevel.y - 96).setVisible(false).setSize(64, 320);
+        //this.nextLevel = this.physics.add.staticSprite(layers.nextLevel.x + 32, layers.nextLevel.y - 96).setVisible(false).setSize(64, 320);
 
         this.mouseOverMob = false;
 
@@ -414,7 +435,19 @@ class SceneClass extends Phaser.Scene {
         });
         //this.jump(poids,blocCible)
 
+        if (isCorrupted) {
+            nameMob.setTint(0xdc143c);
+            nameMob.setAlpha(0.8)
+        }
+
         if (!isCorrupted) { // un mob corrompu ne peut pas être possédé
+
+                //nameMob.setTint(0x66cdaa); // test 1
+                //nameMob.setTint(0x8fbc8f); // test 3 => le pire
+                //nameMob.setTint(0x00fa9a) // test 4 => pas mal mais trop vert
+                nameMob.setTint(0x48d1cc); // test 2 => celui là l'emporte
+
+            nameMob.setAlpha(0.8)
 
             nameMob
                 .setInteractive() // on peut cliquer dessus
@@ -485,6 +518,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(nameMob, this.movingPlat2);
         this.physics.add.collider(nameMob, this.movingPlat3);
         this.physics.add.collider(nameMob, this.movingPlat4);
+        this.physics.add.collider(nameMob, this.movingPlat5);
     }
 
 
@@ -496,18 +530,27 @@ class SceneClass extends Phaser.Scene {
         }
 
         if (currentMob == "frog") {
+
+            this.possessFrogSound.play();
+
             this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure)
                 .setOrigin(0, 0)
                 .setSize(48, 64)
                 .setOffset(38, 32);
         }
         else if (currentMob == "hog") {
+
+            this.possessHogSound.play();
+
             this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure)
                 .setOrigin(0, 0)
                 .setSize(128, 96)
                 .setOffset(64, 64);
         }
         else if (currentMob == "raven") {
+
+            this.possessRavenSound.play();
+
             this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure)
                 .setOrigin(0, 0)
                 .setSize(64, 96)
@@ -515,6 +558,8 @@ class SceneClass extends Phaser.Scene {
         }
 
         this.playerGroup.add(this.player);
+
+        this.player.setAlpha(0.8);
 
         //this.lightPlayer  = this.lights.addLight(this.player.x, this.player.y, 200, 0x00aaff, 10);
         //this.player.setPipeline('Light2D');
@@ -574,6 +619,7 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(this.player.hook, this.movingPlat2, this.cleanHook, null, this);
             this.physics.add.collider(this.player.hook, this.movingPlat3, this.cleanHook, null, this);
             this.physics.add.collider(this.player.hook, this.movingPlat4, this.cleanHook, null, this);
+            this.physics.add.collider(this.player.hook, this.movingPlat5, this.cleanHook, null, this);
             this.physics.add.collider(this.player.hook, this.door);
             this.physics.add.collider(this.player.hook, layers.weakPlatsVertical);
         }
@@ -589,8 +635,9 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player, this.movingPlat2);
         this.physics.add.collider(this.player, this.movingPlat3);
         this.physics.add.collider(this.player, this.movingPlat4);
+        this.physics.add.collider(this.player, this.movingPlat5);
 
-        this.physics.add.overlap(this.player, this.nextLevel, this.startNextLevel, null, this);
+        this.physics.add.overlap(this.player, layers.nextLevel, this.startNextLevel, null, this);
     }
 
     // METHODES POUR POSSESSION DE MOBS --------------
@@ -731,6 +778,16 @@ class SceneClass extends Phaser.Scene {
 
         victim.destroy();
 
+        if (victim.currentMob == "frog") {
+            this.deathFrogSound.play();
+        }
+        else if (victim.currentMob == "hog") {
+            this.deathHogSound.play();
+        }
+        else if (victim.currentMob == "raven") {
+            this.deathRavenSound.play();
+        }
+
         // si un mob meurt
         if (!victim.isPossessed) {
             //console.log("DIE MOB")
@@ -834,7 +891,7 @@ class SceneClass extends Phaser.Scene {
     }
 
     destroyVerticalPlat(player, platform) {
-        if (player.currentMob == "frog" && (player.grabLeft || player.grabRight)) {
+        if ((player.currentMob == "frog" && (player.grabLeft || player.grabRight)) || player.body.blocked.down) {
 
             setTimeout(() => {
                 platform.disableBody();
@@ -844,7 +901,7 @@ class SceneClass extends Phaser.Scene {
             setTimeout(() => {
                 platform.enableBody();
                 platform.visible = true;
-            }, 2000);
+            }, 3000);
         }
     }
 
@@ -939,7 +996,7 @@ class SceneClass extends Phaser.Scene {
 
     cleanHook(hook) {
         this.hookCollideMovingPlat = true;
-        
+
         this.time.delayedCall(300, () => {
             this.hookCollideMovingPlat = false;
         });
@@ -1068,49 +1125,91 @@ class SceneClass extends Phaser.Scene {
 
         if (!this.reachNewLevel) {
 
-            this.cameras.main
-                .fadeOut(1500, 0, 0, 25) // fondu au noir
+            if (this.mapName != "map_06") {
 
-            this.player.inputsMoveLocked = true;
-            this.reachNewLevel = true;
-            this.player.canJump = false;
-            this.player.setCollideWorldBounds(false);
+                this.cameras.main
+                    .fadeOut(1500, 0, 0, 25) // fondu au noir
 
-            this.time.delayedCall(1500, () => {
+                this.player.inputsMoveLocked = true;
+                this.reachNewLevel = true;
+                this.player.canJump = false;
+                this.player.setCollideWorldBounds(false);
 
-                if (this.mapName == "map_01") {
-                    this.scene.start("Level_02", {
-                        mapName: "map_02", // nom de la map
-                        mapTileset: "tileset", // nom du tileset sur TILED
-                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                this.time.delayedCall(1500, () => {
+
+                    if (this.mapName == "map_01") {
+                        this.scene.start("Level_02", {
+                            mapName: "map_02", // nom de la map
+                            mapTileset: "tileset", // nom du tileset sur TILED
+                            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                        });
+                    }
+
+                    if (this.mapName == "map_02") {
+                        this.scene.start("Level_03", {
+                            mapName: "map_03", // nom de la map
+                            mapTileset: "tileset", // nom du tileset sur TILED
+                            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                        });
+                    }
+
+                    if (this.mapName == "map_03") {
+                        this.scene.start("Level_04", {
+                            mapName: "map_04", // nom de la map
+                            mapTileset: "tileset", // nom du tileset sur TILED
+                            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                        });
+                    }
+
+                    if (this.mapName == "map_04") {
+                        this.scene.start("Level_05", {
+                            mapName: "map_05", // nom de la map
+                            mapTileset: "tileset", // nom du tileset sur TILED
+                            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                        });
+                    }
+
+                    if (this.mapName == "map_05") {
+                        this.scene.start("Level_06", {
+                            mapName: "map_06", // nom de la map
+                            mapTileset: "tileset", // nom du tileset sur TILED
+                            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                        });
+                    }
+                });
+            }
+
+            if (this.mapName == "map_06") {
+
+                this.player.inputsMoveLocked = true;
+                this.player.canJump = false;
+                this.player.setCollideWorldBounds(false);
+                this.reachNewLevel = true;
+                this.activePossession = false;
+
+                if (this.counterVictory == 2) {
+                    this.cameras.main
+                        .fadeOut(1500, 0, 0, 25) // fondu au noir
+
+                    this.time.delayedCall(1500, () => {
+                        /*this.scene.start("Level_06", {
+                            mapName: "map_06", // nom de la map
+                            mapTileset: "tileset", // nom du tileset sur TILED
+                            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                        });*/
                     });
                 }
+                else {
+                    this.counterVictory += 1;
 
-                if (this.mapName == "map_02") {
-                    this.scene.start("Level_03", {
-                        mapName: "map_03", // nom de la map
-                        mapTileset: "tileset", // nom du tileset sur TILED
-                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+                    console.log(this.counterVictory)
+
+                    this.time.delayedCall(1500, () => {
+                        this.reachNewLevel = false;
                     });
-                }
 
-                if (this.mapName == "map_03") {
-                    this.scene.start("Level_04", {
-                        mapName: "map_04", // nom de la map
-                        mapTileset: "tileset", // nom du tileset sur TILED
-                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
-                    });
                 }
-
-                if (this.mapName == "map_04") {
-                    this.scene.start("Level_05", {
-                        mapName: "map_05", // nom de la map
-                        mapTileset: "tileset", // nom du tileset sur TILED
-                        mapTilesetImage: "tileset_image", // nom du fichier image du tileset
-                    });
-                }
-            });
-
+            }
         }
     }
 }

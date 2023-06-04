@@ -14,7 +14,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.speedMoveX = 0;
         this.speedXMax = 145;
-        this.speedMoveY = 500;
+        this.speedMoveY = 550;
 
         this.accelerationX = 15;
         this.frictionGround = 50;
@@ -270,7 +270,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
 
                 // RECEPTION
-                else if (this.justFall && !this.isCharging) {
+                else if (this.justFall) {
                     this.anims.play("player_hog_reception", true);
                 }
 

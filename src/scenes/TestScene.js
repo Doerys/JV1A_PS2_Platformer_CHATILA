@@ -20,11 +20,11 @@ class TestScene extends SceneClass {
 
         // plateforme qui bouge
 
-        this.movingPlat1 = this.physics.add.image(1408, 1536, 'movingPlat')
+        /*this.movingPlat1 = this.physics.add.image(1408, 1536, 'movingPlat')
             .setImmovable(true)
             //.setVelocity(100, 0);
 
-        this.movingPlat1.body.setAllowGravity(false);
+        this.movingPlat1.body.setAllowGravity(false);*/
 
         /*this.tweens.timeline({
             targets: this.movingPlat1.body.velocity,

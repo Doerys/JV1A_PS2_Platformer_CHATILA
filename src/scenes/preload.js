@@ -5,6 +5,14 @@ class Preload extends Phaser.Scene {
     }
 
     preload() {
+
+        // mainScreen
+
+        this.load.image('mainScreen_background', 'assets/mainScreen_Background.png');
+        this.load.image('mainScreen_logo', 'assets/mainScreen_Logo.png');
+        this.load.image('mainScreen_start', 'assets/mainScreen_Start.png');
+        this.load.image('mainScreen_set', 'assets/mainScreen_tree.png');
+
         // Perso test
         this.load.spritesheet('player', 'assets/player_test.png', { frameWidth: 64, frameHeight: 128 });
 
@@ -56,16 +64,24 @@ class Preload extends Phaser.Scene {
         this.load.image('button', 'assets/button.png')
         this.load.image('door', 'assets/door.png')
 
-                
+
         this.load.image('feather', 'assets/feather.png');
 
         this.load.image('hook', 'assets/hook.png');
         this.load.image('rope', 'assets/rope.png');
 
-
         // SOUND
 
-        //this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3')
+        this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
+        this.load.audio('ambiance_sound', 'assets/sound/ambiance_inGame.mp3');
+
+        this.load.audio('possessFrogSound', 'assets/sound/possess_Frog.mp3');
+        this.load.audio('possessHogSound', 'assets/sound/possess_Hog.mp3');
+        this.load.audio('possessRavenSound', 'assets/sound/possess_Raven.mp3');
+
+        this.load.audio('deathFrogSound', 'assets/sound/death_Frog.mp3');
+        this.load.audio('deathHogSound', 'assets/sound/death_Hog.mp3');
+        this.load.audio('deathRavenSound', 'assets/sound/death_Raven.mp3');
 
         // fichier image du tileset
         this.load.image('tilesetTest_image', 'assets/placeholder_test.png'); //Tileset test
@@ -79,15 +95,15 @@ class Preload extends Phaser.Scene {
         this.load.tilemapTiledJSON('map_03', 'maps/level_03.json');
         this.load.tilemapTiledJSON('map_04', 'maps/level_04.json');
         this.load.tilemapTiledJSON('map_05', 'maps/level_05.json');
-        this.load.tilemapTiledJSON('map_05', 'maps/level_06.json');
+        this.load.tilemapTiledJSON('map_06', 'maps/level_06.json');
     }
 
     create() {
+        this.music = this.sound.add('music_inGame');
 
-        /*this.music = this.sound.add('music_inGame');
         this.music.play();
         this.music.setLoop(true)
-        .setVolume(0.2);*/
+            .setVolume(0.4);
 
         // ANIMATIONS FROG
 
@@ -173,7 +189,7 @@ class Preload extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: 'player_frog_hookAttrackGround', 
+            key: 'player_frog_hookAttrackGround',
             frames: this.anims.generateFrameNumbers('frogAnim2', { start: 24, end: 33 }),
             frameRate: 25,
             repeat: 0
@@ -361,7 +377,7 @@ class Preload extends Phaser.Scene {
             frameRate: 35,
             repeat: 0
         });
-        
+
         this.anims.create({
             key: 'player_raven_shootOnAir',
             frames: this.anims.generateFrameNumbers('ravenAnim3', { start: 9, end: 26 }),
@@ -376,11 +392,13 @@ class Preload extends Phaser.Scene {
             repeat: 0
         });
 
+        // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
 
+        this.scene.start("MainScreen");
 
         // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
 
-        this.scene.start("Level_05", {
+        /*this.scene.start("Level_03", {
             // POUR LA TESTROOM :
 
             //mapName: "map_test", // nom de la map
@@ -389,10 +407,10 @@ class Preload extends Phaser.Scene {
 
             // POUR LE JEU :
 
-            mapName: "map_05", // nom de la map
+            mapName: "map_03", // nom de la map
             mapTileset: "tileset", // nom du tileset sur TILED
             mapTilesetImage: "tileset_image", // nom du fichier image du tileset
-        });
+        });*/
     }
 
 }

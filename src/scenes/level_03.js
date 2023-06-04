@@ -42,12 +42,12 @@ class Level_03 extends SceneClass {
             targets: this.movingPlat2.body.velocity,
             loop: -1,
             tweens: [
-                { x: -100, y: 0, duration: 3000, ease: 'Stepped' },
-                { x: +100, y: 0, duration: 3000, ease: 'Stepped' },
+                { x: -100, y: 0, duration: 3500, ease: 'Stepped' },
+                { x: +100, y: 0, duration: 3500, ease: 'Stepped' },
             ]
         });
 
-        this.movingPlat3 = this.physics.add.image(2240, 1312, 'movingPlat')
+        this.movingPlat3 = this.physics.add.image(2304, 1312, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0)
 
@@ -57,8 +57,8 @@ class Level_03 extends SceneClass {
             targets: this.movingPlat3.body.velocity,
             loop: -1,
             tweens: [
-                { x: -125, y: 0, duration: 2500, ease: 'Stepped' },
-                { x: +125, y: 0, duration: 2500, ease: 'Stepped' },
+                { x: -125, y: 0, duration: 2750, ease: 'Stepped' },
+                { x: +125, y: 0, duration: 2750, ease: 'Stepped' },
             ]
         });
 
