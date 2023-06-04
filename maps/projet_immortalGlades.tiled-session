@@ -5,8 +5,8 @@
     },
     "activeFile": "level_01.tmx",
     "expandedProjectPaths": [
-        "test",
-        "."
+        ".",
+        "test"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -48,11 +48,11 @@
                 23,
                 10
             ],
-            "scale": 2,
+            "scale": 0.33,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1535.5,
-                "y": 959.25
+                "x": 690.909090909091,
+                "y": 1036.3636363636365
             }
         },
         "level_01.tmx#placeholder_test": {
@@ -268,11 +268,11 @@
                 21,
                 9
             ],
-            "scale": 0.33,
-            "selectedLayer": 11,
+            "scale": 0.5,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 1533.3333333333335,
-                "y": 962.121212121212
+                "x": 2196,
+                "y": 1224
             }
         },
         "test/testScene.tmx#placeholder_test": {

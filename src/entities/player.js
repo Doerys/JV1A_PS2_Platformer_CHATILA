@@ -178,7 +178,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             // HOOK
 
-            else if (this.isHooking && !this.throwHookAnim) {
+            /*else if (this.isHooking && !this.throwHookAnim) {
                 if (this.body.blocked.down) { // C'est okay
                     this.anims.play("player_frog_hookStartGround", true);
                 }
@@ -201,9 +201,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         this.anims.play("player_frog_hookBackJump", true);
                     }*/
 
-                    this.throwHookAnim = false;
+                /*    this.throwHookAnim = false;
                     this.animFallHook = true;
-                }
+                }*/
 
                 /*if (this.stakeCatched) {
                     
@@ -222,7 +222,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     console.log("CHUTE ELEGAANTE")
                     this.anims.play("player_frog_hookFall", true);
                 }*/
-            }
+            //}
 
             // JUMP
             else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isHooking) {
