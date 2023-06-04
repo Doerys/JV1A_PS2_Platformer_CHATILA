@@ -70,7 +70,7 @@ class MainScreen extends Phaser.Scene {
 
         // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
 
-        this.scene.start("Level_01", {
+        this.scene.start("Level_04", {
             // POUR LA TESTROOM :
 
             //mapName: "map_test", // nom de la map
@@ -79,7 +79,7 @@ class MainScreen extends Phaser.Scene {
 
             // POUR LE JEU :
 
-            mapName: "map_01", // nom de la map
+            mapName: "map_04", // nom de la map
             mapTileset: "tileset", // nom du tileset sur TILED
             mapTilesetImage: "tileset_image", // nom du fichier image du tileset
         });
