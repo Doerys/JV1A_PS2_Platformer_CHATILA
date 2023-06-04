@@ -98,7 +98,7 @@ class Level_04 extends SceneClass {
         //this.createMob(this.mob2, layers.spawnHog.x - 64, layers.spawnHog.y - 64, layers, "left", "hog", false, false);
 
         //Création du mob
-        this.createMob(this.mob3, layers.spawnRaven.x - 64, layers.spawnRaven.y - 64, layers, "left", "raven", false, false);
+        this.createMob(this.mob3, layers.spawnRaven.x - 64, layers.spawnRaven.y - 64, layers, "left", "raven", true, false);
     }
 
     update() {

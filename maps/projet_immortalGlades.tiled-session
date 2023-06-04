@@ -38,21 +38,21 @@
                 5
             ],
             "expandedObjectLayers": [
-                19,
                 16,
-                15,
-                12,
-                10,
+                23,
                 22,
                 6,
-                23,
-                21
+                21,
+                10,
+                15,
+                12,
+                19
             ],
             "scale": 0.5,
-            "selectedLayer": 5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1536,
-                "y": 959
+                "x": 422,
+                "y": 1354
             }
         },
         "level_01.tmx#placeholder_test": {
@@ -60,7 +60,8 @@
             "scaleInEditor": 1
         },
         "level_01.tmx#tileset": {
-            "scaleInDock": 0.5
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
         },
         "level_02 - Copie.tmx": {
             "expandedObjectLayers": [
@@ -83,61 +84,63 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                19,
-                16,
+                18,
                 17,
-                15,
-                12,
-                13,
-                26,
-                10,
-                11,
-                24,
-                25,
-                9,
-                6,
+                16,
                 23,
                 7,
-                18
+                6,
+                11,
+                26,
+                10,
+                25,
+                9,
+                24,
+                15,
+                13,
+                12,
+                19
             ],
-            "scale": 0.25,
+            "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1536,
-                "y": 962
+                "x": 669.6969696969697,
+                "y": 863.6363636363637
             }
         },
         "level_02.tmx#placeholder_test": {
             "scaleInDock": 1
         },
         "level_02.tmx#tileset": {
-            "scaleInDock": 0.5
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
         },
         "level_03.tmx": {
             "expandedObjectLayers": [
-                16,
+                18,
                 17,
-                15,
-                13,
+                16,
+                7,
+                6,
+                20,
+                27,
                 26,
                 10,
-                27,
-                24,
                 25,
-                6,
-                7,
-                20,
-                18
+                24,
+                15,
+                13
             ],
             "scale": 0.33,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1533.3333333333335,
-                "y": 962.121212121212
+                "x": 1324.242424242424,
+                "y": 1003.030303030303
             }
         },
         "level_03.tmx#tileset": {
-            "scaleInDock": 0.25
+            "scaleInDock": 0.25,
+            "scaleInEditor": 1
         },
         "level_04 - Copie.tmx": {
             "scale": 0.38346354166666663,
@@ -152,53 +155,55 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
-                19,
                 16,
-                15,
+                23,
+                6,
+                11,
                 26,
                 10,
-                11,
-                24,
-                8,
                 25,
                 9,
-                6,
-                23
+                24,
+                8,
+                15,
+                19
             ],
-            "scale": 0.5,
-            "selectedLayer": 5,
+            "scale": 0.33,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1536,
-                "y": 959
+                "x": 1009.0909090909092,
+                "y": 763.6363636363637
             }
         },
         "level_04.tmx#tileset": {
-            "scaleInDock": 0.5
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
         },
         "level_05.tmx": {
             "expandedGroupLayers": [
                 4
             ],
             "expandedObjectLayers": [
+                18,
                 16,
-                15,
-                13,
-                11,
-                8,
-                9,
                 23,
                 7,
-                18
+                11,
+                9,
+                8,
+                15,
+                13
             ],
             "scale": 0.33,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1533.3333333333335,
-                "y": 962.121212121212
+                "x": 1715.1515151515152,
+                "y": 866.6666666666667
             }
         },
         "level_05.tmx#tileset": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "level_06 - Copie.tmx": {
             "scale": 0.33,
@@ -216,61 +221,63 @@
         },
         "level_06.tmx": {
             "expandedObjectLayers": [
-                19,
+                18,
                 16,
-                15,
-                12,
-                13,
-                26,
-                10,
-                11,
-                24,
-                8,
-                25,
-                9,
-                6,
                 23,
                 7,
-                18
+                6,
+                11,
+                26,
+                10,
+                25,
+                9,
+                24,
+                8,
+                15,
+                13,
+                12,
+                19
             ],
-            "scale": 0.25,
-            "selectedLayer": 11,
+            "scale": 0.33,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1536,
-                "y": 962
+                "x": 1251.5151515151515,
+                "y": 869.6969696969697
             }
         },
         "level_06.tmx#placeholder_test": {
             "scaleInDock": 1
         },
         "level_06.tmx#tileset": {
-            "scaleInDock": 0.75
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
         },
         "test/testScene.tmx": {
             "expandedObjectLayers": [
-                2,
                 3,
-                16,
+                18,
+                2,
                 17,
-                14,
-                15,
-                9,
+                16,
                 6,
-                20,
-                4,
                 21,
                 5,
-                18
+                20,
+                4,
+                9,
+                15,
+                14
             ],
             "scale": 0.33,
-            "selectedLayer": 10,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 2012.1212121212122,
-                "y": 1084.848484848485
+                "x": 1045.4545454545455,
+                "y": 1587.878787878788
             }
         },
         "test/testScene.tmx#placeholder_test": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
     "last.exportedFilePath": "C:/Users/Yann/Documents/GitHub/JV1A_PS2_Platformer_CHATILA/maps",

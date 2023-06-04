@@ -19,7 +19,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: false,
+                    debug: true,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -71,6 +71,7 @@ class SceneClass extends Phaser.Scene {
         const layer_platforms = levelMap.createLayer("layer_platforms", tileset).setDepth(1).setPipeline('Light2D');
         const layer_decos1 = levelMap.createLayer("layer_decos1", tileset).setDepth(2).setPipeline('Light2D');
         const layer_decos2 = levelMap.createLayer("layer_decos2", tileset).setDepth(3).setPipeline('Light2D');
+        const layer_boxStop = levelMap.createLayer("layer_boxStop", tileset).setDepth(0)
         const layer_limits = levelMap.createLayer("layer_limits", tileset).setVisible(false);
         const layer_deadZone = levelMap.createLayer("layer_deadZone", tileset);
 
@@ -102,6 +103,7 @@ class SceneClass extends Phaser.Scene {
 
         // ajout de collision sur plateformes
         layer_platforms.setCollisionByProperty({ estSolide: true });
+        layer_boxStop.setCollisionByProperty({ estSolide: true });
         layer_limits.setCollisionByProperty({ estSolide: true });
         layer_deadZone.setCollisionByProperty({ estSolide: true });
 
@@ -171,7 +173,7 @@ class SceneClass extends Phaser.Scene {
 
         // Boxes normales        
         layer_box.objects.forEach(box => {
-            const box_create = this.physics.add.sprite(box.x + 32, box.y, "box").setDamping(true).setImmovable(true).setPipeline('Light2D');
+            const box_create = this.physics.add.sprite(box.x + 32, box.y, "box").setDamping(true).setImmovable(true).setPipeline('Light2D').setSize(50, 49).setOffset(5, 0);
 
             this.physics.add.collider(box_create, this.movingPlat1);
             this.physics.add.collider(box_create, this.movingPlat2);
@@ -188,13 +190,14 @@ class SceneClass extends Phaser.Scene {
             box_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(boxes, layer_platforms, this.boxOnFloor, null, this);
+            this.physics.add.collider(boxes, layer_boxStop);
 
         }, this)
 
         // Grosses boxes
         layer_bigBox.objects.forEach(bigBox => {
 
-            const box_create = this.physics.add.sprite(bigBox.x + 32, bigBox.y, "bigBox").setDamping(true).setImmovable(true).setPipeline('Light2D');;
+            const box_create = this.physics.add.sprite(bigBox.x + 64, bigBox.y, "bigBox").setDamping(true).setImmovable(true).setPipeline('Light2D').setSize(124, 121).setOffset(12, 0);
 
             this.physics.add.collider(box_create, this.movingPlat1);
             this.physics.add.collider(box_create, this.movingPlat2);
@@ -210,6 +213,7 @@ class SceneClass extends Phaser.Scene {
             box_create.setCollideWorldBounds(true);
 
             this.physics.add.collider(bigBoxes, layer_platforms, this.boxOnFloor, null, this);
+            this.physics.add.collider(bigBoxes, layer_boxStop);
         }, this)
 
         // création des poteaux sur lesquels on peut se grappiner
@@ -264,7 +268,7 @@ class SceneClass extends Phaser.Scene {
             nextLevel.create(nextlvl.x + 32, nextlvl.y - 96).setVisible(false).setSize(64, 320);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, nextLevel, layer_platforms, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, nextLevel, layer_platforms, layer_boxStop, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
     }
 
     loadVar(layers) {
