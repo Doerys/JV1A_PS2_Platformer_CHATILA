@@ -19,7 +19,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: false,
+                    debug: true,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -80,6 +80,10 @@ class SceneClass extends Phaser.Scene {
         const layer_spawnHog = levelMap.getObjectLayer("SpawnHog");
         const layer_spawnRaven = levelMap.getObjectLayer("SpawnRaven");
 
+        const layer_checkPFrog = levelMap.getObjectLayer("checkPointFrog");
+        const layer_checkPHog = levelMap.getObjectLayer("checkPointHog");
+        const layer_checkPRaven = levelMap.getObjectLayer("checkPointRaven");
+
         const layer_box = levelMap.getObjectLayer("Box");
         const layer_bigBox = levelMap.getObjectLayer("BigBox");
         const layer_stake = levelMap.getObjectLayer("Stake");
@@ -118,6 +122,10 @@ class SceneClass extends Phaser.Scene {
         const spawnButton = layer_button.objects[0];
         const spawnButtonBase = layer_buttonBase.objects[0];
 
+        const spawnCheckPFrog = layer_checkPFrog.objects[0];
+        const spawnCheckPHog = layer_checkPHog.objects[0];
+        const spawnCheckPRaven = layer_checkPRaven.objects[0];
+
         // NEXT LEVEL
 
         const nextLevel = this.physics.add.staticGroup();
@@ -144,7 +152,7 @@ class SceneClass extends Phaser.Scene {
         const breaks = this.physics.add.staticGroup();
         const pics = this.physics.add.staticGroup();
 
-        const cures = this.physics.add.staticGroup();
+        //const cures = this.physics.add.staticGroup();
 
         // Plateformes spéciales
 
@@ -170,6 +178,10 @@ class SceneClass extends Phaser.Scene {
         buttons.body.setAllowGravity(false);
 
         const buttonBases = this.physics.add.staticSprite(spawnButtonBase.x + 64, spawnButtonBase.y - 8, "buttonBase").setPipeline('Light2D');
+
+        const checkpointFrog = this.physics.add.staticSprite(spawnCheckPFrog.x, spawnCheckPFrog.y).setPipeline('Light2D');
+        const checkpointHog = this.physics.add.staticSprite(spawnCheckPHog.x, spawnCheckPHog.y).setPipeline('Light2D');
+        const checkpointRaven = this.physics.add.staticSprite(spawnCheckPRaven.x, spawnCheckPRaven.y).setPipeline('Light2D');
 
         // Boxes normales        
         layer_box.objects.forEach(box => {
@@ -244,9 +256,9 @@ class SceneClass extends Phaser.Scene {
         })
 
         // item de soin collectable
-        layer_cure.objects.forEach(cure => {
+        /*layer_cure.objects.forEach(cure => {
             cures.create(cure.x + 32, cure.y, "cure").setDepth(1);
-        })
+        })*/
 
         // création des plateformes qu'on peut créer en tirant dessus avec le raven
         layer_ravenPlat.objects.forEach(ravenPlat => {
@@ -268,7 +280,7 @@ class SceneClass extends Phaser.Scene {
             nextLevel.create(nextlvl.x + 32, nextlvl.y - 96).setVisible(false).setSize(64, 320);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, nextLevel, layer_platforms, layer_boxStop, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, cures, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, checkpointFrog, checkpointHog, checkpointRaven, nextLevel, layer_platforms, layer_boxStop, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
     }
 
     loadVar(layers) {
@@ -289,12 +301,21 @@ class SceneClass extends Phaser.Scene {
         this.deathHogSound = this.sound.add('deathHogSound');
         this.deathRavenSound = this.sound.add('deathRavenSound');
 
+        this.unlockFrogCP = false;
+        this.unlockHogCP = false;
+        this.unlockRavenCP = false;
+
         this.reachNewLevel = false;
         this.counterVictory = 0;
 
         // Variables pour possession 
         this.playerKilled = false;
         this.hasSaveMob = false; // => si un mob est possédé ou non (mob possédé = saveMob)
+
+        this.cure = this.physics.add.sprite(layers.spawnCure.x + 32, layers.spawnCure.y + 32, 'cure').setDepth(1);
+
+        this.cure.body.setAllowGravity(false)
+            .setCollideWorldBounds(true);
 
         // Système portes / Boutons
         this.buttonOn = false;
@@ -309,6 +330,8 @@ class SceneClass extends Phaser.Scene {
         this.projectilesPlayer = new Phaser.GameObjects.Group;
 
         this.hookCollideMovingPlat = false;
+
+        this.speedItem = 0;
 
         this.physics.add.collider(this.projectilesMob, layers.ravenPlats, this.createPlat, null, this);
 
@@ -349,7 +372,6 @@ class SceneClass extends Phaser.Scene {
         this.mobGroup = this.physics.add.group();
 
         //this.nextLevel = this.physics.add.staticSprite(layers.nextLevel.x + 32, layers.nextLevel.y - 96).setVisible(false).setSize(64, 320);
-
         this.mouseOverMob = false;
 
         // PLUS DE CURSEUR
@@ -441,17 +463,16 @@ class SceneClass extends Phaser.Scene {
 
         if (isCorrupted) {
             nameMob.setTint(0xdc143c);
-            nameMob.setAlpha(0.8)
+            nameMob.setAlpha(0)
         }
 
         if (!isCorrupted) { // un mob corrompu ne peut pas être possédé
 
-                //nameMob.setTint(0x66cdaa); // test 1
-                //nameMob.setTint(0x8fbc8f); // test 3 => le pire
-                //nameMob.setTint(0x00fa9a) // test 4 => pas mal mais trop vert
-                nameMob.setTint(0x48d1cc); // test 2 => celui là l'emporte
-
-            nameMob.setAlpha(0.8)
+            //nameMob.setTint(0x66cdaa); // test 1
+            //nameMob.setTint(0x8fbc8f); // test 3 => le pire
+            //nameMob.setTint(0x00fa9a) // test 4 => pas mal mais trop vert
+            nameMob.setTint(0x48d1cc); // test 2 => celui là l'emporte
+            nameMob.setAlpha(0);
 
             nameMob
                 .setInteractive() // on peut cliquer dessus
@@ -486,6 +507,13 @@ class SceneClass extends Phaser.Scene {
                 }, this)
         }
 
+        this.tweens.add({
+            targets: nameMob,
+            alpha: 0.8,
+            duration: 300,  // Durée de l'animation en millisecondes
+            ease: 'Linear', // Fonction d'interpolation pour l'animation
+        });
+
         // COLLIDERS ET OVERLAPS
 
         this.physics.add.overlap(nameMob, this.playerGroup, this.checkCharge, null, this);
@@ -502,7 +530,7 @@ class SceneClass extends Phaser.Scene {
         // collisions obstacles brisables
         this.physics.add.collider(nameMob, layers.breaks, this.destroyIfCharge, null, this);
 
-        this.physics.add.overlap(nameMob, layers.cures, this.isCured, null, this);
+        this.physics.add.overlap(nameMob, this.cure, this.isCured, null, this);
 
         // Projectiles et pics qui tuent au contact
         this.physics.add.collider(this.projectilesPlayer, nameMob, this.hitProjectile, null, this);
@@ -538,6 +566,7 @@ class SceneClass extends Phaser.Scene {
             this.possessFrogSound.play();
 
             this.player = new PlayerFrog(this, x, y, facing, currentMob, haveCure)
+                .setAlpha(0)
                 .setOrigin(0, 0)
                 .setSize(48, 64)
                 .setOffset(38, 32);
@@ -547,6 +576,7 @@ class SceneClass extends Phaser.Scene {
             this.possessHogSound.play();
 
             this.player = new PlayerHog(this, x, y, facing, currentMob, haveCure)
+                .setAlpha(0)
                 .setOrigin(0, 0)
                 .setSize(128, 96)
                 .setOffset(64, 64);
@@ -556,6 +586,7 @@ class SceneClass extends Phaser.Scene {
             this.possessRavenSound.play();
 
             this.player = new PlayerRaven(this, x, y, facing, currentMob, haveCure)
+                .setAlpha(0)
                 .setOrigin(0, 0)
                 .setSize(64, 96)
                 .setOffset(64, 64);
@@ -563,7 +594,12 @@ class SceneClass extends Phaser.Scene {
 
         this.playerGroup.add(this.player);
 
-        this.player.setAlpha(0.8);
+        this.tweens.add({
+            targets: this.player,
+            alpha: 0.8,
+            duration: 300,  // Durée de l'animation en millisecondes
+            ease: 'Linear', // Fonction d'interpolation pour l'animation
+        });
 
         //this.lightPlayer  = this.lights.addLight(this.player.x, this.player.y, 200, 0x00aaff, 10);
         //this.player.setPipeline('Light2D');
@@ -603,12 +639,26 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player, layers.pics, this.kill, null, this);
 
         // Item à récupérer en overlap
-        this.physics.add.overlap(this.player, layers.cures, this.getCure, null, this);
+        this.physics.add.overlap(this.player, this.cure, this.getCure, null, this);
 
         // Système de boutons et porte qui bloque
         this.physics.add.collider(this.player, layers.buttonBases, this.climbButtonBase, null, this);
         this.physics.add.collider(this.player, layers.buttons, this.pressButtonsMob, null, this);
         this.physics.add.collider(this.player, this.door);
+
+        this.physics.add.overlap(this.player, layers.stakes, () => { this.player.reachStake = true }, null, this);
+
+        if (this.player.currentMob == "frog") {
+            this.physics.add.overlap(this.player, layers.checkpointFrog, this.saveCheckPoint, null, this);
+        }
+
+        if (this.player.currentMob == "hog") {
+            this.physics.add.overlap(this.player, layers.checkpointHog, this.saveCheckPoint, null, this);
+        }
+
+        if (this.player.currentMob == "raven") {
+            this.physics.add.overlap(this.player, layers.checkpointRaven, this.saveCheckPoint, null, this);
+        }
 
         if (currentMob == "frog") {
             // collision hook et stake = grappin
@@ -780,45 +830,71 @@ class SceneClass extends Phaser.Scene {
 
     kill(victim, killer) { // tue les mobs et les players
 
-        victim.destroy();
+        if (!victim.isDying) {
+            this.tweens.add({
+                targets: victim,
+                alpha: 0,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
 
-        if (victim.currentMob == "frog") {
-            this.deathFrogSound.play();
-        }
-        else if (victim.currentMob == "hog") {
-            this.deathHogSound.play();
-        }
-        else if (victim.currentMob == "raven") {
-            this.deathRavenSound.play();
-        }
-
-        // si un mob meurt
-        if (!victim.isPossessed) {
-            //console.log("DIE MOB")
-            victim.disableIA();
-        }
-
-        // si un player meurt
-        else if (victim.isPossessed) {
-            //console.log("DIE PLAYER")
-            victim.disablePlayer();
-            this.playerKilled = true;
-            this.player = new Player(this, 0, 0, "right", "frog", false).disableBody(true, true);
+            if (victim.currentMob == "frog") {
+                this.deathFrogSound.play();
+            }
+            else if (victim.currentMob == "hog") {
+                this.deathHogSound.play();
+            }
+            else if (victim.currentMob == "raven") {
+                this.deathRavenSound.play();
+            }
 
             setTimeout(() => {
-                this.activePossession = false;
-                this.playerKilled = false;
-            }, 100);
-        }
+                victim.destroy();
 
-        if (victim.haveCure == true) {
-            setTimeout(() => {
-                const newCure = this.physics.add.staticSprite(this.layers.spawnCure.x + 32, this.layers.spawnCure.y, "cure").setDepth(1);
-                this.layers.cures.add(newCure);
-            }, 500);
-        }
+                // si un mob meurt
+                if (!victim.isPossessed) {
+                    //console.log("DIE MOB")
+                    victim.disableIA();
+                }
 
-        this.respawnMob(victim);
+                // si un player meurt
+                else if (victim.isPossessed) {
+                    //console.log("DIE PLAYER")
+                    victim.disablePlayer();
+                    this.playerKilled = true;
+                    this.player = new Player(this, 0, 0, "right", "frog", false).disableBody(true, true);
+
+                    setTimeout(() => {
+                        this.activePossession = false;
+                        this.playerKilled = false;
+                    }, 100);
+                }
+
+            }, 300);
+
+            if (victim.haveCure == true) {
+
+                this.cure.setVelocity(0, 0);
+
+                this.tweens.add({
+                    targets: this.cure,
+                    alpha: 0,
+                    duration: 300,  // Durée de l'animation en millisecondes
+                    ease: 'Linear', // Fonction d'interpolation pour l'animation
+                });
+
+                setTimeout(() => {
+                    this.cure.x = this.layers.spawnCure.x + 32;
+                    this.cure.y = this.layers.spawnCure.y;
+                    this.cure.setScale(1).setAlpha(1).setVelocity(0, 0);
+                }, 500);
+            }
+
+            this.respawnMob(victim);
+
+            victim.isDying = true;
+
+        }
     }
 
     respawnMob(target) { // fait respawn mobs à leur spawn initial après la mort du player ou d'un mob
@@ -836,12 +912,49 @@ class SceneClass extends Phaser.Scene {
         }, 500);
     }
 
+    saveCheckPoint(player, checkPoint) {
+        if (player.currentMob == "frog" && !this.unlockFrogCP) {
+            console.log("NEW CHECKPOINT");
+
+            this.layers.spawnFrog.x = checkPoint.x;
+            this.layers.spawnFrog.y = checkPoint.y;
+
+            this.unlockFrogCP = true;
+        }
+
+        if (player.currentMob == "hog" && !this.unlockHogCP) {
+            console.log("NEW CHECKPOINT");
+
+            this.layers.spawnHog.x = checkPoint.x;
+            this.layers.spawnHog.y = checkPoint.y;
+
+            this.unlockHogCP = true;
+        }
+
+        if (player.currentMob == "raven" && !this.unlockRavenCP) {
+            console.log("NEW CHECKPOINT");
+
+            this.layers.spawnRaven.x = checkPoint.x;
+            this.layers.spawnRaven.y = checkPoint.y;
+
+            this.unlockRavenCP = true;
+        }
+
+    }
+
     // METHODES POUR PURIFIER MOB
 
     getCure(player, cure) { // récupération de l'item de soin
         if (!this.player.haveCure && Phaser.Input.Keyboard.JustDown(this.player.keyE)) {
-            cure.destroy();
-            player.haveCure = true;
+
+            this.tweens.add({
+                targets: this.cure,
+                scale: 0.7,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+
+            this.player.haveCure = true;
         }
     }
 
@@ -850,20 +963,31 @@ class SceneClass extends Phaser.Scene {
 
             this.player.haveCure = false;
 
+            this.cure.setVelocity(0, 0);
+
             if (this.player.currentMob == "frog") {
-                const newCure = this.physics.add.staticSprite(this.player.x + 64, this.player.y + 64, 'cure').setDepth(1);
-                this.layers.cures.add(newCure);
+                this.dropCureX = this.player.x + 64;
+                this.dropCureY = this.player.y + 32;
             }
 
             if (this.player.currentMob == "hog") {
-                const newCure = this.physics.add.staticSprite(this.player.x + 128, this.player.y + 128, 'cure').setDepth(1);
-                this.layers.cures.add(newCure);
+                this.dropCureX = this.player.x + 128;
+                this.dropCureY = this.player.y + 96;
             }
 
             if (this.player.currentMob == "raven") {
-                const newCure = this.physics.add.staticSprite(this.player.x + 96, this.player.y + 128, 'cure').setDepth(1);
-                this.layers.cures.add(newCure);
+                this.dropCureX = this.player.x + 96;
+                this.dropCureY = this.player.y + 96;
             }
+
+            this.tweens.add({
+                targets: this.cure,
+                x: this.dropCureX,
+                y: this.dropCureY,
+                scale: 1,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
         }
     }
 
@@ -1122,6 +1246,22 @@ class SceneClass extends Phaser.Scene {
 
         if (this.activePossession && this.player.body.velocity.x != 0 && this.player.body.velocity.y != 0) {
             this.emitterPlayer.emitParticle();
+        }
+
+        if (this.player.haveCure) {
+
+            if (this.player.facing == "left") {
+                this.itemMoveX = 64;
+                this.targetX = this.player.x + 128;
+            }
+
+            else if (this.player.facing == "right") {
+                this.itemMoveX = 0;
+                this.targetX = this.player.x;
+            }
+            this.targetY = this.player.y;
+
+            this.physics.moveTo(this.cure, this.player.x + 64 + this.itemMoveX, this.player.y + 32, 350, 300);
         }
     }
 

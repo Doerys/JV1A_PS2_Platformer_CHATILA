@@ -25,6 +25,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // VARIABLES UNIVERSELLES A TOUS LES MOBS
 
         this.isPossessed = true; // vérifie que le mob est possédé ou non (utile pour la méthode disablePlayer)
+        this.isDying = false;
 
         this.inputsMoveLocked = false; // bloque les touches de déplacement latéraux
 
@@ -75,6 +76,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.maxHookDistance = 256;
 
         this.stakeCatched = false;
+        this.reachStake = false;
         this.boxCatched = false;
 
         // VARIABLES HOG

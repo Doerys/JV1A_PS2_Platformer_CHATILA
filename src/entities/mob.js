@@ -30,6 +30,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         // VARIABLES UNIVERSELLES AUX MOBS
 
         this.isPossessed = false; // vérifie que le mob est possédé ou non (utile pour la méthode disableIA)
+        this.isDying = false;
         this.playerSpotted = false; // changement de comportement si le joueur est détecté
 
         this.isPressingButton = false;
@@ -367,36 +368,39 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     }
 
     // méthode pour détecter le player à proximité
-    detectionPlayer(x1, y1, x2, y2) {
+    detectionPlayer(xPlayer, yPlayer, xMob, yMob) {
 
         // constantes pour repérer distance entre mob et player
 
-        const distanceX = this.scene.checkDistance(x2 + 64, x1 + 64);
+        const distanceX = this.scene.checkDistance(xMob + 64, xPlayer + 64);
 
-        const distanceY = this.scene.checkDistance(y2 + 64, y1 + 64);
+        const distanceY = this.scene.checkDistance(yMob + 64, yPlayer + 64);
 
         if (distanceX < 250 && distanceY < 96 && !this.scene.playerKilled && !this.isCharging && this.canCharge) {
-            this.playerSpotted = true;
 
-            // on pivote le mob vers le joueur
-            if (this.currentMob == "raven" || this.currentMob == "hog") {
-                if (x1 < x2) {
-                    this.facing = "left";
-                }
+            if((this.facing == "right" && xPlayer > xMob) || (this.facing == "left" && xPlayer < xMob)) {
+                this.playerSpotted = true;
 
-                if (x1 > x2) {
-                    this.facing = "right";
+                // on pivote le mob vers le joueur
+                if (this.currentMob == "raven" || this.currentMob == "hog") {
+                    if (xPlayer < xMob) {
+                        this.facing = "left";
+                    }
+    
+                    if (xPlayer > xMob) {
+                        this.facing = "right";
+                    }
                 }
-            }
-            else {
-                if (x1 < x2) {
-                    this.facing = "right";
+                else {
+                    if (xPlayer < xMob) {
+                        this.facing = "right";
+                    }
+    
+                    if (xPlayer > xMob) {
+                        this.facing = "left";
+                    }
                 }
-
-                if (x1 > x2) {
-                    this.facing = "left";
-                }
-            }
+            } 
         }
 
         // on réinitialise si le player est trop loin OU mort

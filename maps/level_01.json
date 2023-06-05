@@ -297,7 +297,19 @@
          "draworder":"topdown",
          "id":9,
          "name":"Cure",
-         "objects":[],
+         "objects":[
+                {
+                 "class":"",
+                 "gid":132,
+                 "height":64,
+                 "id":38,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":1600,
+                 "y":1920
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -542,7 +554,7 @@
          "y":0
         }],
  "nextlayerid":25,
- "nextobjectid":38,
+ "nextobjectid":39,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

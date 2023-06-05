@@ -53,6 +53,15 @@ class MobRaven extends Mob {
 
                     setTimeout(() => {
                         const feather = new Projectile(this.scene, this.x + 64, this.y + 90, "feather").setDepth(-1).setOrigin(0, 0);
+
+                        if (!this.isCorrupted) {
+                            feather.setTint(0x48d1cc);
+                        }
+
+                        else if (this.isCorrupted) {
+                            feather.setTint(0xdc143c);
+                        }
+
                         this.scene.projectilesMob.add(feather);
                         feather.shoot(this);
 

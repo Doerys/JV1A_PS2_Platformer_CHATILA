@@ -22,11 +22,12 @@ class PlayerFrog extends Player {
 
         this.jumpCounter = 1; // le nombre de sauts restants (utile pour double jump)
 
-        console.log("PLAYER = FROG");
+        //console.log("PLAYER = FROG");
 
         //this.physics.add.collider(this.hook, layersmurs);
 
         this.hook = new Hook(this.scene, this.x + 64, this.y + 64, "hook")
+            .setAlpha()
             .setCollideWorldBounds(true)
             .setOrigin(0.5, 0.5)
             .disableBody(true, true);
@@ -36,6 +37,7 @@ class PlayerFrog extends Player {
         //
 
         this.rope = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setAlpha(0.8)
             .setOrigin(0, 0.5)
             .setDepth(-1)
             .disableBody(true, true);
@@ -45,6 +47,7 @@ class PlayerFrog extends Player {
         //
 
         this.rope2 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setAlpha(0.8)
             .setOrigin(0, 0.5)
             .setDepth(-1)
             .disableBody(true, true);
@@ -54,6 +57,7 @@ class PlayerFrog extends Player {
         //
 
         this.rope3 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setAlpha(0.8)
             .setOrigin(0, 0.5)
             .setDepth(-1)
             .disableBody(true, true);
@@ -63,6 +67,7 @@ class PlayerFrog extends Player {
         //
 
         this.rope4 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setAlpha(0.8)
             .setOrigin(0, 0.5)
             .setDepth(-1)
             .disableBody(true, true);
@@ -72,6 +77,7 @@ class PlayerFrog extends Player {
         //
 
         this.rope5 = new Rope(this.scene, this.x + 64, this.y + 64, 'rope')
+            .setAlpha(0.8)
             .setOrigin(0, 0.5)
             .setDepth(-1)
             .disableBody(true, true);
@@ -86,8 +92,6 @@ class PlayerFrog extends Player {
     update(time, delta) {
 
         if (this.isPossessed) {
-
-            console.log(this.returnHook);
 
             // gestion des animations
             this.animManager();
@@ -157,6 +161,8 @@ class PlayerFrog extends Player {
 
                 this.canHook = false;
 
+                this.reachStake = false;
+
                 // fixe le joueur sur place
                 this.inputsMoveLocked = true; // commandes bloquées
                 this.body.setAllowGravity(false); //gravité annulée 
@@ -165,8 +171,6 @@ class PlayerFrog extends Player {
 
                 // crée la langue
                 setTimeout(() => {
-
-                    console.log("HOOK");
 
                     this.hook.enableBody(true, this.x + 64, this.y + 54, true, true)
 
@@ -201,7 +205,6 @@ class PlayerFrog extends Player {
 
             if (this.isHooking) {
                 const distanceHook = this.scene.checkDistance(this.x + 64, this.hook.x);
-
 
                 // si le grappin atteint la distance max OU choppe une caisse OU est immobile sans toucher d'élément interactif OU touche une plat mobile : renvoie le grappin
                 if ((distanceHook >= this.maxHookDistance) || (this.boxCatched) || (this.hook.body.velocity.x == 0 && !this.stakeCatched && !this.boxCatched && !this.returnHook && this.isHooking) || (this.scene.hookCollideMovingPlat)) {
@@ -318,7 +321,8 @@ class PlayerFrog extends Player {
 
                 // stoppe le grapin lors du retour et le fait disparaître
                 if (this.returnHook) {
-                    if (distanceHook <= 15) {
+                    if (distanceHook <= 15 || this.reachStake) {
+
                         this.hook.setVelocityX(0);
 
                         this.hook.disableBody(true, true);
@@ -332,10 +336,7 @@ class PlayerFrog extends Player {
                         this.isHooking = false;
                     }
                 }
-
             }
-
-
 
             // débloque les commandes après l'utilisation du grappin
             if (!this.isHooking && !this.grabLeft && !this.grabRight && this.canHook) {
