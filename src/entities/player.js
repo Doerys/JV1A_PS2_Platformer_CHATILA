@@ -65,7 +65,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.isGrabing = false;
 
-        this.varDesactiveFonction
+        this.startGrabFall = false;
+
+        this.preventFall = false;
 
         this.automaticGrab = true; // permet de s'accrocher au mur pendant un court laps de temps sans appuyer sur la touche de grab
         this.grabCollapse = false; // permet d'activer un début de glissade le long du mur avant la chute
@@ -208,27 +210,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         this.anims.play("player_frog_hookBackJump", true);
                     }*/
 
-                /*    this.throwHookAnim = false;
-                    this.animFallHook = true;
-                }*/
+            /*    this.throwHookAnim = false;
+                this.animFallHook = true;
+            }*/
 
-                /*if (this.stakeCatched) {
-                    
-                    if (this.body.blocked.down) {
-                        this.anims.play("player_frog_hookAttrackGround", true);
-                    }
+            /*if (this.stakeCatched) {
+                
+                if (this.body.blocked.down) {
+                    this.anims.play("player_frog_hookAttrackGround", true);
+                }
 
-                    else if (this.jumpAnim) {
-                        this.anims.play("player_frog_hookAttrackJump", true);
-                    }            
-                    
-                    this.attrackAnim = true;
-                }*/
+                else if (this.jumpAnim) {
+                    this.anims.play("player_frog_hookAttrackJump", true);
+                }            
+                
+                this.attrackAnim = true;
+            }*/
 
-                /*if (!this.stakeCatched && this.animFallHook && !this.body.blocked.down) {
-                    console.log("CHUTE ELEGAANTE")
-                    this.anims.play("player_frog_hookFall", true);
-                }*/
+            /*if (!this.stakeCatched && this.animFallHook && !this.body.blocked.down) {
+                console.log("CHUTE ELEGAANTE")
+                this.anims.play("player_frog_hookFall", true);
+            }*/
             //}
 
             // JUMP
@@ -706,11 +708,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         else if (!this.onGround && this.currentMob == "frog") {
 
             // WALL JUMP depuis mur GAUCHE
-            if ((this.upOnce || this.ZOnce || this.cursors.right.isDown || this.keyD.isDown) && this.grabLeft) {
+            if ((this.cursors.up.isDown || this.keyZ.isDown || this.cursors.right.isDown || this.keyD.isDown) && this.grabLeft) {
 
                 this.simpleJump();
 
                 this.isWallJumping = true;
+
+                // permet de réactiver le système de décrochage du mur
+                this.startGrabFall = false;
 
                 this.facing = "right";
 
@@ -727,13 +732,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // WALL JUMP depuis mur DROIT
-            if ((this.upOnce || this.ZOnce || this.cursors.left.isDown || this.keyQ.isDown) && this.grabRight) {
+            if ((this.cursors.up.isDown || this.keyZ.isDown || this.cursors.left.isDown || this.keyQ.isDown) && this.grabRight) {
+
+                //console.log("CHECK JUMP")
 
                 this.simpleJump();
 
                 this.facing = "left";
 
                 this.isWallJumping = true;
+
+                // permet de réactiver le système de décrochage du mur
+                this.startGrabFall = false;
 
                 this.body.setAllowGravity(true); // réactive la gravité du joueur fixé au mur
                 this.grabRight = false; // désactive la variable du wallGrab

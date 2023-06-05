@@ -93,6 +93,8 @@ class PlayerFrog extends Player {
 
         if (this.isPossessed) {
 
+            //console.log(this.grabRight);
+
             // gestion des animations
             this.animManager();
 
@@ -151,38 +153,36 @@ class PlayerFrog extends Player {
             }
 
             // DECROCHAGE DU MUR
-            if (this.isGrabing && !this.varDesactiveFonction) {
 
-                // première vérif pour lancer les setTimeout
-                if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
+            // première vérif pour lancer les setTimeout => si on est accroché à une surface et qu'on ne touche pas la touche pour rester accrocher
+            if (this.isGrabing && !this.startGrabFall && ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp))) {
 
-                    this.varDesactiveFonction = true;
+                this.startGrabFall = true;
 
-                    // Début de slide le long du mur, pour prévenir le joueur de la chute à venir
-                    setTimeout(() => {
+                // Début de slide le long du mur, pour prévenir le joueur de la chute à venir
+                setTimeout(() => {
 
-                        // Double vérification pour ne pas déclencher l'événement si entre temps, le joueur a grab
+                    // Double vérification pour ne pas déclencher l'événement si entre temps, le joueur a grab
 
-                        if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
+                    if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
 
-                            this.setVelocityY(50);
-                            this.grabCollapse = true;
-                        }
+                        this.setVelocityY(50);
+                        this.grabCollapse = true;
+                    }
 
-                    }, 100);
+                }, 100);
 
-                    // Chute
-                    setTimeout(() => {
+                // Chute
+                setTimeout(() => {
 
-                        // Double vérification pour ne pas déclencher l'événement si entre temps, le joueur a grab
-                        if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
+                    // Double vérification pour ne pas déclencher l'événement si entre temps, le joueur a grab
+                    if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
 
-                            this.automaticGrab = false;
-                            this.grabCollapse = false;
-                        }
+                        this.automaticGrab = false;
+                        this.grabCollapse = false;
+                    }
 
-                    }, 500);
-                }
+                }, 500);
             }
 
             // si input de grab pressé pendant un début de décrochage, on stope le début de slide
@@ -190,18 +190,19 @@ class PlayerFrog extends Player {
 
                 if ((this.grabLeft && (this.cursors.left.isDown || this.keyQ.isDown)) || (this.grabRight && (this.cursors.right.isDown || this.keyD.isDown))) {
                     this.grabCollapse = false;
+                    this.startGrabFall = false;
                 }
             }
 
             // si on a lâché le grab, réinitialisation des variables
-            if (!this.blockedLeft && !this.blockedRight && !this.onGround) {
+            if (!this.blockedLeft && !this.blockedRight && !this.onGround && !this.grabCollapse) {
                 this.grabRight = false;
                 this.grabLeft = false;
                 this.isGrabing = false;
 
                 this.automaticGrab = true;
                 this.grabCollapse = false;
-                this.varDesactiveFonction = false;
+                this.startGrabFall = false;
             }
 
             // permet de désactiver le wall jump pour descendre, en pressant la touche du bas
