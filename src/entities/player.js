@@ -58,12 +58,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // wall jump
         this.grabLeft = false;
         this.grabRight = false;
-        this.wasGrabingLeft = false;
-        this.wasGrabingRight = false;
+        this.wasGrabingLeft = false; // utile pour activer le saut avec les touches gauche / droite après un wall jump
+        this.wasGrabingRight = false; // utile pour activer le saut avec les touches gauche / droite après un wall jump
 
         this.isWallJumping = false;
 
         this.isGrabing = false;
+
+        this.varDesactiveFonction
+
+        this.automaticGrab = true; // permet de s'accrocher au mur pendant un court laps de temps sans appuyer sur la touche de grab
+        this.grabCollapse = false; // permet d'activer un début de glissade le long du mur avant la chute
 
         // grappin
         this.hookCreated = false;
@@ -240,7 +245,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // GRAB WALL
-            if (this.isGrabing) {
+            if (this.isGrabing && (this.body.blocked.right || this.body.blocked.left)) {
                 if (this.body.velocity.y > 0) {
                     this.anims.play("player_frog_slideWall", true);
                     this.justFall = false;
@@ -626,11 +631,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 this.isWallJumping = false;
 
+                this.isGrabing = false;
                 this.grabRight = false;
                 this.grabLeft = false;
-                this.wasGrabingLeft = false;
-                this.wasGrabingRight = false;
-                this.isGrabing = false;
+                this.wasGrabingLeft = false; // utile pour activer le saut avec les touches gauche / droite après un wall jump
+                this.wasGrabingRight = false; // utile pour activer le saut avec les touches gauche / droite après un wall jump
             }
         }
 

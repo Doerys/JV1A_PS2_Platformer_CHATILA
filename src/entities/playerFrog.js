@@ -107,13 +107,17 @@ class PlayerFrog extends Player {
             // WALL GRAB - on se fixe au mur une fois en contact avec lui
 
             // WALL GRAB GAUCHE
-            if (this.blockedLeft && (this.cursors.left.isDown || this.keyQ.isDown) && !this.onGround) { // si on est bloqué sur une paroi de gauche, et pas en contact avec le sol
+            if (this.blockedLeft && !this.onGround && this.automaticGrab) { // si on est bloqué sur une paroi de gauche, et pas en contact avec le sol
 
                 if (!this.newJump) { // si le saut actuel n'est pas nouveau
 
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
-                    this.setVelocityY(0);
+
+                    if (!this.grabCollapse) {
+                        this.setVelocityY(0);
+                    }
+
                     this.setVelocityX(-3);
 
                     // verrouille les commandes de déplacement et valide le wall grab gauche
@@ -125,13 +129,17 @@ class PlayerFrog extends Player {
             }
 
             // WALL GRAB DROIT
-            else if (this.blockedRight && (this.cursors.right.isDown || this.keyD.isDown) && !this.onGround) { // si on est bloqué sur une paroi de droite, et pas en contact avec le sol
+            else if (this.blockedRight && !this.onGround && this.automaticGrab) { // si on est bloqué sur une paroi de droite, et pas en contact avec le sol
 
                 if (!this.newJump) { // si le saut actuel n'est pas nouveau
 
                     // fixe le joueur au mur
                     this.body.setAllowGravity(false);
-                    this.setVelocityY(0);
+
+                    if (!this.grabCollapse) {
+                        this.setVelocityY(0);
+                    }
+
                     this.setVelocityX(3);
 
                     // verrouille les commandes de déplacement et valide le wall grab gauche
@@ -142,10 +150,58 @@ class PlayerFrog extends Player {
                 }
             }
 
-            else if (!this.blockedLeft && !this.blockedRight && !this.onGround) {
+            // DECROCHAGE DU MUR
+            if (this.isGrabing && !this.varDesactiveFonction) {
+
+                // première vérif pour lancer les setTimeout
+                if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
+
+                    this.varDesactiveFonction = true;
+
+                    // Début de slide le long du mur, pour prévenir le joueur de la chute à venir
+                    setTimeout(() => {
+
+                        // Double vérification pour ne pas déclencher l'événement si entre temps, le joueur a grab
+
+                        if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
+
+                            this.setVelocityY(50);
+                            this.grabCollapse = true;
+                        }
+
+                    }, 100);
+
+                    // Chute
+                    setTimeout(() => {
+
+                        // Double vérification pour ne pas déclencher l'événement si entre temps, le joueur a grab
+                        if ((this.grabRight && this.cursors.right.isUp && this.keyD.isUp) || (this.grabLeft && this.cursors.left.isUp && this.keyQ.isUp)) {
+
+                            this.automaticGrab = false;
+                            this.grabCollapse = false;
+                        }
+
+                    }, 500);
+                }
+            }
+
+            // si input de grab pressé pendant un début de décrochage, on stope le début de slide
+            if (this.grabCollapse) {
+
+                if ((this.grabLeft && (this.cursors.left.isDown || this.keyQ.isDown)) || (this.grabRight && (this.cursors.right.isDown || this.keyD.isDown))) {
+                    this.grabCollapse = false;
+                }
+            }
+
+            // si on a lâché le grab, réinitialisation des variables
+            if (!this.blockedLeft && !this.blockedRight && !this.onGround) {
                 this.grabRight = false;
                 this.grabLeft = false;
                 this.isGrabing = false;
+
+                this.automaticGrab = true;
+                this.grabCollapse = false;
+                this.varDesactiveFonction = false;
             }
 
             // permet de désactiver le wall jump pour descendre, en pressant la touche du bas
