@@ -255,7 +255,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":56,
                  "height":64,
                  "id":77,
                  "name":"",
@@ -278,7 +277,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":57,
                  "height":64,
                  "id":75,
                  "name":"",
@@ -312,7 +310,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":132,
                  "height":64,
                  "id":97,
                  "name":"",
@@ -335,7 +332,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":56,
                  "name":"",
@@ -347,7 +343,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":60,
                  "name":"",
@@ -359,7 +354,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":61,
                  "name":"",
@@ -371,7 +365,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":91,
                  "name":"",
@@ -383,7 +376,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":92,
                  "name":"",
@@ -395,7 +387,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":93,
                  "name":"",
@@ -407,7 +398,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":95,
                  "name":"",
@@ -419,7 +409,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":96,
                  "name":"",
@@ -453,7 +442,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":86,
                  "height":64,
                  "id":82,
                  "name":"",
@@ -923,7 +911,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":127,
                  "height":64,
                  "id":88,
                  "name":"",
@@ -946,7 +933,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":165,
                  "height":64,
                  "id":86,
                  "name":"",
@@ -999,18 +985,6 @@
                  "width":64,
                  "x":832,
                  "y":896
-                }, 
-                {
-                 "class":"",
-                 "height":0,
-                 "id":100,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "visible":true,
-                 "width":0,
-                 "x":2432,
-                 "y":1920
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1044,7 +1018,19 @@
          "draworder":"topdown",
          "id":31,
          "name":"checkPointRaven",
-         "objects":[],
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":101,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":2432,
+                 "y":1920
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -1052,7 +1038,7 @@
          "y":0
         }],
  "nextlayerid":32,
- "nextobjectid":101,
+ "nextobjectid":102,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

@@ -293,6 +293,8 @@ class SceneClass extends Phaser.Scene {
         this.deathHogSound = this.sound.add('deathHogSound');
         this.deathRavenSound = this.sound.add('deathRavenSound');
 
+        this.checkPointSound = this.sound.add('checkPointSound');
+
         this.unlockFrogCP = false;
         this.unlockHogCP = false;
         this.unlockRavenCP = false;
@@ -1177,6 +1179,8 @@ class SceneClass extends Phaser.Scene {
 
             this.unlockFrogCP = true;
 
+            this.checkPointSound.play();
+
             this.tweens.add({
                 targets: checkPoint,
                 alpha: 1,
@@ -1192,6 +1196,8 @@ class SceneClass extends Phaser.Scene {
 
             this.unlockHogCP = true;
 
+            this.checkPointSound.play();
+
             this.tweens.add({
                 targets: checkPoint,
                 alpha: 1,
@@ -1206,6 +1212,8 @@ class SceneClass extends Phaser.Scene {
             this.layers.spawnRaven.y = checkPoint.y;
 
             this.unlockRavenCP = true;
+
+            this.checkPointSound.play();
 
             this.tweens.add({
                 targets: checkPoint,
@@ -1384,8 +1392,6 @@ class SceneClass extends Phaser.Scene {
         if (this.attrack) {
             if (this.player.facing == 'right') {
                 if (this.player.x + 144 < box.x && !this.boxPressingButton) {
-
-                    console.log("ATTRACTION");
 
                     box.body.setAllowGravity(false);
                     box.x -= 10;

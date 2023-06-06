@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no" ?>
 <!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
-<project xmlns="http://audacity.sourceforge.net/xml/" projname="soundDesign_data" version="1.3.0" audacityversion="2.4.2" sel0="0.0000000000" sel1="1.3780000000" vpos="4656" h="0.0000000000" zoom="59.5000437243" rate="24000.0" snapto="on" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="soundDesign_data" version="1.3.0" audacityversion="2.4.2" sel0="5.4120000000" sel1="5.4120000000" vpos="5248" h="0.0000000000" zoom="29.7500218622" rate="24000.0" snapto="on" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
 	<tags/>
 	<wavetrack name="Piste audio" isSelected="0" height="150" minimized="0" channel="0" linked="1" mute="1" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
 		<waveclip offset="0.07420833" colorindex="0">
@@ -674,12 +674,10 @@
 					<simpleblockfile filename="e0808f6d.au" len="60560" min="-0.690394" max="0.727266" rms="0.130957"/>
 				</waveblock>
 			</sequence>
-			<envelope numpoints="5">
+			<envelope numpoints="3">
 				<controlpoint t="0.008403355169" val="0.154929578304"/>
 				<controlpoint t="0.915965713446" val="0.577464818954"/>
 				<controlpoint t="2.521006550768" val="0.957746505737"/>
-				<controlpoint t="4.179333333333" val="1.000000000000"/>
-				<controlpoint t="4.179333333333" val="0.577464818954"/>
 			</envelope>
 		</waveclip>
 	</wavetrack>
@@ -690,16 +688,14 @@
 					<simpleblockfile filename="e0808067.au" len="60560" min="-0.686761" max="0.725363" rms="0.130849"/>
 				</waveblock>
 			</sequence>
-			<envelope numpoints="5">
+			<envelope numpoints="3">
 				<controlpoint t="0.008403355169" val="0.154929578304"/>
 				<controlpoint t="0.915965713446" val="0.577464818954"/>
 				<controlpoint t="2.521006550768" val="0.957746505737"/>
-				<controlpoint t="4.179333333333" val="1.000000000000"/>
-				<controlpoint t="4.179333333333" val="0.577464818954"/>
 			</envelope>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="Piste audio" isSelected="0" height="150" minimized="0" channel="0" linked="1" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+	<wavetrack name="Piste audio" isSelected="0" height="150" minimized="0" channel="0" linked="1" mute="1" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
 		<waveclip offset="0.07420833" colorindex="0">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="77448">
 				<waveblock start="0">
@@ -711,7 +707,7 @@
 			</envelope>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="Piste audio" isSelected="0" height="150" minimized="0" channel="1" linked="0" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+	<wavetrack name="Piste audio" isSelected="0" height="150" minimized="0" channel="1" linked="0" mute="1" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
 		<waveclip offset="0.07420833" colorindex="0">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="77448">
 				<waveblock start="0">
@@ -791,7 +787,7 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="Piste audio" isSelected="1" height="150" minimized="0" channel="0" linked="1" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+	<wavetrack name="Piste audio" isSelected="0" height="150" minimized="0" channel="0" linked="1" mute="1" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
 		<waveclip offset="0.00000000" colorindex="0">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="33072">
 				<waveblock start="0">
@@ -801,11 +797,51 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="Piste audio" isSelected="1" height="150" minimized="0" channel="1" linked="0" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+	<wavetrack name="Piste audio" isSelected="0" height="150" minimized="0" channel="1" linked="0" mute="1" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
 		<waveclip offset="0.00000000" colorindex="0">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="33072">
 				<waveblock start="0">
 					<simpleblockfile filename="e0800e29.au" len="33072" min="-0.560122" max="0.512657" rms="0.041196"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="magical-glowing-37417" isSelected="1" height="150" minimized="0" channel="0" linked="1" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="69079">
+				<waveblock start="0">
+					<simpleblockfile filename="e08002e3.au" len="69079" min="-0.120407" max="0.109837" rms="0.02756"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="magical-glowing-37417" isSelected="1" height="150" minimized="0" channel="1" linked="0" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="69079">
+				<waveblock start="0">
+					<simpleblockfile filename="e08009b7.au" len="69079" min="-0.119954" max="0.109611" rms="0.027554"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="woosh_low_long01-98755" isSelected="0" height="150" minimized="0" channel="0" linked="1" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="69079">
+				<waveblock start="0">
+					<simpleblockfile filename="e0800cb6.au" len="69079" min="-0.198584" max="0.200471" rms="0.027492"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="woosh_low_long01-98755" isSelected="0" height="150" minimized="0" channel="1" linked="0" mute="0" solo="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="69079">
+				<waveblock start="0">
+					<simpleblockfile filename="e0800e01.au" len="69079" min="-0.200563" max="0.176556" rms="0.02751"/>
 				</waveblock>
 			</sequence>
 			<envelope numpoints="0"/>

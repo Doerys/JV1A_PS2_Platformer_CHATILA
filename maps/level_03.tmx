@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="32" nextobjectid="101">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="48" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="32" nextobjectid="102">
  <editorsettings>
   <export target="level_03.json" format="json"/>
  </editorsettings>
@@ -231,28 +231,28 @@
 </data>
  </layer>
  <objectgroup id="6" name="SpawnFrog">
-  <object id="77" gid="56" x="1280" y="448" width="64" height="64"/>
+  <object id="77" x="1280" y="448" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="7" name="SpawnHog">
-  <object id="75" gid="57" x="0" y="1344" width="64" height="64"/>
+  <object id="75" x="0" y="1344" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="8" name="SpawnRaven"/>
  <objectgroup id="9" name="Cure">
-  <object id="97" gid="132" x="1472" y="1920" width="64" height="64"/>
+  <object id="97" x="1472" y="1920" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="10" name="Stake">
-  <object id="56" gid="48" x="1536" y="768" width="64" height="64"/>
-  <object id="60" gid="48" x="960" y="188" width="64" height="64"/>
-  <object id="61" gid="48" x="576" y="320" width="64" height="64"/>
-  <object id="91" gid="48" x="1088" y="1024" width="64" height="64"/>
-  <object id="92" gid="48" x="1408" y="1088" width="64" height="64"/>
-  <object id="93" gid="48" x="1728" y="1088" width="64" height="64"/>
-  <object id="95" gid="48" x="2240" y="1216" width="64" height="64"/>
-  <object id="96" gid="48" x="1920" y="832" width="64" height="64"/>
+  <object id="56" x="1536" y="768" width="64" height="64"/>
+  <object id="60" x="960" y="188" width="64" height="64"/>
+  <object id="61" x="576" y="320" width="64" height="64"/>
+  <object id="91" x="1088" y="1024" width="64" height="64"/>
+  <object id="92" x="1408" y="1088" width="64" height="64"/>
+  <object id="93" x="1728" y="1088" width="64" height="64"/>
+  <object id="95" x="2240" y="1216" width="64" height="64"/>
+  <object id="96" x="1920" y="832" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="11" name="RavenPlatform"/>
  <objectgroup id="12" name="Box">
-  <object id="82" gid="86" x="1792" y="576" width="64" height="64"/>
+  <object id="82" x="1792" y="576" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="17" name="BigBox">
   <object id="50" x="640" y="832" width="128" height="128"/>
@@ -303,22 +303,23 @@
   <object id="89" x="2688" y="576" width="64" height="192"/>
  </objectgroup>
  <objectgroup id="26" name="Button">
-  <object id="88" gid="127" x="2048" y="896" width="128" height="64"/>
+  <object id="88" x="2048" y="896" width="128" height="64"/>
  </objectgroup>
  <objectgroup id="27" name="ButtonBase">
-  <object id="86" gid="165" x="2048" y="896" width="128" height="64"/>
+  <object id="86" x="2048" y="896" width="128" height="64"/>
  </objectgroup>
  <objectgroup id="15" name="NextLevel">
   <object id="62" x="3008" y="704" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="30" name="checkPointFrog">
   <object id="99" x="832" y="896" width="64" height="64"/>
-  <object id="100" x="2432" y="1920">
-   <point/>
-  </object>
  </objectgroup>
  <objectgroup id="29" name="checkPointHog">
   <object id="98" x="1568" y="1024" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="31" name="checkPointRaven"/>
+ <objectgroup id="31" name="checkPointRaven">
+  <object id="101" x="2432" y="1920">
+   <point/>
+  </object>
+ </objectgroup>
 </map>

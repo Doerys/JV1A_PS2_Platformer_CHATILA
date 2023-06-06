@@ -76,7 +76,7 @@ class Preload extends Phaser.Scene {
 
         // SOUND
 
-        //this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
+        this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
         this.load.audio('ambiance_sound', 'assets/sound/ambiance_inGame.mp3');
 
         this.load.audio('possessFrogSound', 'assets/sound/possess_Frog.mp3');
@@ -86,6 +86,8 @@ class Preload extends Phaser.Scene {
         this.load.audio('deathFrogSound', 'assets/sound/death_Frog.mp3');
         this.load.audio('deathHogSound', 'assets/sound/death_Hog.mp3');
         this.load.audio('deathRavenSound', 'assets/sound/death_Raven.mp3');
+
+        this.load.audio('checkPointSound', 'assets/sound/newCheckPoint.mp3');
 
         // fichier image du tileset
         this.load.image('tilesetTest_image', 'assets/placeholder_test.png'); //Tileset test
@@ -103,11 +105,11 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        /*this.music = this.sound.add('music_inGame');
+        this.music = this.sound.add('music_inGame');
 
         this.music.play();
         this.music.setLoop(true)
-            .setVolume(0.4);*/
+            .setVolume(0.4);
 
         // ANIMATIONS FROG
 

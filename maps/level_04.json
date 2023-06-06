@@ -255,7 +255,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":56,
                  "height":64,
                  "id":112,
                  "name":"",
@@ -289,7 +288,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":58,
                  "height":64,
                  "id":96,
                  "name":"",
@@ -312,7 +310,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":132,
                  "height":64,
                  "id":73,
                  "name":"",
@@ -320,7 +317,7 @@
                  "visible":true,
                  "width":64,
                  "x":96,
-                 "y":1120
+                 "y":1040
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -335,7 +332,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":72,
                  "name":"",
@@ -347,7 +343,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":88,
                  "name":"",
@@ -359,7 +354,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":90,
                  "name":"",
@@ -371,7 +365,6 @@
                 }, 
                 {
                  "class":"",
-                 "gid":48,
                  "height":64,
                  "id":92,
                  "name":"",
@@ -394,7 +387,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":60,
                  "height":64,
                  "id":70,
                  "name":"",
@@ -824,7 +816,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":320,
+                 "x":1920,
                  "y":1856
                 }],
          "opacity":1,
@@ -847,7 +839,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":128,
+                 "x":1728,
                  "y":1856
                 }],
          "opacity":1,
@@ -870,7 +862,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":256,
+                 "x":1856,
                  "y":1856
                 }],
          "opacity":1,

@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "test/testScene.tmx",
+    "activeFile": "level_02.tmx",
     "expandedProjectPaths": [
-        "test",
-        "."
+        ".",
+        "test"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
@@ -51,11 +51,11 @@
                 10,
                 25
             ],
-            "scale": 0.33,
-            "selectedLayer": 6,
+            "scale": 0.5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1284.8484848484848,
-                "y": 830.3030303030301
+                "x": 2034,
+                "y": 260
             }
         },
         "level_01.tmx#placeholder_test": {
@@ -63,7 +63,7 @@
             "scaleInEditor": 1
         },
         "level_01.tmx#tileset": {
-            "scaleInDock": 0.5,
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
         "level_02 - Copie.tmx": {
@@ -107,11 +107,11 @@
                 25,
                 26
             ],
-            "scale": 0.25,
-            "selectedLayer": 25,
+            "scale": 0.33,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1536,
-                "y": 962
+                "x": 1342.4242424242425,
+                "y": 1003.030303030303
             }
         },
         "level_02.tmx#placeholder_test": {
@@ -129,6 +129,7 @@
                 29,
                 15,
                 30,
+                31,
                 16,
                 17,
                 18,
@@ -136,14 +137,14 @@
                 6,
                 7,
                 24,
-                25,
-                10
+                10,
+                25
             ],
             "scale": 0.33,
-            "selectedLayer": 23,
+            "selectedLayer": 25,
             "viewCenter": {
-                "x": 1533.3333333333335,
-                "y": 962.121212121212
+                "x": 1536.3636363636365,
+                "y": 963.6363636363637
             }
         },
         "level_03.tmx#tileset": {
@@ -163,8 +164,8 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
-                26,
                 11,
+                26,
                 28,
                 29,
                 15,
@@ -176,18 +177,18 @@
                 8,
                 9,
                 24,
-                25,
-                10
+                10,
+                25
             ],
             "scale": 0.25,
-            "selectedLayer": 25,
+            "selectedLayer": 19,
             "viewCenter": {
-                "x": 1536,
-                "y": 962
+                "x": 1916,
+                "y": 780
             }
         },
         "level_04.tmx#tileset": {
-            "scaleInDock": 0.5,
+            "scaleInDock": 0.03125,
             "scaleInEditor": 1
         },
         "level_05.tmx": {
@@ -210,10 +211,10 @@
                 24
             ],
             "scale": 0.25,
-            "selectedLayer": 23,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 1536,
-                "y": 962
+                "x": 1512,
+                "y": 1024
             }
         },
         "level_05.tmx#tileset": {
@@ -256,11 +257,11 @@
                 25,
                 26
             ],
-            "scale": 0.25,
+            "scale": 0.33,
             "selectedLayer": 23,
             "viewCenter": {
-                "x": 1536,
-                "y": 962
+                "x": 1581.8181818181818,
+                "y": 1090.909090909091
             }
         },
         "level_06.tmx#placeholder_test": {
@@ -322,12 +323,12 @@
     "property.type": "bool",
     "recentFiles": [
         "level_01.tmx",
-        "level_02.tmx",
-        "level_03.tmx",
-        "level_04.tmx",
-        "level_05.tmx",
-        "level_06.tmx",
         "test/testScene.tmx",
+        "level_06.tmx",
+        "level_05.tmx",
+        "level_04.tmx",
+        "level_03.tmx",
+        "level_02.tmx",
         "level_01 - Copie.tmx",
         "level_06 - Copie.tmx",
         "level_02 - Copie.tmx",
