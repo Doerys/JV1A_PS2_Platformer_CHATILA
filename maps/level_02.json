@@ -297,8 +297,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1053.33333333333,
-                 "y":1397.33333333333
+                 "x":1053.33,
+                 "y":1397.33
                 }, 
                 {
                  "class":"",
@@ -309,8 +309,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1049.33333333333,
-                 "y":1378.66666666667
+                 "x":1049.33,
+                 "y":1378.67
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -633,9 +633,77 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":29,
+         "name":"checkPointFrog",
+         "objects":[
+                {
+                 "class":"",
+                 "height":64,
+                 "id":108,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":800,
+                 "y":672
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":28,
+         "name":"checkPointHog",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":109,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":1600,
+                 "y":1920
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":30,
+         "name":"checkPointRaven",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":110,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":1664,
+                 "y":1920
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":28,
- "nextobjectid":108,
+ "nextlayerid":31,
+ "nextobjectid":111,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

@@ -37,7 +37,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.jumpTimer = 0; // temps en secondes sur lequel on appuie sur la touche saut
 
+        this.climbButton = false;
         this.isPressingButton = false;
+        this.currentlyPressing = false;
 
         // VARIABLES D'ANIMATION
 
@@ -80,7 +82,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.returnHook = false;
 
         this.speedHook = 1500;
-        this.maxHookDistance = 256;
+        this.maxHookDistance = 288;
 
         this.stakeCatched = false;
         this.reachStake = false;
@@ -234,13 +236,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //}
 
             // JUMP
-            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isHooking) {
+            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isHooking && !this.climbButton) {
                 this.anims.play("player_frog_jump", true);
                 this.jumpAnim = true;
             }
 
             // FALL
-            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated && !this.isHooking && !this.throwHookAnim && !this.animFallHook) {
+            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated && !this.isHooking && !this.throwHookAnim && !this.animFallHook && !this.climbButton) {
                 this.anims.play("player_frog_fall", true);
                 this.fallAnim = true;
                 this.justFall = true;
@@ -312,7 +314,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // JUMP
-            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isShooting) {
+            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isShooting && !this.climbButton) {
                 this.anims.play("player_hog_jump", true);
                 this.jumpAnim = true;
             }
@@ -329,7 +331,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // FALL
-            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated) {
+            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated && !this.isPressingButton && !this.climbButton) {
                 this.anims.play("player_hog_fall", true);
                 this.fallAnim = true;
                 this.justFall = true;
@@ -455,7 +457,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         this.anims.play("player_raven_planeToFall", true);
                     }
 
-                    else if (!this.firstFallAnim && !this.justCreated) {
+                    else if (!this.firstFallAnim && !this.justCreated && !this.climbButton) {
                         this.anims.play("player_raven_groundtoFall", true);
                         this.firstFallAnim = true;
                     }
@@ -472,7 +474,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             // ANIM DE JUMP
 
             // si on va vers le haut
-            if (this.body.velocity.y < 0 && !this.isShooting && !this.shootAnim) {
+            if (this.body.velocity.y < 0 && !this.isShooting && !this.shootAnim && !this.climbButton) {
                 if (!this.jumpAnim) {
 
                     if (this.body.blocked.downd) {
@@ -547,7 +549,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         // DEPLACEMENT A DROITE =>
-        else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked && !this.isHooking && this.canHook && !this.isShooting) || this.scene.reachNewLevel) { // si touche vers la droite pressée
+        else if (((this.cursors.right.isDown || this.keyD.isDown /*|| this.controller.right */) && !this.inputsMoveLocked && !this.isHooking && this.canHook && !this.isShooting) || this.scene.writtenMoveRight) { // si touche vers la droite pressée
             this.facing = 'right'; // rotation
 
             if (this.currentMob != "raven") {
@@ -564,7 +566,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // frottement au sol
         if (this.cursors.left.isUp && this.cursors.right.isUp && this.keyQ.isUp && this.keyD.isUp && /*!this.controller.left
-            && !this.controller.right &&*/ (this.onGround || this.body.velocity.y == 0) && this.speedPlayer != 0 && !this.scene.reachNewLevel) { // si aucune touche de déplacement pressée + bloqué au sol + pas de saut + pas déjà immobile
+            && !this.controller.right &&*/ (this.onGround || this.body.velocity.y == 0) && this.speedPlayer != 0 && !this.scene.writtenMoveRight && !this.scene.writtenMoveLeft) { // si aucune touche de déplacement pressée + bloqué au sol + pas de saut + pas déjà immobile
 
             //this.setDragX(0.0001); // pas fonctionnel encore
 

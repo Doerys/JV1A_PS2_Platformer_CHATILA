@@ -34,6 +34,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.playerSpotted = false; // changement de comportement si le joueur est détecté
 
         this.isPressingButton = false;
+        this.currentlyPressing = false;
 
         this.canMove = true; // permet de bloquer momentanément le hog après qu'il ait percuté un mur en chargeant
 

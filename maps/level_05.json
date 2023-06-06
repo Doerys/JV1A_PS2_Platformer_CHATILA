@@ -743,9 +743,77 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":28,
+         "name":"checkPointFrog",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":139,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":640,
+                 "y":1920
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":29,
+         "name":"checkPointHog",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":141,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":768,
+                 "y":1920
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":30,
+         "name":"checkPointRaven",
+         "objects":[
+                {
+                 "class":"",
+                 "height":64,
+                 "id":140,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":1504,
+                 "y":256
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":28,
- "nextobjectid":137,
+ "nextlayerid":31,
+ "nextobjectid":142,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

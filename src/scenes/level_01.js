@@ -25,7 +25,7 @@ class Level_01 extends SceneClass {
 
         // plateforme qui bouge
 
-        this.movingPlat1 = this.physics.add.image(2752, 512, 'movingPlat')
+        this.movingPlat1 = this.physics.add.image(2752, 736, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0);
 

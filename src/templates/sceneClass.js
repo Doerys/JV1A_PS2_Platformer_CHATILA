@@ -129,7 +129,6 @@ class SceneClass extends Phaser.Scene {
         // NEXT LEVEL
 
         const nextLevel = this.physics.add.staticGroup();
-        //layer_nextLevel.objects[0];
 
         // ELEMENTS DE DECORS
 
@@ -151,8 +150,6 @@ class SceneClass extends Phaser.Scene {
 
         const breaks = this.physics.add.staticGroup();
         const pics = this.physics.add.staticGroup();
-
-        //const cures = this.physics.add.staticGroup();
 
         // Plateformes spéciales
 
@@ -193,7 +190,7 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat4);
             this.physics.add.collider(box_create, this.movingPlat5);
 
-            this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(box_create, buttonBases, this.boxClimbButtonBase, null, this);
             this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
             this.physics.add.collider(box_create, this.door);
 
@@ -216,7 +213,7 @@ class SceneClass extends Phaser.Scene {
             this.physics.add.collider(box_create, this.movingPlat3);
             this.physics.add.collider(box_create, this.movingPlat4);
             this.physics.add.collider(box_create, this.movingPlat5);
-            this.physics.add.collider(box_create, buttonBases, this.climbButtonBase, null, this);
+            this.physics.add.collider(box_create, buttonBases, this.boxClimbButtonBase, null, this);
             this.physics.add.collider(box_create, buttons, this.pressButtonsBox, null, this);
             this.physics.add.collider(box_create, this.door);
 
@@ -255,11 +252,6 @@ class SceneClass extends Phaser.Scene {
             pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
         })
 
-        // item de soin collectable
-        /*layer_cure.objects.forEach(cure => {
-            cures.create(cure.x + 32, cure.y, "cure").setDepth(1);
-        })*/
-
         // création des plateformes qu'on peut créer en tirant dessus avec le raven
         layer_ravenPlat.objects.forEach(ravenPlat => {
             ravenPlats.create(ravenPlat.x + 54, ravenPlat.y + 54, "ravenPlatOff").setSize(64, 64).setOffset(10, 8).setPipeline('Light2D');
@@ -280,7 +272,7 @@ class SceneClass extends Phaser.Scene {
             nextLevel.create(nextlvl.x + 32, nextlvl.y - 96).setVisible(false).setSize(64, 320);
         })
 
-        return { spawnFrog, spawnHog, spawnRaven, checkpointFrog, checkpointHog, checkpointRaven, nextLevel, layer_platforms, layer_boxStop, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
+        return { spawnFrog, spawnHog, spawnRaven, spawnButton, spawnButtonBase, checkpointFrog, checkpointHog, checkpointRaven, nextLevel, layer_platforms, layer_boxStop, layer_limits, layer_deadZone, boxes, bigBoxes, stakes, spawnCure, breaks, pics, ravenPlats, /*movingPlats,*/ weakPlats, weakPlatsVertical, layer_movingPlats, buttonBases, buttons, spawnDoor, tileset }
     }
 
     loadVar(layers) {
@@ -305,13 +297,17 @@ class SceneClass extends Phaser.Scene {
         this.unlockHogCP = false;
         this.unlockRavenCP = false;
 
-        this.reachNewLevel = false;
+        // quand le mob se déplace au cours de phases "scénarisées" => fins de niveaux, boutons, etc...
+        this.writtenMoveRight = false;
+        this.writtenMoveLeft = false;
+
         this.counterVictory = 0;
 
         // Variables pour possession 
         this.playerKilled = false;
         this.hasSaveMob = false; // => si un mob est possédé ou non (mob possédé = saveMob)
 
+        // item de soin collectable
         this.cure = this.physics.add.sprite(layers.spawnCure.x + 32, layers.spawnCure.y + 32, 'cure').setDepth(1);
 
         this.cure.body.setAllowGravity(false)
@@ -323,7 +319,13 @@ class SceneClass extends Phaser.Scene {
         this.boxPressingButton = false;
         this.firstDisableDoor = false;
 
-        this.door = this.physics.add.staticSprite(layers.spawnDoor.x + 32, layers.spawnDoor.y + 96, "door");
+        this.boxCurrentlyPressingButton = false;
+        this.mobCurrentlyPressingButton = false;
+        this.doorCurrentlyOpening = false;
+
+        this.door = this.physics.add.sprite(layers.spawnDoor.x + 32, layers.spawnDoor.y + 96, "door").setImmovable(true);
+        this.door.body.setAllowGravity(false)
+            .setCollideWorldBounds(true);
 
         // Projectiles
         this.projectilesMob = new Phaser.GameObjects.Group;
@@ -642,7 +644,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.cure, this.getCure, null, this);
 
         // Système de boutons et porte qui bloque
-        this.physics.add.collider(this.player, layers.buttonBases, this.climbButtonBase, null, this);
+        this.physics.add.collider(this.player, layers.buttonBases, this.mobClimbButtonBase, null, this);
         this.physics.add.collider(this.player, layers.buttons, this.pressButtonsMob, null, this);
         this.physics.add.collider(this.player, this.door);
 
@@ -722,20 +724,91 @@ class SceneClass extends Phaser.Scene {
     // METHODES POUR BOUTONS ET PORTES
 
     // permet aux boîtes de monter automatiquement les supports de boutons
-    climbButtonBase(box, baseButton) {
+    boxClimbButtonBase(box, baseButton) {
         if (box.body.blocked.left || box.body.blocked.right) {
-            box.y -= 8;
+            this.tweens.add({
+                targets: box,
+                y: box.y -= 8,
+                duration: 50,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+        }
+    }
+
+    mobClimbButtonBase(mob, baseButton) {
+        if (mob.body.blocked.left || mob.body.blocked.right) {
+
+            this.tweens.add({
+                targets: mob,
+                y: mob.y -= 8,
+                duration: 50,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+
+            mob.climbButton = true;
         }
     }
 
     // Boîte qui presse un bouton
     pressButtonsBox(box, button) {
+
         if (box.body.blocked.left || box.body.blocked.right) {
             box.setImmovable(false);
-            box.y -= 8;
+
+            this.tweens.add({
+                targets: box,
+                y: box.y -= 8,
+                duration: 50,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
         }
         if (!box.body.blocked.left && !box.body.blocked.right && !this.mobPressingButton) {
+
             this.boxPressingButton = true;
+
+            if (!this.boxCurrentlyPressingButton) {
+
+                this.boxCurrentlyPressingButton = true;
+
+                // TWEEN
+                this.tweens.add({
+                    targets: box,
+                    x: this.layers.spawnButton.x + 64,
+                    duration: 500,
+                    ease: 'Linear',
+                });
+            }
+
+            // Animation pression du bouton
+            if (!this.mobCurrentlyPressingButton) {
+
+                this.mobCurrentlyPressingButton = true;
+
+                // TWEEN
+                this.tweens.add({
+                    targets: button,
+                    y: this.layers.spawnButton.y - 8,
+                    delay: 500,
+                    ease: 'Linear',
+                });
+            }
+
+            box.destroy();
+
+            const boxPressingButton = this.physics.add.sprite(box.x - 54, box.y, "box").setPushable(false).setPipeline('Light2D').setSize(50, 49).setOffset(5, 0);
+
+            this.physics.add.collider(this.layers.buttons, boxPressingButton, this.climbBoxButton, null, this);
+            this.physics.add.collider(this.playerGroup, boxPressingButton);
+            this.physics.add.collider(this.mobGroup, boxPressingButton);
+            this.physics.add.collider(this.projectilesMob, boxPressingButton, this.cleanProj, null, this);
+            this.physics.add.collider(this.projectilesPlayer, boxPressingButton, this.cleanProj, null, this);
+            //this.physics.add.collider(this.player.hook, boxPressingButton, this.cleanHook, null, this)
+
+
+            // Activation de l'ouverture de la porte
+            this.time.delayedCall(600, () => {
+                this.buttonOn = true;
+            });
         }
     }
 
@@ -743,7 +816,13 @@ class SceneClass extends Phaser.Scene {
     pressButtonsMob(mob, button) {
         // permet de monter automatiquement les supports de boutons sans sauter
         if (mob.body.blocked.left || mob.body.blocked.right) {
-            mob.y -= 8;
+
+            this.tweens.add({
+                targets: mob,
+                y: mob.y -= 8,
+                duration: 50,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
         }
 
         // Verification qu'on est bien SUR le bouton, et pas collé à gauche ou à droite
@@ -751,42 +830,114 @@ class SceneClass extends Phaser.Scene {
 
             // SI HOG
             if (mob.currentMob == "hog") {
-                if (mob.isPossessed) {
+                if (mob.isPossessed && !this.boxPressingButton) {
 
-                    // TWEEN
-                    /*this.tweens.timeline({
-                        targets: button.body.velocity,
-                        tweens: [
-                            { x: 0, y: +8, duration: 10, ease: 'Stepped'  },
-                            { x: 0, y: 0, duration: 10, ease: 'Stepped' }
-                        ]
-                    });*/
-
-                    //console.log("check Hog player")
-
-                    mob.isPressingButton = true;
                     this.mobPressingButton = true;
-                    this.buttonOn = true;
+
+                    // placement du mob sur le bouton
+
+                    if (button.x < mob.x + 128 && !mob.currentlyPressing) {
+
+                        // fais en sorte de ne pas boucler cette partie du code
+                        mob.currentlyPressing = true;
+
+                        //ANIMATION & PLACEMENT
+
+                        this.writtenMoveLeft = true;
+                        this.facing = "left";
+
+                        // TWEEN
+                        this.tweens.add({
+                            targets: mob,
+                            x: this.layers.spawnButton.x - 64,
+                            duration: 500,
+                            ease: 'Linear',
+                        });
+                    }
+
+                    // placement du mob sur le bouton
+
+                    else if (button.x > mob.x + 128 && !mob.currentlyPressing) {
+
+                        // fais en sorte de ne pas boucler cette partie du code
+                        mob.currentlyPressing = true;
+
+                        //ANIMATION & PLACEMENT
+                        this.writtenMoveRight = true;
+                        this.facing = "right";
+
+                        // TWEEN
+                        this.tweens.add({
+                            targets: mob,
+                            x: this.layers.spawnButton.x - 64,
+                            duration: 500,
+                            ease: 'Linear',
+                        });
+                    }
+
+                    // immobilisation du mob pour un temps
+                    mob.inputsMoveLocked = true;
+                    mob.canJump = false;
+
+                    // Animation pression du bouton
+                    if (!this.mobCurrentlyPressingButton) {
+
+                        this.mobCurrentlyPressingButton = true;
+
+                        // TWEEN
+                        this.tweens.add({
+                            targets: button,
+                            y: this.layers.spawnButton.y - 8,
+                            delay: 500,
+                            ease: 'Linear',
+                        });
+                    }
+
+                    // Activation de l'ouverture de la porte
+                    this.time.delayedCall(600, () => {
+
+                        this.writtenMoveRight = false;
+                        this.writtenMoveLeft = false;
+
+                        mob.isPressingButton = true;
+                        this.buttonOn = true;
+
+                        mob.inputsMoveLocked = false;
+                        mob.canJump = true;
+
+                    });
                 }
+
                 else {
                     // TWEEN
 
-                    //console.log("check Hog mob")
-
                     mob.isPressingButton = true;
                     this.mobPressingButton = true;
                     this.buttonOn = true;
                 }
+
             }
 
             // SI RAVEN OU FROG
             else if (mob.isPossessed) {
-                //console.log("check Frog player")
-                // Petit mouvement de plaque, mais rien de plus
+
+                // TWEEN
+                this.tweens.add({
+                    targets: button,
+                    y: this.layers.spawnButton.y - 20,
+                    duration: 100,
+                    ease: 'Linear',
+                });
             }
+
             else {
-                //console.log("check Frog mob")
-                // Petit mouvement de plaque, mais rien de plus
+                // TWEEN
+                this.tweens.add({
+                    targets: button,
+                    y: this.layers.spawnButton.y - 20,
+                    duration: 100,
+                    ease: 'Linear',
+                });
             }
         }
     }
@@ -794,8 +945,10 @@ class SceneClass extends Phaser.Scene {
     removePressButtons(mob) { // si on quitte le bouton
         if (mob.currentMob == "hog") {
             mob.isPressingButton = false;
+            mob.currentlyPressing = false;
             this.mobPressingButton = false;
         }
+        mob.climbButton = false;
     }
 
     boxOnFloor(box) { // désactive la pression du bouton si bouton quitte le bouton
@@ -806,22 +959,53 @@ class SceneClass extends Phaser.Scene {
                 box.setVelocityX(0);
             }
             box.setDragX(0.0001);
-
-            if (!this.mobPressingButton) {
-                this.buttonOn = false;
-            }
         }
     }
 
     manageDoor(layers) { // door qui s'ouvre ou non en fonction de buttonOn
-        if (layers.buttons.body.touching.up && (this.mobPressingButton || this.boxPressingButton)) {
-            this.door.disableBody(true, true);
+
+        if (!this.mobPressingButton && !this.boxPressingButton && this.mobCurrentlyPressingButton) {
+
+            this.mobCurrentlyPressingButton = false;
+
+            // TWEEN
+            this.tweens.add({
+                targets: this.layers.buttons,
+                y: this.layers.spawnButton.y - 24,
+                duration: 500,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+
+        }
+
+        if (layers.buttons.body.touching.up && (this.mobPressingButton || this.boxPressingButton) && !this.doorCurrentlyOpening && this.buttonOn) {
+
+            this.doorCurrentlyOpening = true;
+
+            this.tweens.add({
+                targets: this.door,
+                y: layers.spawnDoor.y + 288,
+                duration: 1500,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+
+            //this.door.disableBody(true, true);
             if (!this.firstDisableDoor) {
                 this.firstDisableDoor = true;
             }
         }
-        else if (this.firstDisableDoor && !this.mobPressingButton && !this.boxPressingButton) {
-            this.door.enableBody();
+        else if (this.firstDisableDoor && !this.mobPressingButton && !this.boxPressingButton && this.doorCurrentlyOpening && !this.buttonOn) {
+
+            this.doorCurrentlyOpening = false;
+
+            this.tweens.add({
+                targets: this.door,
+                y: layers.spawnDoor.y + 96,
+                duration: 1500,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+
+            //this.door.enableBody();
             this.door.visible = true;
         }
     }
@@ -848,29 +1032,27 @@ class SceneClass extends Phaser.Scene {
                 this.deathRavenSound.play();
             }
 
-            setTimeout(() => {
+            this.time.delayedCall(300, () => {
+
                 victim.destroy();
 
                 // si un mob meurt
                 if (!victim.isPossessed) {
-                    //console.log("DIE MOB")
                     victim.disableIA();
                 }
 
                 // si un player meurt
                 else if (victim.isPossessed) {
-                    //console.log("DIE PLAYER")
                     victim.disablePlayer();
                     this.playerKilled = true;
                     this.player = new Player(this, 0, 0, "right", "frog", false).disableBody(true, true);
 
-                    setTimeout(() => {
+                    this.time.delayedCall(100, () => {
                         this.activePossession = false;
                         this.playerKilled = false;
-                    }, 100);
+                    });
                 }
-
-            }, 300);
+            });
 
             if (victim.haveCure == true) {
 
@@ -883,11 +1065,12 @@ class SceneClass extends Phaser.Scene {
                     ease: 'Linear', // Fonction d'interpolation pour l'animation
                 });
 
-                setTimeout(() => {
+                this.time.delayedCall(500, () => {
                     this.cure.x = this.layers.spawnCure.x + 32;
                     this.cure.y = this.layers.spawnCure.y;
                     this.cure.setScale(1).setAlpha(1).setVelocity(0, 0);
-                }, 500);
+                });
+
             }
 
             this.respawnMob(victim);
@@ -899,7 +1082,7 @@ class SceneClass extends Phaser.Scene {
 
     respawnMob(target) { // fait respawn mobs à leur spawn initial après la mort du player ou d'un mob
 
-        setTimeout(() => {
+        this.time.delayedCall(500, () => {
             if (target.currentMob == "frog") {
                 this.createMob(target, this.layers.spawnFrog.x - 64, this.layers.spawnFrog.y - 64, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
@@ -909,12 +1092,11 @@ class SceneClass extends Phaser.Scene {
             else if (target.currentMob == "raven") {
                 this.createMob(target, this.layers.spawnRaven.x - 64, this.layers.spawnRaven.y - 64, this.layers, target.facing, target.currentMob, target.isCorrupted, false);
             }
-        }, 500);
+        });
     }
 
     saveCheckPoint(player, checkPoint) {
         if (player.currentMob == "frog" && !this.unlockFrogCP) {
-            console.log("NEW CHECKPOINT");
 
             this.layers.spawnFrog.x = checkPoint.x;
             this.layers.spawnFrog.y = checkPoint.y;
@@ -923,7 +1105,6 @@ class SceneClass extends Phaser.Scene {
         }
 
         if (player.currentMob == "hog" && !this.unlockHogCP) {
-            console.log("NEW CHECKPOINT");
 
             this.layers.spawnHog.x = checkPoint.x;
             this.layers.spawnHog.y = checkPoint.y;
@@ -932,7 +1113,6 @@ class SceneClass extends Phaser.Scene {
         }
 
         if (player.currentMob == "raven" && !this.unlockRavenCP) {
-            console.log("NEW CHECKPOINT");
 
             this.layers.spawnRaven.x = checkPoint.x;
             this.layers.spawnRaven.y = checkPoint.y;
@@ -1007,29 +1187,26 @@ class SceneClass extends Phaser.Scene {
         if (player.currentMob == "hog" && player.onGround) {
             platform.disableBody();
             platform.visible = false;
-            /*setTimeout(() => { 
-                platform.destroy();
-            }, 50);*/
 
-            setTimeout(() => {
+            this.time.delayedCall(2000, () => {
                 platform.enableBody();
                 platform.visible = true;
-            }, 2000);
+            });
         }
     }
 
     destroyVerticalPlat(player, platform) {
         if ((player.currentMob == "frog" && (player.grabLeft || player.grabRight)) || player.body.blocked.down) {
 
-            setTimeout(() => {
+            this.time.delayedCall(500, () => {
                 platform.disableBody();
                 platform.visible = false;
-            }, 500);
+            });
 
-            setTimeout(() => {
+            this.time.delayedCall(3000, () => {
                 platform.enableBody();
                 platform.visible = true;
-            }, 3000);
+            });
         }
     }
 
@@ -1174,6 +1351,19 @@ class SceneClass extends Phaser.Scene {
         }
     }
 
+    climbBoxButton(player, box) {
+
+        // si on contrôle le joueur => on peut pousser la boxe
+        if (player.isPossessed) {
+            // empêche le joueur de tressauter quand il est sur la caisse
+            if (player.body.blocked.down && box.body.touching.up && !player.blockedLeft && !player.blockedLeft) {
+                player.body.velocity.y = 0;
+                box.body.setAllowGravity(false);
+                box.setImmovable(true);
+            }
+        }
+    }
+
     // METHODES POUR PLAYER = RAVEN ------
 
     /*createProj( shooter ) {
@@ -1267,7 +1457,7 @@ class SceneClass extends Phaser.Scene {
 
     startNextLevel(player, detectionZone) {
 
-        if (!this.reachNewLevel) {
+        if (!this.writtenMoveRight) {
 
             if (this.mapName != "map_06") {
 
@@ -1275,7 +1465,7 @@ class SceneClass extends Phaser.Scene {
                     .fadeOut(1500, 0, 0, 25) // fondu au noir
 
                 this.player.inputsMoveLocked = true;
-                this.reachNewLevel = true;
+                this.writtenMoveRight = true;
                 this.player.canJump = false;
                 this.player.setCollideWorldBounds(false);
 
@@ -1328,7 +1518,7 @@ class SceneClass extends Phaser.Scene {
                 this.player.inputsMoveLocked = true;
                 this.player.canJump = false;
                 this.player.setCollideWorldBounds(false);
-                this.reachNewLevel = true;
+                this.writtenMoveRight = true;
                 this.activePossession = false;
 
                 if (this.counterVictory == 2) {
@@ -1347,7 +1537,7 @@ class SceneClass extends Phaser.Scene {
                     this.counterVictory += 1;
 
                     this.time.delayedCall(1500, () => {
-                        this.reachNewLevel = false;
+                        this.writtenMoveRight = false;
                     });
 
                 }
