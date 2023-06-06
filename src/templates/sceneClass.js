@@ -176,9 +176,9 @@ class SceneClass extends Phaser.Scene {
 
         const buttonBases = this.physics.add.staticSprite(spawnButtonBase.x + 64, spawnButtonBase.y - 8, "buttonBase").setPipeline('Light2D');
 
-        const checkpointFrog = this.physics.add.staticSprite(spawnCheckPFrog.x, spawnCheckPFrog.y).setPipeline('Light2D');
-        const checkpointHog = this.physics.add.staticSprite(spawnCheckPHog.x, spawnCheckPHog.y).setPipeline('Light2D');
-        const checkpointRaven = this.physics.add.staticSprite(spawnCheckPRaven.x, spawnCheckPRaven.y).setPipeline('Light2D');
+        const checkpointFrog = this.physics.add.staticSprite(spawnCheckPFrog.x + 56, spawnCheckPFrog.y + 64, "cpFrogImage").setSize(64, 64).setOffset(8, 0).setAlpha(0.3).setPipeline('Light2D');
+        const checkpointHog = this.physics.add.staticSprite(spawnCheckPHog.x + 64, spawnCheckPHog.y + 64, "cpHogImage").setSize(64, 64).setOffset(0, 0).setAlpha(0.3).setPipeline('Light2D');
+        const checkpointRaven = this.physics.add.staticSprite(spawnCheckPRaven.x + 64, spawnCheckPRaven.y + 64, "cpRavenImage").setSize(64, 64).setOffset(0, 0).setAlpha(0.3).setPipeline('Light2D');
 
         // Boxes normales        
         layer_box.objects.forEach(box => {
@@ -1102,6 +1102,13 @@ class SceneClass extends Phaser.Scene {
             this.layers.spawnFrog.y = checkPoint.y;
 
             this.unlockFrogCP = true;
+
+            this.tweens.add({
+                targets: checkPoint,
+                alpha : 1,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
         }
 
         if (player.currentMob == "hog" && !this.unlockHogCP) {
@@ -1110,6 +1117,13 @@ class SceneClass extends Phaser.Scene {
             this.layers.spawnHog.y = checkPoint.y;
 
             this.unlockHogCP = true;
+
+            this.tweens.add({
+                targets: checkPoint,
+                alpha : 1,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
         }
 
         if (player.currentMob == "raven" && !this.unlockRavenCP) {
@@ -1118,6 +1132,13 @@ class SceneClass extends Phaser.Scene {
             this.layers.spawnRaven.y = checkPoint.y;
 
             this.unlockRavenCP = true;
+
+            this.tweens.add({
+                targets: checkPoint,
+                alpha : 1,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
         }
 
     }

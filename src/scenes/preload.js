@@ -37,6 +37,10 @@ class Preload extends Phaser.Scene {
 
         this.load.image("particule_cursor", "assets/particule_cursor.png");
 
+        this.load.image('cpFrogImage', 'assets/checkPointFrog.png');
+        this.load.image('cpHogImage', 'assets/checkPointHog.png');
+        this.load.image('cpRavenImage', 'assets/checkPointRaven.png');
+
         // Box
         this.load.image('box', 'assets/caisse.png');
         this.load.image('bigBox', 'assets/bigBox.png')
@@ -72,7 +76,7 @@ class Preload extends Phaser.Scene {
 
         // SOUND
 
-        this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
+        //this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
         this.load.audio('ambiance_sound', 'assets/sound/ambiance_inGame.mp3');
 
         this.load.audio('possessFrogSound', 'assets/sound/possess_Frog.mp3');
@@ -99,11 +103,11 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        this.music = this.sound.add('music_inGame');
+        /*this.music = this.sound.add('music_inGame');
 
         this.music.play();
         this.music.setLoop(true)
-            .setVolume(0.4);
+            .setVolume(0.4);*/
 
         // ANIMATIONS FROG
 

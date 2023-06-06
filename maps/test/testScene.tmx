@@ -772,12 +772,12 @@
   <object id="65" x="3008" y="256" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="23" name="checkPointFrog">
-  <object id="88" x="2048" y="960" width="64" height="64"/>
+  <object id="88" x="1728" y="1088" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="24" name="checkPointHog">
-  <object id="89" x="960" y="1472" width="64" height="64"/>
+  <object id="89" x="1856" y="1536" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="25" name="checkPointRaven">
-  <object id="91" x="2240" y="1536" width="64" height="64"/>
+  <object id="91" x="512" y="1152" width="64" height="64"/>
  </objectgroup>
 </map>
