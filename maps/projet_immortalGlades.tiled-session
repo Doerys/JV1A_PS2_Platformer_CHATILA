@@ -275,23 +275,25 @@
                 14,
                 15,
                 16,
-                17,
                 2,
+                17,
                 3,
                 18,
                 4,
                 5,
                 20,
-                21,
                 6,
+                21,
+                8,
                 9,
+                24,
                 25
             ],
-            "scale": 0.5,
-            "selectedLayer": 12,
+            "scale": 0.25,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 1518,
-                "y": 1276
+                "x": 2092,
+                "y": 924
             }
         },
         "test/testScene.tmx#placeholder_test": {

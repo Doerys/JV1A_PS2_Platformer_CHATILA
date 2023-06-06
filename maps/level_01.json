@@ -262,8 +262,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2176,
-                 "y":192
+                 "x":64,
+                 "y":1664
                 }],
          "opacity":1,
          "type":"objectgroup",
