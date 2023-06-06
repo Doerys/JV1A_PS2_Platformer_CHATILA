@@ -242,7 +242,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // FALL
-            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated && !this.isHooking && !this.throwHookAnim && !this.animFallHook && !this.climbButton) {
+            else if (this.body.velocity.y > 0 && !this.fallAnim && !this.justCreated && !this.isHooking && !this.throwHookAnim && !this.animFallHook && (!this.climbButton || this.cursors.up.isDown || this.keyZ.isDown)) {
                 this.anims.play("player_frog_fall", true);
                 this.fallAnim = true;
                 this.justFall = true;
@@ -314,7 +314,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
             // JUMP
-            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isShooting && !this.climbButton) {
+            else if (this.body.velocity.y < 0 && !this.jumpAnim && !this.isShooting && (!this.climbButton || this.cursors.up.isDown || this.keyZ.isDown)) {
                 this.anims.play("player_hog_jump", true);
                 this.jumpAnim = true;
             }
@@ -457,7 +457,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         this.anims.play("player_raven_planeToFall", true);
                     }
 
-                    else if (!this.firstFallAnim && !this.justCreated && !this.climbButton) {
+                    else if (!this.firstFallAnim && !this.justCreated && (!this.climbButton || this.cursors.up.isDown || this.keyZ.isDown)) {
                         this.anims.play("player_raven_groundtoFall", true);
                         this.firstFallAnim = true;
                     }

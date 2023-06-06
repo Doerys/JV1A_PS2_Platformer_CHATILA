@@ -44,7 +44,7 @@ class MobHog extends Mob {
                 this.setVelocityX(0, 0);
             }
 
-            if (this.scene.activePossession) {
+            if (this.scene.activePossession && !this.justCreated) {
 
                 // si le joueur possède un mob, détection du joueur
                 this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);

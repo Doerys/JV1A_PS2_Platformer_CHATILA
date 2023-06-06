@@ -458,10 +458,9 @@ class SceneClass extends Phaser.Scene {
 
         //this.lightMouseOver.setFollow(nameMob);
 
-        this.time.delayedCall(500, () => {
+        this.time.delayedCall(1500, () => {
             nameMob.justCreated = false;
         });
-        //this.jump(poids,blocCible)
 
         if (isCorrupted) {
             nameMob.setTint(0xdc143c);
@@ -701,20 +700,81 @@ class SceneClass extends Phaser.Scene {
     // POSSEDER MOB - On détruit le mob, et on crée un player à la place
     possessMob(mob, mobX, mobY, layers) {
         this.saveMob = mob; // permet de sauvegarder toutes les infos liées au mob, pour le recréer plus tard
-        //const nature = currentMob; // permet de sauvegarder quel type de mob recréer plus tard
         mob.destroy();
+        //const nature = currentMob; // permet de sauvegarder quel type de mob recréer plus tard
         this.createPlayer(mobX, mobY, layers, mob.facing, mob.currentMob, mob.haveCure);
         this.activePossession = true;
     }
 
     // POSSEDER AUTRE MOB - On détruit le player, et on crée un mob à la place (en utilisant le mob sauvegardé préalablement dans le possessMob)
     replaceMobBySaveMob(player, layers, possessedMob) {
+
+        if (player.haveCure) {
+            player.haveCure = false;
+
+            this.cure.setVelocity(0, 0);
+
+            if (player.currentMob == "frog") {
+                this.dropCureX = player.x + 64;
+                this.dropCureY = player.y + 32;
+            }
+
+            if (player.currentMob == "hog") {
+                this.dropCureX = player.x + 128;
+                this.dropCureY = player.y + 96;
+            }
+
+            if (player.currentMob == "raven") {
+                this.dropCureX = player.x + 96;
+                this.dropCureY = player.y + 96;
+            }
+
+            this.tweens.add({
+                targets: this.cure,
+                x: this.dropCureX,
+                y: this.dropCureY,
+                scale: 1,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+        }
+
         player.disablePlayer(); // permet de désactiver le update du player pour éviter un crash
         player.destroy();
         this.createMob(possessedMob, player.x, player.y, layers, player.facing, possessedMob.currentMob, possessedMob.isCorrupted, player.haveCure);
     }
 
     replaceMobByPlayer(player, layers) {
+        if (player.haveCure) {
+            player.haveCure = false;
+
+            this.cure.setVelocity(0, 0);
+
+            if (player.currentMob == "frog") {
+                this.dropCureX = player.x + 64;
+                this.dropCureY = player.y + 32;
+            }
+
+            if (player.currentMob == "hog") {
+                this.dropCureX = player.x + 128;
+                this.dropCureY = player.y + 96;
+            }
+
+            if (player.currentMob == "raven") {
+                this.dropCureX = player.x + 96;
+                this.dropCureY = player.y + 96;
+            }
+
+            this.tweens.add({
+                targets: this.cure,
+                x: this.dropCureX,
+                y: this.dropCureY,
+                scale: 1,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+        }
+
         player.disablePlayer(); // permet de désactiver le update du player pour éviter un crash
         player.destroy();
         this.createMob(this.mob1, player.x, player.y, layers, player.facing, player.currentMob, player.isCorrupted, player.haveCure);
@@ -762,11 +822,16 @@ class SceneClass extends Phaser.Scene {
                 ease: 'Linear', // Fonction d'interpolation pour l'animation
             });
         }
+
+        // si la boxe ne rencontre pas de collision à guache, à droite et que le mob n'est pas déjà en train de presser le bouton
         if (!box.body.blocked.left && !box.body.blocked.right && !this.mobPressingButton) {
 
             this.boxPressingButton = true;
 
+            // on centre la box sur le bouton
             if (!this.boxCurrentlyPressingButton) {
+
+                console.log("CHECK");
 
                 this.boxCurrentlyPressingButton = true;
 
@@ -795,7 +860,16 @@ class SceneClass extends Phaser.Scene {
 
             box.destroy();
 
-            const boxPressingButton = this.physics.add.sprite(box.x - 54, box.y, "box").setPushable(false).setPipeline('Light2D').setSize(50, 49).setOffset(5, 0);
+            // création d'une boxe qu'on ne pourra pas bouger
+
+            if (this.player.currentMob == "hog") {
+                this.spawnNewBoxX = 54; 
+            }
+            else if (this.player.currentMob == "frog") {
+                this.spawnNewBoxX = 0; 
+            }
+
+            const boxPressingButton = this.physics.add.sprite(box.x - this.spawnNewBoxX, box.y, "box").setPushable(false).setPipeline('Light2D').setSize(50, 49).setOffset(5, 0);
 
             this.physics.add.collider(this.layers.buttons, boxPressingButton, this.climbBoxButton, null, this);
             this.physics.add.collider(this.playerGroup, boxPressingButton);
@@ -994,7 +1068,7 @@ class SceneClass extends Phaser.Scene {
                 this.firstDisableDoor = true;
             }
         }
-        else if (this.firstDisableDoor && !this.mobPressingButton && !this.boxPressingButton && this.doorCurrentlyOpening && !this.buttonOn) {
+        else if (this.firstDisableDoor && !this.mobPressingButton && !this.boxPressingButton && this.doorCurrentlyOpening) {
 
             this.doorCurrentlyOpening = false;
 
@@ -1007,6 +1081,7 @@ class SceneClass extends Phaser.Scene {
 
             //this.door.enableBody();
             this.door.visible = true;
+            this.buttonOn = false;
         }
     }
 
@@ -1076,7 +1151,6 @@ class SceneClass extends Phaser.Scene {
             this.respawnMob(victim);
 
             victim.isDying = true;
-
         }
     }
 
@@ -1105,7 +1179,7 @@ class SceneClass extends Phaser.Scene {
 
             this.tweens.add({
                 targets: checkPoint,
-                alpha : 1,
+                alpha: 1,
                 duration: 300,  // Durée de l'animation en millisecondes
                 ease: 'Linear', // Fonction d'interpolation pour l'animation
             });
@@ -1120,7 +1194,7 @@ class SceneClass extends Phaser.Scene {
 
             this.tweens.add({
                 targets: checkPoint,
-                alpha : 1,
+                alpha: 1,
                 duration: 300,  // Durée de l'animation en millisecondes
                 ease: 'Linear', // Fonction d'interpolation pour l'animation
             });
@@ -1135,7 +1209,7 @@ class SceneClass extends Phaser.Scene {
 
             this.tweens.add({
                 targets: checkPoint,
-                alpha : 1,
+                alpha: 1,
                 duration: 300,  // Durée de l'animation en millisecondes
                 ease: 'Linear', // Fonction d'interpolation pour l'animation
             });
@@ -1195,9 +1269,30 @@ class SceneClass extends Phaser.Scene {
     isCured(mob, cure) { // si un mob corrompu entre en contact => guéri
 
         if (mob.isCorrupted) {
+
+            mob.isCorrupted = false;
+
+            this.tweens.add({
+                targets: this.cure,
+                alpha: 0,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+
+            this.tweens.add({
+                targets: mob,
+                alpha: 0,
+                duration: 300,  // Durée de l'animation en millisecondes
+                ease: 'Linear', // Fonction d'interpolation pour l'animation
+            });
+
             mob.disableIA();
-            cure.destroy();
-            mob.destroy();
+
+            this.time.delayedCall(300, () => {
+                cure.destroy();
+                mob.destroy();
+            });
+
             this.createMob(mob, mob.x, mob.y, this.layers, mob.facing, mob.currentMob, false, mob.haveCure);
         }
     }
@@ -1284,26 +1379,27 @@ class SceneClass extends Phaser.Scene {
     // GRAPPIN qui attire les boxes
     attrackHook(hook, box) {
         this.player.boxCatched = true;
-
         this.attrack = true;
 
         if (this.attrack) {
             if (this.player.facing == 'right') {
-                if (this.player.x + 144 < box.x) {
+                if (this.player.x + 144 < box.x && !this.boxPressingButton) {
+
+                    console.log("ATTRACTION");
+
                     box.body.setAllowGravity(false);
                     box.x -= 10;
                     this.time.delayedCall(15, () => {
                         this.attrackHook(hook, box)
                     });
-                    //this.jump(poids,blocCible)
                 }
-                else {
+                else {                 
                     box.body.setAllowGravity(true);
                     this.attrack = false;
                     this.player.boxCatched = false;
                 }
             }
-            else if (this.player.facing == 'left') {
+            else if (this.player.facing == 'left' && !this.boxPressingButton) {
                 if (this.player.x - 16 > box.x) {
                     box.body.setAllowGravity(false);
                     box.x += 10;
@@ -1459,18 +1555,25 @@ class SceneClass extends Phaser.Scene {
             this.emitterPlayer.emitParticle();
         }
 
+        // Item cure qui flotte autour du joueur
         if (this.player.haveCure) {
 
             if (this.player.facing == "left") {
                 this.itemMoveX = 64;
-                this.targetX = this.player.x + 128;
             }
 
             else if (this.player.facing == "right") {
-                this.itemMoveX = 0;
-                this.targetX = this.player.x;
+
+                if (this.player.currentMob == "frog") {
+                    this.itemMoveX = - 64;
+                }
+                else if (this.player.currentMob == "hog") {
+                    this.itemMoveX = 32;
+                }
+                else if (this.player.currentMob == "raven") {
+                    this.itemMoveX = 0;
+                }
             }
-            this.targetY = this.player.y;
 
             this.physics.moveTo(this.cure, this.player.x + 64 + this.itemMoveX, this.player.y + 32, 350, 300);
         }

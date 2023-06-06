@@ -37,7 +37,7 @@ class MobFrog extends Mob {
             
             this.patrolMob();
 
-            if (this.scene.activePossession) {
+            if (this.scene.activePossession && !this.justCreated) {
 
                 this.detectionPlayer(this.scene.player.x, this.scene.player.y, this.x, this.y);
                 
