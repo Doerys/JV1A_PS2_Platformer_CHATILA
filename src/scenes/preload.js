@@ -56,7 +56,7 @@ class Preload extends Phaser.Scene {
 
         this.load.image('cure', 'assets/cure.png');
 
-        this.load.image('pic', 'assets/pics.png')
+        this.load.spritesheet('pic', 'assets/pics.png', { frameWidth: 64, frameHeight: 64 });
 
         this.load.image('weakPlat', 'assets/weakPlat_3x1.png')
 
@@ -76,7 +76,7 @@ class Preload extends Phaser.Scene {
 
         // SOUND
 
-        this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
+        //this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
         this.load.audio('ambiance_sound', 'assets/sound/ambiance_inGame.mp3');
 
         this.load.audio('possessFrogSound', 'assets/sound/possess_Frog.mp3');
@@ -105,11 +105,19 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        this.music = this.sound.add('music_inGame');
+        /*this.music = this.sound.add('music_inGame');
 
         this.music.play();
         this.music.setLoop(true)
-            .setVolume(0.4);
+            .setVolume(0.4);*/
+
+        this.anims.create({
+            key: 'variousPics',
+            frames: this.anims.generateFrameNames('pic', {
+                start: 0,
+                end: 4
+            })
+        });
 
         // ANIMATIONS FROG
 

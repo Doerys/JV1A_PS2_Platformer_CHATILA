@@ -249,7 +249,19 @@ class SceneClass extends Phaser.Scene {
 
         // pics mortels
         layer_pics.objects.forEach(pic => {
-            pics.create(pic.x + 32, pic.y - 32, "pic").setSize(48, 64);
+
+            const imagePic = Math.floor(Math.random() * 5);
+
+            const flip = Math.floor(Math.random() * 2);
+
+            pics.create(pic.x + 32, pic.y - 32).setSize(48, 64).setTexture("pic", imagePic);
+
+            if (flip == 0) {
+                pics.flipX = true;
+            }
+            else {
+                pics.flipX = false;
+            }
         })
 
         // création des plateformes qu'on peut créer en tirant dessus avec le raven
@@ -865,10 +877,10 @@ class SceneClass extends Phaser.Scene {
             // création d'une boxe qu'on ne pourra pas bouger
 
             if (this.player.currentMob == "hog") {
-                this.spawnNewBoxX = 54; 
+                this.spawnNewBoxX = 54;
             }
             else if (this.player.currentMob == "frog") {
-                this.spawnNewBoxX = 0; 
+                this.spawnNewBoxX = 0;
             }
 
             const boxPressingButton = this.physics.add.sprite(box.x - this.spawnNewBoxX, box.y, "box").setPushable(false).setPipeline('Light2D').setSize(50, 49).setOffset(5, 0);
@@ -1399,7 +1411,7 @@ class SceneClass extends Phaser.Scene {
                         this.attrackHook(hook, box)
                     });
                 }
-                else {                 
+                else {
                     box.body.setAllowGravity(true);
                     this.attrack = false;
                     this.player.boxCatched = false;

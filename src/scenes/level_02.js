@@ -17,7 +17,7 @@ class Level_02 extends SceneClass {
     create() {
         this.activePossession = true;
 
-        this.movingPlat1 = this.physics.add.image(1024, 544, 'movingPlat')
+        this.movingPlat1 = this.physics.add.image(1024, 672, 'movingPlat')
         .setImmovable(true)
         .setVelocity(100, 0);
 
@@ -32,7 +32,7 @@ class Level_02 extends SceneClass {
             ]
         });
 
-        this.movingPlat2 = this.physics.add.image(512, 352, 'movingPlat')
+        this.movingPlat2 = this.physics.add.image(512, 416, 'movingPlat')
             .setImmovable(true)
             .setVelocity(100, 0);
 

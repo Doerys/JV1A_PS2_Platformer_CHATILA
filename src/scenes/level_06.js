@@ -79,7 +79,7 @@ class Level_06 extends SceneClass {
 
         this.movingPlat5 = this.physics.add.image(2112, 736, 'movingPlat')
             .setImmovable(true)
-            .setVelocity(100, 0)
+            //.setVelocity(100, 0)
 
         this.movingPlat5.body.setAllowGravity(false);
 

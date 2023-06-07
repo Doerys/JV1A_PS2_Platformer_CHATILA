@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_02.tmx",
+    "activeFile": "level_06.tmx",
     "expandedProjectPaths": [
         ".",
         "test"
@@ -38,24 +38,24 @@
                 5
             ],
             "expandedObjectLayers": [
-                26,
-                12,
-                27,
-                15,
-                16,
-                19,
                 6,
-                21,
-                22,
                 23,
+                21,
+                19,
+                16,
+                15,
+                12,
+                26,
                 10,
-                25
+                27,
+                25,
+                22
             ],
-            "scale": 0.5,
-            "selectedLayer": 4,
+            "scale": 0.33,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 2034,
-                "y": 260
+                "x": 2821.212121212121,
+                "y": 703.0303030303031
             }
         },
         "level_01.tmx#placeholder_test": {
@@ -87,31 +87,32 @@
         },
         "level_02.tmx": {
             "expandedObjectLayers": [
-                28,
-                29,
-                30,
-                16,
-                17,
-                18,
-                19,
-                23,
-                9,
-                10,
-                11,
+                15,
                 12,
                 13,
-                15,
-                6,
-                7,
+                10,
+                11,
+                8,
+                9,
+                23,
+                18,
+                19,
+                16,
+                17,
+                30,
+                28,
+                29,
+                26,
                 24,
                 25,
-                26
+                6,
+                7
             ],
-            "scale": 0.33,
-            "selectedLayer": 0,
+            "scale": 0.75,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 1342.4242424242425,
-                "y": 1003.030303030303
+                "x": 1545.3333333333333,
+                "y": 1320
             }
         },
         "level_02.tmx#placeholder_test": {
@@ -123,28 +124,29 @@
         },
         "level_03.tmx": {
             "expandedObjectLayers": [
-                26,
-                27,
-                13,
-                29,
-                15,
-                30,
-                31,
-                16,
-                17,
-                18,
-                20,
                 6,
                 7,
-                24,
+                20,
+                18,
+                16,
+                17,
+                30,
+                31,
+                15,
+                12,
+                29,
+                13,
+                26,
                 10,
+                27,
+                24,
                 25
             ],
-            "scale": 0.33,
-            "selectedLayer": 25,
+            "scale": 0.75,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 1536.3636363636365,
-                "y": 963.6363636363637
+                "x": 1546.6666666666665,
+                "y": 776
             }
         },
         "level_03.tmx#tileset": {
@@ -164,27 +166,27 @@
         },
         "level_04.tmx": {
             "expandedObjectLayers": [
-                11,
-                26,
-                28,
-                29,
-                15,
-                30,
-                16,
-                19,
                 6,
                 23,
-                8,
-                9,
-                24,
+                19,
+                16,
+                30,
+                15,
+                28,
+                29,
+                26,
                 10,
-                25
+                11,
+                24,
+                8,
+                25,
+                9
             ],
-            "scale": 0.25,
-            "selectedLayer": 19,
+            "scale": 0.75,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 1916,
-                "y": 780
+                "x": 1096,
+                "y": 1116
             }
         },
         "level_04.tmx#tileset": {
@@ -196,25 +198,25 @@
                 4
             ],
             "expandedObjectLayers": [
-                11,
-                13,
+                23,
+                7,
+                18,
+                16,
+                30,
+                15,
                 28,
                 29,
-                15,
-                30,
-                16,
-                18,
-                7,
-                23,
+                13,
+                11,
+                24,
                 8,
-                9,
-                24
+                9
             ],
             "scale": 0.25,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 1512,
-                "y": 1024
+                "x": 1888,
+                "y": 788
             }
         },
         "level_05.tmx#tileset": {
@@ -237,31 +239,31 @@
         },
         "level_06.tmx": {
             "expandedObjectLayers": [
-                28,
-                29,
-                30,
-                16,
-                18,
-                19,
-                23,
-                8,
-                9,
-                10,
-                11,
+                15,
                 12,
                 13,
-                15,
-                6,
-                7,
+                10,
+                11,
+                8,
+                9,
+                23,
+                18,
+                19,
+                16,
+                30,
+                28,
+                29,
+                26,
                 24,
                 25,
-                26
+                6,
+                7
             ],
-            "scale": 0.33,
-            "selectedLayer": 23,
+            "scale": 2,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 1581.8181818181818,
-                "y": 1090.909090909091
+                "x": 2070,
+                "y": 639.5
             }
         },
         "level_06.tmx#placeholder_test": {
@@ -273,28 +275,27 @@
         },
         "test/testScene.tmx": {
             "expandedObjectLayers": [
+                6,
+                20,
+                4,
+                21,
+                5,
+                18,
+                2,
+                3,
+                16,
+                17,
                 14,
                 15,
-                16,
-                2,
-                17,
-                3,
-                18,
-                4,
-                5,
-                20,
-                6,
-                21,
-                8,
-                9,
                 24,
-                25
+                25,
+                9
             ],
-            "scale": 0.25,
-            "selectedLayer": 11,
+            "scale": 0.5,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 2092,
-                "y": 924
+                "x": 1128,
+                "y": 1054
             }
         },
         "test/testScene.tmx#placeholder_test": {
@@ -323,12 +324,12 @@
     "property.type": "bool",
     "recentFiles": [
         "level_01.tmx",
+        "level_02.tmx",
+        "level_03.tmx",
+        "level_04.tmx",
+        "level_05.tmx",
         "test/testScene.tmx",
         "level_06.tmx",
-        "level_05.tmx",
-        "level_04.tmx",
-        "level_03.tmx",
-        "level_02.tmx",
         "level_01 - Copie.tmx",
         "level_06 - Copie.tmx",
         "level_02 - Copie.tmx",
