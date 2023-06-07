@@ -70,18 +70,18 @@ class MainScreen extends Phaser.Scene {
 
         // START SCENE (> Changer le paramètre dans la parenthèse après start, et la map name)  
 
-        this.scene.start("Level_06", {
+        this.scene.start("TestScene", {
             // POUR LA TESTROOM :
 
-            //mapName: "map_test", // nom de la map
-            //mapTileset: "placeholder_test", // nom du tileset sur TILED
-            //mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
+            mapName: "map_test", // nom de la map
+            mapTileset: "placeholder_test", // nom du tileset sur TILED
+            mapTilesetImage: "tilesetTest_image", // nom du fichier image du tileset
 
             // POUR LE JEU :
 
-            mapName: "map_06", // nom de la map
-            mapTileset: "tileset", // nom du tileset sur TILED
-            mapTilesetImage: "tileset_image", // nom du fichier image du tileset
+            //mapName: "map_06", // nom de la map
+            //mapTileset: "tileset", // nom du tileset sur TILED
+            //mapTilesetImage: "tileset_image", // nom du fichier image du tileset
         });
     }
 }

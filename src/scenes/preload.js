@@ -47,27 +47,25 @@ class Preload extends Phaser.Scene {
 
         this.load.image('movingPlat', 'assets/movingPlat.png');
 
-        this.load.image('break', 'assets/break.png');
+        this.load.spritesheet('break', 'assets/breakingRock.png', { frameWidth: 256, frameHeight: 256});
 
-        this.load.image('ravenPlatOff', 'assets/ravenPlatOff.png');
+        this.load.spritesheet('ravenPlat', 'assets/ravenPlat.png', { frameWidth: 128, frameHeight: 128});
+
         this.load.image('ravenPlatOn', 'assets/ravenPlatOn.png');
-
         this.load.image('stake', 'assets/stake.png');
 
         this.load.image('cure', 'assets/cure.png');
 
         this.load.spritesheet('pic', 'assets/pics.png', { frameWidth: 64, frameHeight: 64 });
 
-        this.load.image('weakPlat', 'assets/weakPlat_3x1.png')
-
-        this.load.image('bigWeakPlat', 'assets/weakPlat_5x1.png')
+        this.load.spritesheet('weakPlat1', 'assets/falling_tree1.png', { frameWidth: 192, frameHeight: 192 });
+        this.load.spritesheet('weakPlat2', 'assets/falling_tree2.png', { frameWidth: 192, frameHeight: 192 });
 
         this.load.image('weakPlatVertical', 'assets/weakPlatVertical.png')
 
         this.load.image('buttonBase', 'assets/buttonBase.png')
         this.load.image('button', 'assets/button.png')
         this.load.image('door', 'assets/door.png')
-
 
         this.load.image('feather', 'assets/feather.png');
 
@@ -117,6 +115,53 @@ class Preload extends Phaser.Scene {
                 start: 0,
                 end: 4
             })
+        });
+
+        // FALLING TREE
+        this.anims.create({
+            key: 'fallingTree_idle',
+            frames: [{ key: 'weakPlat1', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'fallingTree_destroy',
+            frames: this.anims.generateFrameNumbers('weakPlat1', { start: 1, end: 17 }),
+            frameRate: 25,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'fallingTree_recreate',
+            frames: this.anims.generateFrameNumbers('weakPlat2', { start: 0, end: 31}),
+            frameRate: 25,
+            repeat: 0
+        });
+
+        // BREAKING WALL
+        this.anims.create({
+            key: 'breakingWall_idle',
+            frames: [{ key: 'break', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'breakingWall_destroy',
+            frames: this.anims.generateFrameNumbers('break', { start: 1, end: 20 }),
+            frameRate: 25,
+            repeat: 0
+        });
+
+        // RAVEN PLAT
+
+        this.anims.create({
+            key: 'ravenPlat_off',
+            frames: [{ key: 'ravenPlat', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'ravenPlat_on',
+            frames: this.anims.generateFrameNumbers('ravenPlat', { start: 1, end: 9 }),
+            frameRate: 25,
+            repeat: 0
         });
 
         // ANIMATIONS FROG

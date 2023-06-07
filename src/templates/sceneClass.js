@@ -19,7 +19,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: false,
+                    debug: true,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -148,13 +148,13 @@ class SceneClass extends Phaser.Scene {
 
         const stakes = this.physics.add.group();
 
-        const breaks = this.physics.add.staticGroup();
+        const breaks = this.physics.add.group();
         const pics = this.physics.add.staticGroup();
 
         // Plateformes spéciales
 
         const ravenPlats = this.physics.add.staticGroup();
-        const weakPlats = this.physics.add.staticGroup();
+        const weakPlats = this.physics.add.group();
         const weakPlatsVertical = this.physics.add.staticGroup();
 
         /*
@@ -206,7 +206,7 @@ class SceneClass extends Phaser.Scene {
         // Grosses boxes
         layer_bigBox.objects.forEach(bigBox => {
 
-            const box_create = this.physics.add.sprite(bigBox.x + 64, bigBox.y, "bigBox").setDamping(true).setImmovable(true).setPipeline('Light2D').setSize(124, 121).setOffset(12, 0);
+            const box_create = this.physics.add.sprite(bigBox.x + 64, bigBox.y, "bigBox").setDamping(true).setImmovable(true).setPipeline('Light2D').setSize(124, 121).setOffset(0, 0);
 
             this.physics.add.collider(box_create, this.movingPlat1);
             this.physics.add.collider(box_create, this.movingPlat2);
@@ -220,6 +220,7 @@ class SceneClass extends Phaser.Scene {
             bigBoxes.add(box_create);
 
             box_create.setCollideWorldBounds(true);
+            box_create.flipX = true;
 
             this.physics.add.collider(bigBoxes, layer_platforms, this.boxOnFloor, null, this);
             this.physics.add.collider(bigBoxes, layer_boxStop);
@@ -244,7 +245,12 @@ class SceneClass extends Phaser.Scene {
 
         // création des éléments destructibles (charge)
         layer_break.objects.forEach(break_create => {
-            breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128, 256).setPipeline('Light2D');
+            //breaks.create(break_create.x + 64, break_create.y + 128, "break").setSize(128, 256).setPipeline('Light2D');
+
+            const newBreak = this.physics.add.sprite(break_create.x + 64, break_create.y + 128).setImmovable(true).setPushable(false).setTexture("break", 0).setSize(128, 256).setOffset(64, 0).setPipeline('Light2D');
+            breaks.add(newBreak);
+            newBreak.body.setAllowGravity(false);
+
         }, this)
 
         // pics mortels
@@ -266,12 +272,19 @@ class SceneClass extends Phaser.Scene {
 
         // création des plateformes qu'on peut créer en tirant dessus avec le raven
         layer_ravenPlat.objects.forEach(ravenPlat => {
-            ravenPlats.create(ravenPlat.x + 54, ravenPlat.y + 54, "ravenPlatOff").setSize(64, 64).setOffset(10, 8).setPipeline('Light2D');
+            //ravenPlats.create(ravenPlat.x + 54, ravenPlat.y + 54, "ravenPlat").setSize(64, 64).setOffset(10, 8).setPipeline('Light2D');
+
+            const newRavenPlat = this.physics.add.staticSprite(ravenPlat.x + 48, ravenPlat.y + 16).setTexture("ravenPlat", 0).setSize(64, 64).setOffset(-16, -16).setPipeline('Light2D');
+            ravenPlats.add(newRavenPlat);
+
         }, this)
 
         // plateformes destructibles si Hog dessus
         layer_weakPlat.objects.forEach(plat => {
-            weakPlats.create(plat.x + 96, plat.y + 16, "weakPlat").setSize(192, 32).setPipeline('Light2D');
+
+            const newWeakPlat = this.physics.add.sprite(plat.x + 96, plat.y + 64).setImmovable(true).setPushable(false).setTexture("weakPlat1", 0)/*.setSize(192, 32).setOffset(0,32)*/.setPipeline('Light2D');
+            weakPlats.add(newWeakPlat);
+            newWeakPlat.body.setAllowGravity(false);
         })
 
         // plateformes destructibles si Frog wall jump dessus
@@ -647,7 +660,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.player, layers.bigBoxes, this.pushBox, null, this);
 
         // collisions obstacles brisables
-        this.physics.add.collider(this.player, layers.breaks, this.destroyIfCharge, null, this);
+        this.breakCollisions = this.physics.add.collider(this.player, layers.breaks, this.destroyIfCharge, null, this);
 
         // Projectiles et pics qui tuent au contact
         this.physics.add.collider(this.projectilesMob, this.player, this.hitProjectile, null, this);
@@ -695,7 +708,7 @@ class SceneClass extends Phaser.Scene {
 
         // Plateformes
 
-        this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
+        this.weakPlatsColliders = this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
         this.physics.add.collider(this.player, layers.weakPlatsVertical, this.destroyVerticalPlat, null, this);
 
         this.physics.add.collider(this.player, layers.ravenPlat);
@@ -1320,13 +1333,15 @@ class SceneClass extends Phaser.Scene {
     // METHODES POUR LES PLATEFORMES FRAGILES
 
     destroyPlat(player, platform) {
-        if (player.currentMob == "hog" && player.onGround) {
-            platform.disableBody();
-            platform.visible = false;
+        if (player.currentMob == "hog" && player.onGround && !this.treeBreaking) {
+            this.treeBreaking = true;
+            this.physics.world.removeCollider(this.weakPlatsColliders);
+            platform.anims.play("fallingTree_destroy");
 
             this.time.delayedCall(2000, () => {
-                platform.enableBody();
-                platform.visible = true;
+                this.treeBreaking = false;
+                this.weakPlatsColliders = this.physics.add.collider(this.player, this.layers.weakPlats, this.destroyPlat, null, this);;
+                platform.anims.play("fallingTree_recreate", true);
             });
         }
     }
@@ -1446,9 +1461,18 @@ class SceneClass extends Phaser.Scene {
 
     // si collision pendant charge, détruit l'objet et stop la charge
     destroyIfCharge(player, breaks) {
-        if (player.isCharging && (player.body.touching.left || player.body.touching.right)) {
-            breaks.destroy(breaks.x, breaks.y);
+        if (player.isCharging && (player.body.touching.left || player.body.touching.right) && !this.wallBreaking) {
+            
+            this.wallBreaking = true;
             player.stopCharge()
+            this.treeBreaking = true;
+            this.physics.world.removeCollider(this.breakCollisions);
+            breaks.anims.play("breakingWall_destroy");
+
+            this.time.delayedCall(2000, () => {
+                breaks.destroy(breaks.x, breaks.y);
+                this.wallBreaking = false;
+            });
         }
     }
 
@@ -1508,16 +1532,34 @@ class SceneClass extends Phaser.Scene {
     }*/
 
     // crée une plateforme si on tire sur un élément de décor
-    createPlat(proj, ravenPlatOff) {
+    createPlat(proj, ravenPlat) {
 
-        const newRavenPlat = this.physics.add.staticSprite(ravenPlatOff.x, ravenPlatOff.y - 16, "ravenPlatOn").setDepth(1).setSize(128, 64).setOffset(8, 24);
-        this.physics.add.collider(this.playerGroup, newRavenPlat);
-        this.physics.add.collider(this.mobGroup, newRavenPlat);
-        this.physics.add.collider(this.projectilesMob, newRavenPlat, this.cleanProj, null, this);
-        this.physics.add.collider(this.projectilesPlayer, newRavenPlat, this.cleanProj, null, this);
+        console.log("TIR ATTEINT")
 
-        ravenPlatOff.destroy(ravenPlatOff.x, ravenPlatOff.y);
+        ravenPlat.destroy(ravenPlat.x, ravenPlat.y);
         proj.destroy();
+
+        const solidRavenPlat = this.physics.add.staticSprite(ravenPlat.x + 16, ravenPlat.y).setTexture("ravenPlat", 0).setDepth(1).setSize(128, 64).setOffset(-48, -32).setPipeline('Light2D');
+        solidRavenPlat.anims.play("ravenPlat_on");
+        this.physics.add.collider(this.playerGroup, solidRavenPlat);
+        this.physics.add.collider(this.mobGroup, solidRavenPlat);
+        this.physics.add.collider(this.projectilesMob, solidRavenPlat, this.cleanProj, null, this);
+        this.physics.add.collider(this.projectilesPlayer, solidRavenPlat, this.cleanProj, null, this);
+        
+
+
+
+        /*this.wallBreaking = true;
+        player.stopCharge()
+        this.treeBreaking = true;
+        this.physics.world.removeCollider(this.breakCollisions);
+        breaks.anims.play("breakingWall_destroy");
+
+        this.time.delayedCall(2000, () => {
+            breaks.destroy(breaks.x, breaks.y);
+            this.wallBreaking = false;
+        });*/
+        
     }
 
     // tue la cible si projectile est atteint

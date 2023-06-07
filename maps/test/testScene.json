@@ -447,8 +447,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2240,
-                 "y":1600
+                 "x":1472,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -470,8 +470,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1600,
-                 "y":1600
+                 "x":960,
+                 "y":384
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -492,8 +492,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1088,
-                 "y":256
+                 "x":2112,
+                 "y":640
                 }, 
                 {
                  "class":"",
@@ -525,8 +525,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":2944,
-                 "y":512
+                 "x":2048.36363636364,
+                 "y":1532.60606060606
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -621,7 +621,18 @@
          "draworder":"topdown",
          "id":16,
          "name":"WeakPlat",
-         "objects":[],
+         "objects":[
+                {
+                 "class":"",
+                 "height":64,
+                 "id":97,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":192,
+                 "x":1152,
+                 "y":384
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -841,7 +852,7 @@
          "y":0
         }],
  "nextlayerid":26,
- "nextobjectid":94,
+ "nextobjectid":98,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
