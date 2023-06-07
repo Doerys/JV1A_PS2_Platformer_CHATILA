@@ -413,13 +413,14 @@
          "objects":[
                 {
                  "class":"",
+                 "gid":86,
                  "height":64,
-                 "id":104,
+                 "id":118,
                  "name":"",
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1408,
+                 "x":1424,
                  "y":1472
                 }],
          "opacity":1,
@@ -721,7 +722,7 @@
          "y":0
         }],
  "nextlayerid":31,
- "nextobjectid":117,
+ "nextobjectid":119,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

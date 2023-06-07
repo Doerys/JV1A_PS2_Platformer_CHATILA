@@ -19,7 +19,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: true,
+                    debug: false,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -274,7 +274,7 @@ class SceneClass extends Phaser.Scene {
         layer_ravenPlat.objects.forEach(ravenPlat => {
             //ravenPlats.create(ravenPlat.x + 54, ravenPlat.y + 54, "ravenPlat").setSize(64, 64).setOffset(10, 8).setPipeline('Light2D');
 
-            const newRavenPlat = this.physics.add.staticSprite(ravenPlat.x + 48, ravenPlat.y + 16).setTexture("ravenPlat", 0).setSize(64, 64).setOffset(-16, -16).setPipeline('Light2D');
+            const newRavenPlat = this.physics.add.staticSprite(ravenPlat.x + 64, ravenPlat.y + 32).setTexture("ravenPlat", 0).setSize(64, 64).setOffset(-16, -16).setPipeline('Light2D');
             ravenPlats.add(newRavenPlat);
 
         }, this)
@@ -282,7 +282,7 @@ class SceneClass extends Phaser.Scene {
         // plateformes destructibles si Hog dessus
         layer_weakPlat.objects.forEach(plat => {
 
-            const newWeakPlat = this.physics.add.sprite(plat.x + 96, plat.y + 64).setImmovable(true).setPushable(false).setTexture("weakPlat1", 0)/*.setSize(192, 32).setOffset(0,32)*/.setPipeline('Light2D');
+            const newWeakPlat = this.physics.add.sprite(plat.x + 96, plat.y + 64).setImmovable(true).setPushable(false).setTexture("weakPlat1", 0).setSize(192, 32).setOffset(0,32).setPipeline('Light2D');
             weakPlats.add(newWeakPlat);
             newWeakPlat.body.setAllowGravity(false);
         })
@@ -1333,6 +1333,7 @@ class SceneClass extends Phaser.Scene {
     // METHODES POUR LES PLATEFORMES FRAGILES
 
     destroyPlat(player, platform) {
+        
         if (player.currentMob == "hog" && player.onGround && !this.treeBreaking) {
             this.treeBreaking = true;
             this.physics.world.removeCollider(this.weakPlatsColliders);
@@ -1465,7 +1466,6 @@ class SceneClass extends Phaser.Scene {
             
             this.wallBreaking = true;
             player.stopCharge()
-            this.treeBreaking = true;
             this.physics.world.removeCollider(this.breakCollisions);
             breaks.anims.play("breakingWall_destroy");
 
@@ -1539,7 +1539,7 @@ class SceneClass extends Phaser.Scene {
         ravenPlat.destroy(ravenPlat.x, ravenPlat.y);
         proj.destroy();
 
-        const solidRavenPlat = this.physics.add.staticSprite(ravenPlat.x + 16, ravenPlat.y).setTexture("ravenPlat", 0).setDepth(1).setSize(128, 64).setOffset(-48, -32).setPipeline('Light2D');
+        const solidRavenPlat = this.physics.add.staticSprite(ravenPlat.x, ravenPlat.y).setTexture("ravenPlat", 0).setDepth(1).setSize(128, 64).setOffset(-48, -32).setPipeline('Light2D');
         solidRavenPlat.anims.play("ravenPlat_on");
         this.physics.add.collider(this.playerGroup, solidRavenPlat);
         this.physics.add.collider(this.mobGroup, solidRavenPlat);
