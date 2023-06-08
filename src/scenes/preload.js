@@ -47,11 +47,11 @@ class Preload extends Phaser.Scene {
 
         this.load.image('movingPlat', 'assets/movingPlat.png');
 
-        this.load.spritesheet('break', 'assets/breakingRock.png', { frameWidth: 256, frameHeight: 256});
+        this.load.spritesheet('break', 'assets/breakingRock.png', { frameWidth: 256, frameHeight: 256 });
 
-        this.load.spritesheet('ravenPlat', 'assets/ravenPlat.png', { frameWidth: 128, frameHeight: 128});
+        this.load.spritesheet('ravenPlat', 'assets/ravenPlat.png', { frameWidth: 128, frameHeight: 128 });
 
-        this.load.image('ravenPlatOn', 'assets/ravenPlatOn.png');
+        //this.load.image('ravenPlatOn', 'assets/ravenPlatOn.png');
         this.load.image('stake', 'assets/stake.png');
 
         this.load.image('cure', 'assets/cure.png');
@@ -61,7 +61,7 @@ class Preload extends Phaser.Scene {
         this.load.spritesheet('weakPlat1', 'assets/falling_tree1.png', { frameWidth: 192, frameHeight: 192 });
         this.load.spritesheet('weakPlat2', 'assets/falling_tree2.png', { frameWidth: 192, frameHeight: 192 });
 
-        this.load.image('weakPlatVertical', 'assets/weakPlatVertical.png')
+        this.load.spritesheet('weakPlatVertical', 'assets/weakPlatVertical.png', { frameWidth: 192, frameHeight: 384 });
 
         this.load.image('buttonBase', 'assets/buttonBase.png')
         this.load.image('button', 'assets/button.png')
@@ -74,7 +74,7 @@ class Preload extends Phaser.Scene {
 
         // SOUND
 
-        this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
+        //this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
         this.load.audio('ambiance_sound', 'assets/sound/ambiance_inGame.mp3');
 
         this.load.audio('possessFrogSound', 'assets/sound/possess_Frog.mp3');
@@ -103,11 +103,11 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        this.music = this.sound.add('music_inGame');
+        /*this.music = this.sound.add('music_inGame');
 
         this.music.play();
         this.music.setLoop(true)
-            .setVolume(0.4);
+            .setVolume(0.4);*/
 
         this.anims.create({
             key: 'variousPics',
@@ -132,10 +132,37 @@ class Preload extends Phaser.Scene {
 
         this.anims.create({
             key: 'fallingTree_recreate',
-            frames: this.anims.generateFrameNumbers('weakPlat2', { start: 0, end: 31}),
+            frames: this.anims.generateFrameNumbers('weakPlat2', { start: 0, end: 31 }),
             frameRate: 25,
             repeat: 0
         });
+
+        // FALLING TREE
+        this.anims.create({
+            key: 'weakPlatVertical_idle',
+            frames: [{ key: 'weakPlatVertical', frame: 0 }],
+        });
+
+        this.anims.create({
+            key: 'weakPlatVertical_shake',
+            frames: this.anims.generateFrameNumbers('weakPlatVertical', { start: 1, end: 18 }),
+            frameRate: 50,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'weakPlatVertical_destroy',
+            frames: this.anims.generateFrameNumbers('weakPlatVertical', { start: 19, end: 29 }),
+            frameRate: 25,
+            repeat: 0
+        });
+
+        /*this.anims.create({
+            key: 'fallingTree_recreate',
+            frames: this.anims.generateFrameNumbers('weakPlat2', { start: 0, end: 31 }),
+            frameRate: 25,
+            repeat: 0
+        });*/
 
         // BREAKING WALL
         this.anims.create({

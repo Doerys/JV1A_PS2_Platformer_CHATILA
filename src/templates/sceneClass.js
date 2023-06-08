@@ -19,7 +19,7 @@ class SceneClass extends Phaser.Scene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 1600 },
-                    debug: false,
+                    debug: true,
                     tileBias: 64, // permet d'éviter de passer à travers les tiles à la réception d'un saut
                 }
             },
@@ -153,9 +153,10 @@ class SceneClass extends Phaser.Scene {
 
         // Plateformes spéciales
 
-        const ravenPlats = this.physics.add.staticGroup();
         const weakPlats = this.physics.add.group();
-        const weakPlatsVertical = this.physics.add.staticGroup();
+        const weakPlatsVertical = this.physics.add.group();
+
+        const ravenPlats = this.physics.add.staticGroup();
 
         /*
         // GROUP MIS DE COTE POUR L'INSTANT (non fonctionnel)
@@ -289,7 +290,12 @@ class SceneClass extends Phaser.Scene {
 
         // plateformes destructibles si Frog wall jump dessus
         layer_weakPlatVertical.objects.forEach(plat => {
-            weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192).setPipeline('Light2D');
+            const newWeakPlatVertical = this.physics.add.sprite(plat.x + 32, plat.y + 192).setSize(64, 192).setOffset(64, 0).setPipeline('Light2D').setImmovable(true).setPushable(false).setTexture("weakPlatVertical", 0);
+            weakPlatsVertical.add(newWeakPlatVertical);
+            newWeakPlatVertical.body.setAllowGravity(false);
+
+
+            //weakPlatsVertical.create(plat.x + 32, plat.y + 96, "weakPlatVertical").setSize(64, 192).setPipeline('Light2D');
         })
 
         // plateformes destructibles si Frog wall jump dessus
@@ -709,7 +715,7 @@ class SceneClass extends Phaser.Scene {
         // Plateformes
 
         this.weakPlatsColliders = this.physics.add.collider(this.player, layers.weakPlats, this.destroyPlat, null, this);
-        this.physics.add.collider(this.player, layers.weakPlatsVertical, this.destroyVerticalPlat, null, this);
+        this.weakPlatVerticalCollider = this.physics.add.collider(this.player, layers.weakPlatsVertical, this.destroyVerticalPlat, null, this);
 
         this.physics.add.collider(this.player, layers.ravenPlat);
 
@@ -1020,7 +1026,9 @@ class SceneClass extends Phaser.Scene {
             }
 
             // SI RAVEN OU FROG
-            else if (mob.isPossessed) {
+            else if (mob.isPossessed && !mob.isPressingButton && !this.boxPressingButton) {
+
+                mob.isPressingButton = true;
 
                 // TWEEN
                 this.tweens.add({
@@ -1029,15 +1037,14 @@ class SceneClass extends Phaser.Scene {
                     duration: 100,
                     ease: 'Linear',
                 });
-            }
 
-            else {
-                // TWEEN
-                this.tweens.add({
-                    targets: button,
-                    y: this.layers.spawnButton.y - 20,
-                    duration: 100,
-                    ease: 'Linear',
+                this.time.delayedCall(100, () => {
+                    this.tweens.add({
+                        targets: button,
+                        y: this.layers.spawnButton.y - 26,
+                        duration: 100,
+                        ease: 'Linear',
+                    });
                 });
             }
         }
@@ -1045,10 +1052,10 @@ class SceneClass extends Phaser.Scene {
 
     removePressButtons(mob) { // si on quitte le bouton
         if (mob.currentMob == "hog") {
-            mob.isPressingButton = false;
             mob.currentlyPressing = false;
             this.mobPressingButton = false;
         }
+        mob.isPressingButton = false;
         mob.climbButton = false;
     }
 
@@ -1348,16 +1355,42 @@ class SceneClass extends Phaser.Scene {
     }
 
     destroyVerticalPlat(player, platform) {
-        if ((player.currentMob == "frog" && (player.grabLeft || player.grabRight)) || player.body.blocked.down) {
+
+        if ((player.currentMob == "frog" && (player.grabLeft || player.grabRight) && !this.verticalWallBreaking) || player.body.blocked.down && !this.verticalWallBreaking) {
+
+            platform.disableBody(true, true);
+
+            const temporaryPlatform = this.physics.add.sprite(platform.x, platform.y).setSize(64, 192).setOffset(64, 0).setPipeline('Light2D').setImmovable(true).setPushable(false).setTexture("weakPlatVertical", 0);
+            temporaryPlatform.body.setAllowGravity(false);
+            const weakPlatVerticalCollider = this.physics.add.collider(this.player, temporaryPlatform);
+
+            temporaryPlatform.anims.play("weakPlatVertical_shake", true);
 
             this.time.delayedCall(500, () => {
-                platform.disableBody();
-                platform.visible = false;
+
+                this.physics.world.removeCollider(weakPlatVerticalCollider);
+                temporaryPlatform.anims.play("weakPlatVertical_destroy", true);
+            });
+
+            this.time.delayedCall(2500, () => {
+
+                this.verticalWallBreaking = false;
+
+                temporaryPlatform.destroy();
             });
 
             this.time.delayedCall(3000, () => {
-                platform.enableBody();
-                platform.visible = true;
+
+                platform.enableBody(true, platform.x, platform.y, true, true);
+                platform.setAlpha(0);
+                platform.anims.play("weakPlatVertical_idle", true);
+                
+                this.tweens.add( {
+                    targets : platform,
+                    alpha : 1,
+                    duration : 1000,
+                    ease: 'Linear'
+                })
             });
         }
     }

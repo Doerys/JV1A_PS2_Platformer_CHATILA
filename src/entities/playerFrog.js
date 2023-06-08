@@ -203,6 +203,11 @@ class PlayerFrog extends Player {
                 this.automaticGrab = true;
                 this.grabCollapse = false;
                 this.startGrabFall = false;
+                
+                if (this.scene.verticalWallBreaking) {
+                    this.scene.verticalWallBreaking = false;
+                    this.scene.weakPlatVerticalCollider = this.scene.physics.add.collider(this, this.scene.layers.weakPlatsVertical, this.destroyVerticalPlat, null, this);
+                }
             }
 
             // permet de désactiver le wall jump pour descendre, en pressant la touche du bas
