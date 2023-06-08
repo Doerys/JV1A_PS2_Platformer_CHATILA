@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_02.tmx",
+    "activeFile": "level_06.tmx",
     "expandedProjectPaths": [
         "test",
         "."
@@ -111,8 +111,8 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 204,
-                "y": 1324
+                "x": 2590.6666666666665,
+                "y": 984
             }
         },
         "level_02.tmx#placeholder_test": {
@@ -143,10 +143,10 @@
                 7
             ],
             "scale": 0.5,
-            "selectedLayer": 3,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 2438,
-                "y": 436
+                "x": 2420,
+                "y": 800
             }
         },
         "level_03.tmx#tileset": {
@@ -182,15 +182,15 @@
                 25,
                 6
             ],
-            "scale": 0.25,
-            "selectedLayer": 10,
+            "scale": 0.75,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1536,
-                "y": 964
+                "x": 213.33333333333326,
+                "y": 1488
             }
         },
         "level_04.tmx#tileset": {
-            "scaleInDock": 0.03125,
+            "scaleInDock": 0.33,
             "scaleInEditor": 1
         },
         "level_05.tmx": {
@@ -212,11 +212,11 @@
                 24,
                 7
             ],
-            "scale": 0.25,
-            "selectedLayer": 9,
+            "scale": 0.5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 1536,
-                "y": 962
+                "x": 1934,
+                "y": 760
             }
         },
         "level_05.tmx#tileset": {
@@ -259,11 +259,11 @@
                 10,
                 11
             ],
-            "scale": 0.25,
-            "selectedLayer": 10,
+            "scale": 0.33,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1536,
-                "y": 964
+                "x": 1736.3636363636365,
+                "y": 851.5151515151515
             }
         },
         "level_06.tmx#placeholder_test": {
@@ -278,8 +278,8 @@
                 4,
                 5,
                 20,
-                21,
                 2,
+                21,
                 3,
                 18,
                 16,
@@ -324,12 +324,12 @@
     "property.type": "bool",
     "recentFiles": [
         "level_01.tmx",
+        "level_02.tmx",
+        "level_03.tmx",
+        "level_04.tmx",
+        "level_05.tmx",
         "test/testScene.tmx",
         "level_06.tmx",
-        "level_05.tmx",
-        "level_04.tmx",
-        "level_03.tmx",
-        "level_02.tmx",
         "level_01 - Copie.tmx",
         "level_06 - Copie.tmx",
         "level_02 - Copie.tmx",

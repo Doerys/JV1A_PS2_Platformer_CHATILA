@@ -283,7 +283,7 @@ class SceneClass extends Phaser.Scene {
         // plateformes destructibles si Hog dessus
         layer_weakPlat.objects.forEach(plat => {
 
-            const newWeakPlat = this.physics.add.sprite(plat.x + 96, plat.y + 64).setImmovable(true).setPushable(false).setTexture("weakPlat1", 0).setSize(192, 32).setOffset(0,32).setPipeline('Light2D');
+            const newWeakPlat = this.physics.add.sprite(plat.x + 96, plat.y + 64).setImmovable(true).setPushable(false).setTexture("weakPlat1", 0).setSize(192, 32).setOffset(0, 32).setPipeline('Light2D');
             weakPlats.add(newWeakPlat);
             newWeakPlat.body.setAllowGravity(false);
         })
@@ -1131,6 +1131,47 @@ class SceneClass extends Phaser.Scene {
                 ease: 'Linear', // Fonction d'interpolation pour l'animation
             });
 
+            if (victim.currentMob == "frog" && victim.isPossessed) {
+                this.tweens.add({
+                    targets: this.player.rope,
+                    alpha: 0,
+                    duration: 300,  // Durée de l'animation en millisecondes
+                    ease: 'Linear', // Fonction d'interpolation pour l'animation
+                });
+                this.tweens.add({
+                    targets: this.player.rope2,
+                    alpha: 0,
+                    duration: 300,  // Durée de l'animation en millisecondes
+                    ease: 'Linear', // Fonction d'interpolation pour l'animation
+                });
+
+                this.tweens.add({
+                    targets: this.player.rope3,
+                    alpha: 0,
+                    duration: 300,  // Durée de l'animation en millisecondes
+                    ease: 'Linear', // Fonction d'interpolation pour l'animation
+                });
+
+                this.tweens.add({
+                    targets: this.player.rope4,
+                    alpha: 0,
+                    duration: 300,  // Durée de l'animation en millisecondes
+                    ease: 'Linear', // Fonction d'interpolation pour l'animation
+                });
+                this.tweens.add({
+                    targets: this.player.rope5,
+                    alpha: 0,
+                    duration: 300,  // Durée de l'animation en millisecondes
+                    ease: 'Linear', // Fonction d'interpolation pour l'animation
+                });
+                this.tweens.add({
+                    targets: this.player.hook,
+                    alpha: 0,
+                    duration: 300,  // Durée de l'animation en millisecondes
+                    ease: 'Linear', // Fonction d'interpolation pour l'animation
+                });
+            }
+
             if (victim.currentMob == "frog") {
                 this.deathFrogSound.play();
             }
@@ -1144,6 +1185,16 @@ class SceneClass extends Phaser.Scene {
             this.time.delayedCall(300, () => {
 
                 victim.destroy();
+
+                if (victim.currentMob == "frog" && victim.isPossessed) {
+
+                    this.player.rope.destroy()
+                    this.player.rope2.destroy();
+                    this.player.rope3.destroy();
+                    this.player.rope4.destroy();
+                    this.player.rope5.destroy();
+                    this.player.hook.destroy();
+                }
 
                 // si un mob meurt
                 if (!victim.isPossessed) {
@@ -1162,6 +1213,51 @@ class SceneClass extends Phaser.Scene {
                     });
                 }
             });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             if (victim.haveCure == true) {
 
@@ -1340,7 +1436,7 @@ class SceneClass extends Phaser.Scene {
     // METHODES POUR LES PLATEFORMES FRAGILES
 
     destroyPlat(player, platform) {
-        
+
         if (player.currentMob == "hog" && player.onGround && !this.treeBreaking) {
             this.treeBreaking = true;
             this.physics.world.removeCollider(this.weakPlatsColliders);
@@ -1384,11 +1480,11 @@ class SceneClass extends Phaser.Scene {
                 platform.enableBody(true, platform.x, platform.y, true, true);
                 platform.setAlpha(0);
                 platform.anims.play("weakPlatVertical_idle", true);
-                
-                this.tweens.add( {
-                    targets : platform,
-                    alpha : 1,
-                    duration : 1000,
+
+                this.tweens.add({
+                    targets: platform,
+                    alpha: 1,
+                    duration: 1000,
                     ease: 'Linear'
                 })
             });
@@ -1409,7 +1505,7 @@ class SceneClass extends Phaser.Scene {
 
         this.jumpHook = true;
 
-        if (this.jumpHook) {
+        if (this.jumpHook && !this.playerKilled) {
             this.player.y = stake.y - 64;
             this.player.rope.y = stake.y;
             this.player.rope2.y = stake.y;
@@ -1496,7 +1592,7 @@ class SceneClass extends Phaser.Scene {
     // si collision pendant charge, détruit l'objet et stop la charge
     destroyIfCharge(player, breaks) {
         if (player.isCharging && (player.body.touching.left || player.body.touching.right) && !this.wallBreaking) {
-            
+
             this.wallBreaking = true;
             player.stopCharge()
             this.physics.world.removeCollider(this.breakCollisions);
@@ -1578,7 +1674,7 @@ class SceneClass extends Phaser.Scene {
         this.physics.add.collider(this.mobGroup, solidRavenPlat);
         this.physics.add.collider(this.projectilesMob, solidRavenPlat, this.cleanProj, null, this);
         this.physics.add.collider(this.projectilesPlayer, solidRavenPlat, this.cleanProj, null, this);
-        
+
 
 
 
@@ -1592,7 +1688,7 @@ class SceneClass extends Phaser.Scene {
             breaks.destroy(breaks.x, breaks.y);
             this.wallBreaking = false;
         });*/
-        
+
     }
 
     // tue la cible si projectile est atteint
