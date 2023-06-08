@@ -142,15 +142,15 @@
                 6,
                 7
             ],
-            "scale": 0.75,
+            "scale": 0.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 545.3333333333333,
-                "y": 1284
+                "x": 2438,
+                "y": 436
             }
         },
         "level_03.tmx#tileset": {
-            "scaleInDock": 0.25,
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
         "level_04 - Copie.tmx": {
@@ -186,7 +186,7 @@
             "selectedLayer": 10,
             "viewCenter": {
                 "x": 1536,
-                "y": 962
+                "y": 964
             }
         },
         "level_04.tmx#tileset": {
@@ -260,10 +260,10 @@
                 11
             ],
             "scale": 0.25,
-            "selectedLayer": 12,
+            "selectedLayer": 10,
             "viewCenter": {
                 "x": 1536,
-                "y": 962
+                "y": 964
             }
         },
         "level_06.tmx#placeholder_test": {
