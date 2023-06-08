@@ -109,10 +109,10 @@
                 11
             ],
             "scale": 0.75,
-            "selectedLayer": 3,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1536,
-                "y": 959.3333333333333
+                "x": 204,
+                "y": 1324
             }
         },
         "level_02.tmx#placeholder_test": {
@@ -142,11 +142,11 @@
                 6,
                 7
             ],
-            "scale": 0.25,
-            "selectedLayer": 1,
+            "scale": 0.75,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 1184,
-                "y": 1240
+                "x": 545.3333333333333,
+                "y": 1284
             }
         },
         "level_03.tmx#tileset": {
