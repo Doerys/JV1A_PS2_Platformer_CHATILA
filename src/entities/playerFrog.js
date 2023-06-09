@@ -384,8 +384,6 @@ class PlayerFrog extends Player {
                 // stoppe le grapin lors du retour et le fait disparaître
                 if (this.returnHook) {
                     if (distanceHook <= 15 || this.reachStake) {
-                        
-                        console.log("CHECK");
 
                         this.hook.setVelocityX(0);
 

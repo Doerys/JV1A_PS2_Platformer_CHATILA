@@ -59,10 +59,61 @@ class SceneClass extends Phaser.Scene {
         //this.cameras.main.setBounds(0, 192, 3072, 1920).setSize(3072, 1920).setOrigin(0, 0); 
 
         // ARRIERE PLAN - BACKGROUND
-        this.background = this.add.tileSprite(0, 0, 3072, 1728, "background")
+        this.backgroundSky = this.add.tileSprite(0, 0, 3072, 1728, "background_sky")
             .setPipeline('Light2D')
             .setOrigin(0, 0)
-            .setDepth(-3); // profondeur
+            .setDepth(-15); // profondeur
+
+        this.backgroundMoon = this.add.tileSprite(0, 0, 3072, 1728, "background_moon")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-14); // profondeur
+
+        this.backgroundMountain1 = this.add.tileSprite(0, 0, 3072, 1728, "background_mountain1")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-13); // profondeur
+
+        this.backgroundClouds = this.physics.add.sprite(0, 0, "background_clouds")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-12) // profondeur
+            .setVelocityX(15);
+
+        this.backgroundClouds.body.setAllowGravity(false)
+
+        this.backgroundMountain2 = this.add.tileSprite(0, 0, 3072, 1728, "background_mountain2")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-11); // profondeur
+
+        this.backgroundFarForest = this.add.tileSprite(0, 0, 3072, 1728, "background_farForest")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-10); // profondeur
+
+        this.backgroundForeground1 = this.add.tileSprite(0, 0, 3072, 1728, "background_foreground1")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-9); // profondeur
+
+        this.backgroundForeground2 = this.add.tileSprite(0, 0, 3072, 1728, "background_foreground2")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-8); // profondeur
+
+        this.backgroundFlyingIsles = this.physics.add.sprite(0, 0, "background_floatingIsles")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(-9) // profondeur
+            .setVelocityX(5);
+
+        this.backgroundFlyingIsles.body.setAllowGravity(false)
+
+        this.foreground = this.add.tileSprite(0, 0, 3072, 1728, "foreground")
+            .setPipeline('Light2D')
+            .setOrigin(0, 0)
+            .setDepth(10) // profondeur
 
         // Tileset dans le TILED
         const tileset = levelMap.addTilesetImage(this.mapTileset, this.mapTilesetImage);
@@ -863,9 +914,7 @@ class SceneClass extends Phaser.Scene {
 
             // on centre la box sur le bouton
             if (!this.boxCurrentlyPressingButton) {
-
-                console.log("CHECK");
-
+                
                 this.boxCurrentlyPressingButton = true;
 
                 // TWEEN
@@ -1662,8 +1711,6 @@ class SceneClass extends Phaser.Scene {
 
     // crée une plateforme si on tire sur un élément de décor
     createPlat(proj, ravenPlat) {
-
-        console.log("TIR ATTEINT")
 
         ravenPlat.destroy(ravenPlat.x, ravenPlat.y);
         proj.destroy();

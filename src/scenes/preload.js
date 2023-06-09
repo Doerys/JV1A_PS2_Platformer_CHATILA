@@ -13,6 +13,20 @@ class Preload extends Phaser.Scene {
         this.load.image('mainScreen_start', 'assets/mainScreen_Start.png');
         this.load.image('mainScreen_set', 'assets/mainScreen_tree.png');
 
+        //background
+
+        this.load.image('background_sky', 'assets/background_sky.png');
+        this.load.image('background_mountain1', 'assets/background_mountain1.png');
+        this.load.image('background_mountain2', 'assets/background_mountain2.png');
+        this.load.image('background_clouds', 'assets/background_clouds.png');
+        this.load.image('background_farForest', 'assets/background_farForest.png');
+        this.load.image('background_moon', 'assets/background_moon.png');
+        this.load.image('background_foreground1', 'assets/background_foreground1.png');
+        this.load.image('background_foreground2', 'assets/background_foreground2.png');
+        this.load.image('background_floatingIsles', 'assets/background_floatingIsles.png');
+        this.load.image('foreground', 'assets/foreground.png');
+
+
         // Perso test
         this.load.spritesheet('player', 'assets/player_test.png', { frameWidth: 64, frameHeight: 128 });
 
@@ -74,7 +88,7 @@ class Preload extends Phaser.Scene {
 
         // SOUND
 
-        //this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
+        this.load.audio('music_inGame', 'assets/sound/music_inGame.mp3');
         this.load.audio('ambiance_sound', 'assets/sound/ambiance_inGame.mp3');
 
         this.load.audio('possessFrogSound', 'assets/sound/possess_Frog.mp3');
@@ -103,11 +117,11 @@ class Preload extends Phaser.Scene {
     }
 
     create() {
-        /*this.music = this.sound.add('music_inGame');
+        this.music = this.sound.add('music_inGame');
 
         this.music.play();
         this.music.setLoop(true)
-            .setVolume(0.4);*/
+            .setVolume(0.4);
 
         this.anims.create({
             key: 'variousPics',
