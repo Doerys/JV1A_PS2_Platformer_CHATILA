@@ -1840,8 +1840,8 @@ class SceneClass extends Phaser.Scene {
                     }
 
                     if (this.mapName == "map_02") {
-                        this.scene.start("Level_03", {
-                            mapName: "map_03", // nom de la map
+                        this.scene.start("Level_05", {
+                            mapName: "map_05", // nom de la map
                             mapTileset: "tileset", // nom du tileset sur TILED
                             mapTilesetImage: "tileset_image", // nom du fichier image du tileset
                         });
